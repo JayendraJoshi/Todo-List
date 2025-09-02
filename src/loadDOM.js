@@ -1,7 +1,7 @@
 import "./styles.css";
 
-export function loadDom(){
-    (function loadHeader(){
+export const loadDOM = function(){
+    function loadHeader(){
         const header = document.querySelector("header");
         const showLinksButton = document.createElement("button");
         showLinksButton.classList.add("showLinks");
@@ -15,8 +15,8 @@ export function loadDom(){
 
         header.appendChild(showLinksButton);
         header.appendChild(title);
-    })();
-    (function loadAside(){
+    };
+    function loadAside(){
         const aside = document.querySelector("aside");
         const filterContainer = document.createElement("div");
         filterContainer.classList.add("filterContainer");
@@ -57,5 +57,8 @@ export function loadDom(){
         projectContainer.appendChild(addProjectButton);
 
         aside.appendChild(projectContainer);
-    })();
+    };
+    return{
+        loadAside,
+    }
 }

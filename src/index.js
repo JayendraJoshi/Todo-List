@@ -1,4 +1,4 @@
 import "./styles.css";
-import { loadDom } from './loadDOM';
+import { loadDOM } from './loadDOM';
 
-loadDom();
+const dom = loadDOM();
