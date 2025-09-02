@@ -1,0 +1,52 @@
+/* resets */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+body{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+header{
+    flex-basis: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+}
+header .showLinks{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 22px; 
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+header h1{
+    margin: 0 auto;
+    font-size:3rem;
+}
+main{
+    flex-grow: 1;
+}
+.showLinks span{
+    display: block;
+    height: 4px;
+    background-color: #333;
+    border-radius: 2px;
+}
+footer{
+    flex-basis: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
