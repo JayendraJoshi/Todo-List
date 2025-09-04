@@ -1,5 +1,3 @@
-import { Task } from  "./task";
-
 export class Project{
     constructor(name){
         this.name = name;
@@ -20,30 +18,32 @@ export class ProjectList{
         }
         ProjectList.instance=this;
         this.list = [];
+        this.activeProject = null;
     }
     addProject(project){
         this.list.push(project);
     }
     getProjectByID(id){
-        this.list.forEach(function(project){
-            if(project.id === id){
-                return project;
-            }
-            else{
-                return null;
-            }
+       return this.list.find(function(project){
+           return project.id === id;
         })
-
+    }
+    setActiveProject(id){
+        this.activeProject = this.getProjectByID(id);
+    }
+    getActiveProject(){
+        return this.activeProject;
     }
 }
 export const handleProjects = function(){
     const addProjectButton = document.querySelector(".addProjectButton");
     const projectContainer = document.querySelector(".projectContainer");
     const projectList = new ProjectList();
+
     function getInputValue(){
         const name = document.querySelector(".formInput");
         return name.value;
-        }
+    }
     function createNewProject(name){
         const project = new Project(name);
         return project;
@@ -69,10 +69,11 @@ export const handleProjects = function(){
         projectForm.classList.add("projectForm");
         return projectForm;
     };
+    
     function addProjectFormToDOM(projectForm){
        projectContainer.insertBefore(projectForm,addProjectButton);
     }
-    function createProjectDiv(name, id){
+    function createProjectDiv(name,id){
         const projectDiv = document.createElement("div");
         projectDiv.textContent = name;
         projectDiv.id = id;
@@ -81,6 +82,7 @@ export const handleProjects = function(){
     function appendProjectDivToDOM(projectDiv){
         projectContainer.insertBefore(projectDiv,addProjectButton);
     }
+    
     return{
         getInputValue,
         createNewProject,
