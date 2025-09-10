@@ -28,6 +28,9 @@ export class ProjectList{
            return project.id === id;
         })
     }
+    getAllProjects(){
+        return this.list;
+    }
     setActiveProject(id){
         this.activeProject = this.getProjectByID(id);
     }

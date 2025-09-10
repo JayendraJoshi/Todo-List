@@ -2,14 +2,7 @@ import { wrapperFunctions } from "./wrapperFunctions";
 
 export const setEventListeners = function () {
     const wrapFunctions = wrapperFunctions();
-    
-    function setEventOnProjectDiv() {
-        const newDiv = wrapFunctions.getActiveProjectDiv();
-        newDiv.addEventListener("click",function(event){
-            wrapFunctions.clickEventOnProjectDiv(event);
-            console.log("setProjectDivEventSuccesful");
-        })
-    }
+
     function setEventOnProjectDivs(){
         const projectsList = document.querySelector(".projectsList");
         projectsList.addEventListener("click",function(event){
@@ -63,13 +56,22 @@ export const setEventListeners = function () {
             setEventsOnProjectFormButtons();
         })
     };
-    
+    function setEventOnFiltersList(){
+        const filtersList = document.querySelector(".filtersList");
+        filtersList.addEventListener("click",function(event){
+            if(event.target.closest("div")){
+                wrapFunctions.determineClickedFilter(event.target.className);
+            }
+        })
+ 
+    }
     function entryPointEventListener(){
         setEventOnAddProjectButton();
         wrapFunctions.setDefaultProjectDiv();
         setEventOnProjectDivs();
         wrapFunctions.createAndAppendAddTaskButtonToContentDiv();
         setEventOnAddTaskButton();
+        setEventOnFiltersList();
     }
     return{
         entryPointEventListener,

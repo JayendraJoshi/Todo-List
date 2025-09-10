@@ -106,6 +106,28 @@ export const wrapperFunctions = function(){
         const tasks = getTasksOfProject(defaultProject);
         appendTasksToTasksList(tasks);
     }
+    function getAllTasks(){
+        const allTasks = [];
+        const allProjects = projectList.getAllProjects();
+        for(let i =0; i< allProjects.length;i++){
+            let tasks = allProjects[i].getTasks();
+            for( let j = 0; j <tasks.length;j++){
+                allTasks.push(tasks[j]);
+            }
+        }
+        return allTasks;
+    }
+    function determineClickedFilter(className){
+        switch(className){
+            case 'allTasks':
+                clickEventOnAllTasksDiv();
+                setContentContainerTitle(className);
+        }
+    }
+    function clickEventOnAllTasksDiv(){
+        resetContentOfTasksList();
+        appendTasksToTasksList(getAllTasks());
+    }
     return{
         clickEventOnAddProjectButton,
         clickEventOnAddProjectFormButton,
@@ -117,7 +139,7 @@ export const wrapperFunctions = function(){
         getActiveProjectDiv,
         doesElementExistInDOM,
         createAndAppendAddTaskButtonToContentDiv,
-        setDefaultProjectDiv
-        
+        setDefaultProjectDiv,
+        determineClickedFilter
     }
 }
