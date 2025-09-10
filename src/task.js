@@ -2,7 +2,7 @@ export class Task{
     constructor(title,description,dueDate){
         this.title = title;
         this.description = description;
-        this.dueDate = dueDate;
+        this.dueDate = new Date(dueDate);
         this.id = crypto.randomUUID;
         this.projectID = null;
     }
@@ -85,7 +85,10 @@ export const handleTasks = function(){
         const descriptionDiv = document.createElement("div");
         descriptionDiv.textContent = task.description;
         const dueDateDiv = document.createElement("div");
-        dueDateDiv.textContent=task.dueDate;
+        const day = task.dueDate.getDate();
+        const month = task.dueDate.getMonth() + 1;
+        const year = task.dueDate.getFullYear();
+        dueDateDiv.textContent= (`${day}-${month}-${year}`);
         taskDiv.appendChild(titleDiv);
         taskDiv.appendChild(descriptionDiv);
         taskDiv.appendChild(dueDateDiv);

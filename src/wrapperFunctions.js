@@ -1,6 +1,7 @@
 import "./styles.css";
 import { ProjectList, handleProjects, Project } from "./project";
 import { handleTasks } from "./task";
+import { isToday } from 'date-fns';
 
 
 export const wrapperFunctions = function(){
@@ -121,12 +122,34 @@ export const wrapperFunctions = function(){
         switch(className){
             case 'allTasks':
                 clickEventOnAllTasksDiv();
-                setContentContainerTitle(className);
+                break;
+            case 'today':
+                clickEventOnTodayTaskDiv();
+                break;
+            }
+    }
+    function getTodaysTasks(){
+        const todaysTasks = [];
+        const allProjects = projectList.getAllProjects();
+        for(let i =0; i< allProjects.length;i++){
+            let tasks = allProjects[i].getTasks();
+            for( let j = 0; j <tasks.length;j++){
+                if(isToday(tasks[j].dueDate)){
+                    todaysTasks.push(tasks[j]);
+                }
+            }
         }
+        return todaysTasks;
+    }
+    function clickEventOnTodayTaskDiv(){
+        resetContentOfTasksList();
+        appendTasksToTasksList(getTodaysTasks());
+        setContentContainerTitle('Today');
     }
     function clickEventOnAllTasksDiv(){
         resetContentOfTasksList();
         appendTasksToTasksList(getAllTasks());
+        setContentContainerTitle('All tasks');
     }
     return{
         clickEventOnAddProjectButton,
