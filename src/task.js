@@ -1,24 +1,30 @@
-import { ProjectList } from "./project";
 export class Task{
-    constructor(title,description,dueDate,projectID){
+    constructor(title,description,dueDate){
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
         this.id = crypto.randomUUID;
-        this.projectID = projectID;
+        this.projectID = null;
+    }
+    assignToProject(id){
+        this.projectID = id;
     }
 }
 export const handleTasks = function(){
     const contentDiv = document.querySelector(".content");
-    const addTaskButton = document.createElement("button");
-    const taskForm = document.querySelector(".taskForm");
-    const projectList = new ProjectList();
-    function renderAddTaskButton(){
+    const taskUtilFunctions = function(){
+    function createButton(){
+        return document.createElement("button");    
+    }
+    function addAttributesForAddTaskButton(addTaskButton){
         addTaskButton.classList.add("addTaskButton");
         addTaskButton.textContent="+ Add Task";
-        contentDiv.appendChild(addTaskButton);
+        return addTaskButton;
     }
-    function renderTaskForm(){
+    function appendButtonOnContentDiv(button){
+        contentDiv.appendChild(button);
+    }
+    function createTaskForm(){
         const taskForm = document.createElement("form");
         taskForm.classList.add("taskForm");
         const titleLabel = document.createElement("label");
@@ -51,23 +57,18 @@ export const handleTasks = function(){
         cancelButton.textContent="Cancel";
         cancelButton.classList.add("TaskFormCancelButton");
 
-
         taskForm.appendChild(titleLabel);
         taskForm.appendChild(descriptionLabel);
         taskForm.appendChild(dateLabel);
         taskForm.appendChild(addButton);
         taskForm.appendChild(cancelButton);
-        contentDiv.appendChild(taskForm);
+        return taskForm;
     }
-    function createDivsFromTasks(project){
-        const tasks = project.getTasks();
-        const divsArray = [];
-        tasks.forEach(function(){
-            const listItem = document.createElement("li");
-            const description = document.createElement("div");
-        })
+    function appendTaskFormOnContentDiv(taskForm){
+        const addTaskButton = document.querySelector(".addTAskButton");
+        contentDiv.insertBefore(taskForm,addTaskButton);
     }
-    function getInputValues(){
+    function getInputValuesOfTaskForm(){
         const taskTitle = document.querySelector(".taskTitleInput").value;
         const taskDescription = document.querySelector(".taskDescriptionInput").value;
         const taskDueDate = document.querySelector(".taskDateInput").value;
@@ -76,9 +77,8 @@ export const handleTasks = function(){
             taskDescription,
             taskDueDate,
         }
-        
     }
-    function renderTaskDiv(task){
+    function createTaskDiv(task){
         const taskDiv = document.createElement("div");
         const titleDiv = document.createElement("div");
         titleDiv.textContent=task.title;
@@ -89,16 +89,46 @@ export const handleTasks = function(){
         taskDiv.appendChild(titleDiv);
         taskDiv.appendChild(descriptionDiv);
         taskDiv.appendChild(dueDateDiv);
+        return taskDiv;    
+    }
+    function appendTaskDivOnDOM(taskDiv){
         const li = document.createElement("li");
         const ul = document.querySelector(".tasksList");
         li.appendChild(taskDiv);
         ul.appendChild(li);
     }
-    return {
-        renderAddTaskButton,
-        renderTaskForm,
-        createDivsFromTasks,
-        getInputValues,
-        renderTaskDiv,
+    return{
+        createButton,
+        addAttributesForAddTaskButton,
+        appendButtonOnContentDiv,
+        createTaskForm,
+        appendTaskFormOnContentDiv,
+        getInputValuesOfTaskForm,
+        createTaskDiv,
+        appendTaskDivOnDOM
     }
+    }
+    const utilFunctions = taskUtilFunctions();
+
+    function createNewTaskWithInputValues(){
+        const values = utilFunctions.getInputValuesOfTaskForm();
+        return new Task(values.taskTitle,values.taskDescription,values.taskDueDate);
+    }
+    function createAndAppendAddTaskButtonToContentDiv(){
+        const button = utilFunctions.createButton();
+        utilFunctions.appendButtonOnContentDiv(utilFunctions.addAttributesForAddTaskButton(button));
+    }
+    function createAndAppendTaskDivToContentDiv(task){
+        utilFunctions.appendTaskDivOnDOM(utilFunctions.createTaskDiv(task));
+    }
+    function createAndAppendTaskFormOnContentDiv(){
+        utilFunctions.appendTaskFormOnContentDiv(utilFunctions.createTaskForm());
+    }
+    
+    return {
+        createAndAppendAddTaskButtonToContentDiv,
+        createAndAppendTaskDivToContentDiv,
+        createAndAppendTaskFormOnContentDiv,
+        createNewTaskWithInputValues,
+    }    
 }

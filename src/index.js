@@ -1,7 +1,7 @@
 import "./styles.css";
-import { handleEventListeners } from "./eventListeners";
+import { setEventListeners } from "./eventListeners";
 
-const eventListeners = handleEventListeners();
+const eventListeners = setEventListeners();
 eventListeners.entryPointEventListener();
 
 

@@ -35,26 +35,17 @@ export class ProjectList{
         return this.activeProject;
     }
 }
+
+
 export const handleProjects = function(){
+
+    const projectUtilFunctions = function(){
     const addProjectButton = document.querySelector(".addProjectButton");
     const projectContainer = document.querySelector(".projectContainer");
-    const projectList = new ProjectList();
-
-    function getInputValue(){
-        const name = document.querySelector(".formInput");
-        return name.value;
-    }
-    function createNewProject(name){
-        const project = new Project(name);
-        return project;
-    }
-    function addToProjectsList(project){
-        projectList.addProject(project);
-    }
-    function createProjectForm(){
+     function createProjectForm(){
         const projectForm = document.createElement("form");
         const projectInput = document.createElement("input");
-        projectInput.classList.add("formInput");
+        projectInput.classList.add("projectName");
         projectInput.type="text";
         const addButton = document.createElement("button");
         addButton.textContent="Add";
@@ -71,25 +62,45 @@ export const handleProjects = function(){
     };
     
     function addProjectFormToDOM(projectForm){
-       projectContainer.insertBefore(projectForm,addProjectButton);
+       projectContainer.insertBefore(projectForm, addProjectButton);
     }
-    function createProjectDiv(name,id){
+    function createProjectDiv(project){
         const projectDiv = document.createElement("div");
-        projectDiv.textContent = name;
-        projectDiv.id = id;
+        projectDiv.textContent = project.name;
+        projectDiv.id = project.id;
         return projectDiv;
     }
-    function appendProjectDivToDOM(projectDiv){
-        projectContainer.insertBefore(projectDiv,addProjectButton);
+    function appendProjectDivToProjectContainer(projectDiv){
+        const projectsList = document.querySelector(".projectsList");
+        projectsList.appendChild(projectDiv);
     }
-    
+    function getNameValueOfProjectForm(){
+        const projectName = document.querySelector(".projectName");
+        return projectName.value;
+    }
     return{
-        getInputValue,
-        createNewProject,
-        addToProjectsList,
         createProjectForm,
         addProjectFormToDOM,
         createProjectDiv,
-        appendProjectDivToDOM,
+        appendProjectDivToProjectContainer,
+        getNameValueOfProjectForm,
+        }
+    }
+    const utilFunctions = projectUtilFunctions();
+
+   function createAndAppendProjectFormOnProjectContainer(){
+        utilFunctions.addProjectFormToDOM(utilFunctions.createProjectForm());
+    }
+    function createAndAppendProjectDivToProjectContainer(project){
+        utilFunctions.appendProjectDivToProjectContainer(utilFunctions.createProjectDiv(project))
+    }
+    function createProjectBasedOnProjectFormInput(){
+        return new Project(utilFunctions.getNameValueOfProjectForm());
+    }
+    
+    return{
+        createAndAppendProjectFormOnProjectContainer,
+        createAndAppendProjectDivToProjectContainer,
+        createProjectBasedOnProjectFormInput,
     }
 }

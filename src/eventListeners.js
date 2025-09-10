@@ -1,82 +1,75 @@
-import "./styles.css";
-import { ProjectList, handleProjects } from "./project";
-import { Task, handleTasks } from "./task";
+import { wrapperFunctions } from "./wrapperFunctions";
 
-export const handleEventListeners = function () {
-    const projectList = new ProjectList;
-    const projectFunctions = handleProjects();
-    const taskFunctions = handleTasks();
-
-    function setEventOnProjectDiv(div) {
-        div.addEventListener("click",function(){
-            const targetProject = projectList.getProjectByID(div.id);
-            const title = document.querySelector(".contentTitleContainer h2");
-            title.textContent = targetProject.name;
-            projectList.setActiveProject(div.id);
-            taskFunctions.renderAddTaskButton();
-            setEventOnAddTaskButton();
+export const setEventListeners = function () {
+    const wrapFunctions = wrapperFunctions();
+    
+    function setEventOnProjectDiv() {
+        const newDiv = wrapFunctions.getActiveProjectDiv();
+        newDiv.addEventListener("click",function(event){
+            wrapFunctions.clickEventOnProjectDiv(event);
+            console.log("setProjectDivEventSuccesful");
+        })
+    }
+    function setEventOnProjectDivs(){
+        const projectsList = document.querySelector(".projectsList");
+        projectsList.addEventListener("click",function(event){
+            if(event.target.closest("div")){
+                wrapFunctions.clickEventOnProjectDiv(event);
+            }
         })
     }
     function setEventOnAddTaskButton(){
         const addTaskButton = document.querySelector(".addTaskButton");
         addTaskButton.addEventListener("click",function(){
-            if(!document.querySelector(".taskForm")){
-                taskFunctions.renderTaskForm();
-                setEventsOnTaskFormButtons();
-            }
+             console.log("taskADdButtonClicked");
+            wrapFunctions.clickEventOnAddTaskButton();
+            setEventsOnTaskFormButtons();
         })
     };
+    
     function setEventsOnProjectFormButtons() {
         const cancelButton = document.querySelector(".cancelButton");
         const addButton = document.querySelector(".addButton");
 
         addButton.addEventListener("click", function (event) {
-            event.preventDefault();
-            const projectForm = document.querySelector(".projectForm");
-            const newProject = projectFunctions.createNewProject(projectFunctions.getInputValue());
-            projectFunctions.addToProjectsList(newProject);
-            const newProjectDiv = projectFunctions.createProjectDiv(newProject.name, newProject.id);
-            projectFunctions.appendProjectDivToDOM(newProjectDiv);
-            projectForm.remove();
-            setEventOnProjectDiv(newProjectDiv);
+            wrapFunctions.clickEventOnAddProjectFormButton(event);
+            if(!wrapFunctions.doesElementExistInDOM(".addTaskButton")){
+                wrapFunctions.createAndAppendAddTaskButtonToContentDiv();
+                setEventOnAddTaskButton();
+            };
         });
         cancelButton.addEventListener("click", function (event) {
-            event.preventDefault();
-            const projectForm = document.querySelector(".projectForm");
-            projectForm.remove();
+            wrapFunctions.clickEventOnCancelProjectFormButton(event);
         });
     }
+    
     function setEventsOnTaskFormButtons(){
         const taskFormCancelButton = document.querySelector(".TaskFormCancelButton");
         const taskFormAddButton = document.querySelector(".TaskFormAddButton");
 
         taskFormAddButton.addEventListener("click",function(event){
-            const taskForm = document.querySelector(".taskForm");
-            event.preventDefault();
-            const values = taskFunctions.getInputValues();
-            const activeProject = projectList.getActiveProject();
-            const task = new Task(values.taskTitle,values.taskDescription,values.taskDueDate,activeProject.id);
-            activeProject.addTask(task);
-            taskFunctions.renderTaskDiv(task);
-            taskForm.remove();
+            wrapFunctions.clickEventOnTaskFormAddButton(event);
         })
          taskFormCancelButton.addEventListener("click",function(event){
-            const taskForm = document.querySelector(".taskForm");
-            event.preventDefault();
-            taskForm.remove();
+            wrapFunctions.clickEventOnTaskFormCancelButton(event);
         }) 
     }
+    
     function setEventOnAddProjectButton() {
         const addProjectButton = document.querySelector(".addProjectButton");
+
         addProjectButton.addEventListener("click", function (event) {
-            if (!document.querySelector(".projectForm")) {
-                projectFunctions.addProjectFormToDOM(projectFunctions.createProjectForm());
-                setEventsOnProjectFormButtons();
-            }
+            wrapFunctions.clickEventOnAddProjectButton();
+            setEventsOnProjectFormButtons();
         })
     };
+    
     function entryPointEventListener(){
         setEventOnAddProjectButton();
+        wrapFunctions.setDefaultProjectDiv();
+        setEventOnProjectDivs();
+        wrapFunctions.createAndAppendAddTaskButtonToContentDiv();
+        setEventOnAddTaskButton();
     }
     return{
         entryPointEventListener,
