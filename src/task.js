@@ -3,7 +3,7 @@ export class Task{
         this.title = title;
         this.description = description;
         this.dueDate = "";
-        this.id = crypto.randomUUID;
+        this.id = crypto.randomUUID();
         this.projectID = null;
         this.important = important;
     }
@@ -117,7 +117,7 @@ export const handleTasks = function(){
         }else{
             importantInput.checked = false;
         }
-
+        importantInput.classList.add("importantInput");
         if(task.dueDate!=""){
             console.log(task.dueDate);
             const day = task.dueDate.getDate();
@@ -127,6 +127,7 @@ export const handleTasks = function(){
         }else{
             dueDateDiv.textContent= task.dueDate;
         }
+        taskDiv.id =task.id;
         taskDiv.appendChild(titleDiv);
         taskDiv.appendChild(descriptionDiv);
         taskDiv.appendChild(dueDateDiv);

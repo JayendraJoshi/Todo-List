@@ -44,12 +44,21 @@ export const setEventListeners = function () {
 
         taskFormAddButton.addEventListener("click",function(event){
             wrapFunctions.clickEventOnTaskFormAddButton(event);
+            setEventOnTaskElements();
         })
          taskFormCancelButton.addEventListener("click",function(event){
             wrapFunctions.clickEventOnTaskFormCancelButton(event);
         }) 
+
     }
-    
+    function setEventOnTaskElements(){
+        const tasksList = document.querySelector(".tasksList");
+        tasksList.addEventListener("change",function(event){
+            if(event.target.classList.contains('importantInput')){
+                wrapFunctions.clickEventOnTaskImportantCheckBox(event);
+            }
+        });
+    }
     function setEventOnAddProjectButton() {
         const addProjectButton = document.querySelector(".addProjectButton");
 
@@ -58,6 +67,7 @@ export const setEventListeners = function () {
             setEventsOnProjectFormButtons();
         })
     };
+    
     function setEventOnFiltersList(){
         const filtersList = document.querySelector(".filtersList");
         filtersList.addEventListener("click",function(event){

@@ -74,6 +74,19 @@ export const wrapperFunctions = function(){
             event.preventDefault();
             taskForm.remove();
     }
+    function clickEventOnTaskImportantCheckBox(event){
+        const activeProject = projectList.getActiveProject();
+        console.log(activeProject + "is there");
+        const taskId = event.target.closest('div').id;
+        console.log(taskId);
+        const targetTask = activeProject.getTaskByID(taskId);
+        if(targetTask.important=== true){
+            targetTask.setToUnimportant();
+        }else{
+            targetTask.setToImportant();
+        }
+         event.target.checked = targetTask.important;
+    }
     function getActiveProjectDiv(){
         console.log(projectList.getActiveProject());
         const activeDivID = projectList.getActiveProject().id;
@@ -230,6 +243,7 @@ export const wrapperFunctions = function(){
         doesElementExistInDOM,
         createAndAppendAddTaskButtonToContentDiv,
         setDefaultProjectDiv,
-        determineClickedFilter
+        determineClickedFilter,
+        clickEventOnTaskImportantCheckBox
     }
 }

@@ -10,6 +10,11 @@ export class Project{
     getTasks(){
         return this.tasks;
     }
+    getTaskByID(id){
+        return this.tasks.find(function(task){
+           return task.id === id;
+        })
+    }
 }
 export class ProjectList{
     constructor(){
