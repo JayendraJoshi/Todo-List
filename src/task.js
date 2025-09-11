@@ -1,13 +1,23 @@
 export class Task{
-    constructor(title,description,dueDate){
+    constructor(title,description,important){
         this.title = title;
         this.description = description;
-        this.dueDate = new Date(dueDate);
+        this.dueDate = "";
         this.id = crypto.randomUUID;
         this.projectID = null;
+        this.important = important;
     }
     assignToProject(id){
         this.projectID = id;
+    }
+    setDueDate(dueDate){
+        this.dueDate = new Date(dueDate);
+    }
+    setToImportant(){
+        this.important = true;
+    }
+    setToUnimportant(){
+        this.important = false;
     }
 }
 export const handleTasks = function(){
@@ -57,25 +67,37 @@ export const handleTasks = function(){
         cancelButton.textContent="Cancel";
         cancelButton.classList.add("TaskFormCancelButton");
 
+        const importantInput = document.createElement("input");
+        importantInput.type="checkbox";
+        const importantLabel = document.createElement("label");
+        importantLabel.textContent="Important";
+        importantInput.classList.add("taskImportanceInput");
+
+        importantLabel.appendChild(importantInput);
+        
+
         taskForm.appendChild(titleLabel);
         taskForm.appendChild(descriptionLabel);
         taskForm.appendChild(dateLabel);
+        taskForm.appendChild(importantLabel);
         taskForm.appendChild(addButton);
         taskForm.appendChild(cancelButton);
         return taskForm;
     }
     function appendTaskFormOnContentDiv(taskForm){
-        const addTaskButton = document.querySelector(".addTAskButton");
+        const addTaskButton = document.querySelector(".addTaskButton");
         contentDiv.insertBefore(taskForm,addTaskButton);
     }
     function getInputValuesOfTaskForm(){
         const taskTitle = document.querySelector(".taskTitleInput").value;
         const taskDescription = document.querySelector(".taskDescriptionInput").value;
         const taskDueDate = document.querySelector(".taskDateInput").value;
+        const taskImportance = document.querySelector(".taskImportanceInput").checked;
         return{
             taskTitle,
             taskDescription,
             taskDueDate,
+            taskImportance
         }
     }
     function createTaskDiv(task){
@@ -85,13 +107,30 @@ export const handleTasks = function(){
         const descriptionDiv = document.createElement("div");
         descriptionDiv.textContent = task.description;
         const dueDateDiv = document.createElement("div");
-        const day = task.dueDate.getDate();
-        const month = task.dueDate.getMonth() + 1;
-        const year = task.dueDate.getFullYear();
-        dueDateDiv.textContent= (`${day}-${month}-${year}`);
+        const importantInput = document.createElement("input");
+        importantInput.type="checkbox";
+        const importantLabel = document.createElement("label");
+        importantLabel.textContent="Important";
+        importantLabel.appendChild(importantInput);
+        if(task.important===true){
+            importantInput.checked = true;
+        }else{
+            importantInput.checked = false;
+        }
+
+        if(task.dueDate!=""){
+            console.log(task.dueDate);
+            const day = task.dueDate.getDate();
+            const month = task.dueDate.getMonth() + 1;
+            const year = task.dueDate.getFullYear();
+            dueDateDiv.textContent= (`${day}-${month}-${year}`);
+        }else{
+            dueDateDiv.textContent= task.dueDate;
+        }
         taskDiv.appendChild(titleDiv);
         taskDiv.appendChild(descriptionDiv);
         taskDiv.appendChild(dueDateDiv);
+        taskDiv.appendChild(importantLabel);
         return taskDiv;    
     }
     function appendTaskDivOnDOM(taskDiv){
@@ -115,7 +154,14 @@ export const handleTasks = function(){
 
     function createNewTaskWithInputValues(){
         const values = utilFunctions.getInputValuesOfTaskForm();
-        return new Task(values.taskTitle,values.taskDescription,values.taskDueDate);
+        console.log(values.taskDueDate);
+        if(values.taskDueDate ==""){
+            return new Task(values.taskTitle,values.taskDescription,values.taskImportance);
+        }else {
+            const newTask = new Task(values.taskTitle,values.taskDescription,values.taskImportance);
+            newTask.setDueDate(values.taskDueDate);
+            return newTask;
+        }
     }
     function createAndAppendAddTaskButtonToContentDiv(){
         const button = utilFunctions.createButton();

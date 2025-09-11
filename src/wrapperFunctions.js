@@ -1,7 +1,7 @@
 import "./styles.css";
 import { ProjectList, handleProjects, Project } from "./project";
 import { handleTasks } from "./task";
-import { isToday } from 'date-fns';
+import { isToday, isAfter, isBefore, addDays, startOfDay } from 'date-fns';
 
 
 export const wrapperFunctions = function(){
@@ -21,11 +21,9 @@ export const wrapperFunctions = function(){
     }
 
     function clickEventOnAddTaskButton(){
-        if(!doesElementExistInDOM((".taskForm"))){
-            console.log("in loop");
-                        taskFunctions.createAndAppendTaskFormOnContentDiv();
-            console.log("taskForm created");
-            }
+        if(!doesElementExistInDOM(".taskForm")){
+            taskFunctions.createAndAppendTaskFormOnContentDiv();
+        }
     }
     function clickEventOnAddProjectFormButton(event){
         event.preventDefault();
@@ -107,6 +105,25 @@ export const wrapperFunctions = function(){
         const tasks = getTasksOfProject(defaultProject);
         appendTasksToTasksList(tasks);
     }
+    function determineClickedFilter(className){
+        switch(className){
+            case 'allTasks':
+                clickEventOnAllTasksDiv();
+                break;
+            case 'today':
+                clickEventOnTodayTaskDiv();
+                break;
+            case 'unplanned':
+                clickEventOnUnplannedTaskDiv();
+                break;
+            case 'next7Days':
+                clickEventOnNext7DaysDiv();
+                break;
+            case 'important':
+                clickEventOnImportantTaskDiv();
+                break;
+        }
+    }
     function getAllTasks(){
         const allTasks = [];
         const allProjects = projectList.getAllProjects();
@@ -118,15 +135,10 @@ export const wrapperFunctions = function(){
         }
         return allTasks;
     }
-    function determineClickedFilter(className){
-        switch(className){
-            case 'allTasks':
-                clickEventOnAllTasksDiv();
-                break;
-            case 'today':
-                clickEventOnTodayTaskDiv();
-                break;
-            }
+    function clickEventOnAllTasksDiv(){
+        resetContentOfTasksList();
+        appendTasksToTasksList(getAllTasks());
+        setContentContainerTitle('All tasks');
     }
     function getTodaysTasks(){
         const todaysTasks = [];
@@ -146,10 +158,65 @@ export const wrapperFunctions = function(){
         appendTasksToTasksList(getTodaysTasks());
         setContentContainerTitle('Today');
     }
-    function clickEventOnAllTasksDiv(){
+    function getUnplannedTasks(){
+        const unplannedTasks = [];
+        const allProjects = projectList.getAllProjects();
+        for(let i =0; i< allProjects.length;i++){
+            let tasks = allProjects[i].getTasks();
+            for( let j = 0; j <tasks.length;j++){
+                if(tasks[j].dueDate==""){
+                    unplannedTasks.push(tasks[j]);
+                }
+            }
+        }
+        return unplannedTasks;
+    }
+    function clickEventOnUnplannedTaskDiv(){
         resetContentOfTasksList();
-        appendTasksToTasksList(getAllTasks());
-        setContentContainerTitle('All tasks');
+        appendTasksToTasksList(getUnplannedTasks());
+        setContentContainerTitle('Unplanned');
+    }
+    function dateIsInNext7Days(date){
+        const today = startOfDay(new Date());
+        const sevenDaysFromNow = addDays(today,7);
+        return isAfter(date,today) && isBefore(date,sevenDaysFromNow);
+    }
+    function getNext7DaysTasks(){
+        const next7DaysTasks = [];
+        const allProjects = projectList.getAllProjects();
+        for(let i =0; i< allProjects.length;i++){
+            let tasks = allProjects[i].getTasks();
+            for( let j = 0; j <tasks.length;j++){
+                if(dateIsInNext7Days(tasks[j].dueDate)){
+                    next7DaysTasks.push(tasks[j]);
+                    console.log(tasks[j]);
+                }
+            }
+        }
+        return next7DaysTasks;
+    }
+    function clickEventOnNext7DaysDiv(){
+        resetContentOfTasksList();
+        appendTasksToTasksList(getNext7DaysTasks());
+        setContentContainerTitle('Next 7 Days');
+    }
+    function getImportantTasks(){
+        const importantTasks = [];
+        const allProjects = projectList.getAllProjects();
+        for(let i =0; i< allProjects.length;i++){
+            let tasks = allProjects[i].getTasks();
+            for( let j = 0; j <tasks.length;j++){
+                if((tasks[j].important===true)){
+                    importantTasks.push(tasks[j]);
+                }
+            }
+        }
+        return importantTasks;
+    }
+    function clickEventOnImportantTaskDiv(){
+        resetContentOfTasksList();
+        appendTasksToTasksList(getImportantTasks());
+        setContentContainerTitle('Important');
     }
     return{
         clickEventOnAddProjectButton,

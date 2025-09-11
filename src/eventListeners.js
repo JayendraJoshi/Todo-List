@@ -14,9 +14,11 @@ export const setEventListeners = function () {
     function setEventOnAddTaskButton(){
         const addTaskButton = document.querySelector(".addTaskButton");
         addTaskButton.addEventListener("click",function(){
-             console.log("taskADdButtonClicked");
-            wrapFunctions.clickEventOnAddTaskButton();
-            setEventsOnTaskFormButtons();
+            if(!wrapFunctions.doesElementExistInDOM(".taskForm")){
+                wrapFunctions.clickEventOnAddTaskButton();
+                setEventsOnTaskFormButtons();
+            }
+            
         })
     };
     
