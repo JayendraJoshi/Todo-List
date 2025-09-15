@@ -77,9 +77,43 @@ aside > div > h2{
     background-color: #333;
     border-radius: 2px;
 }
+li div{
+    display:flex;
+    gap:20px;
+}
+.optionButton span{
+     display: block;
+    height: 4px;
+    background-color: #333;
+    border-radius: 2px;
+}
+.optionButton{
+    display: flex;
+    flex-direction: column;
+    width: 3px;
+    height: 20px; 
+    gap:3px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.optionsButton{
+    display: flex;
+    flex-direction: column;
+}
 footer{
     flex-basis: 5vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
+  .hidden {
+    top: 0;
+    left: 0;
+    pointer-events: none !important;
+    position: absolute !important;
+    max-height: 0 !important;
+    transition: max-height 1s 
+    ease-out !important;
+    opacity: 0 !important
+  }

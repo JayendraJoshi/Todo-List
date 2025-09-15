@@ -51,13 +51,29 @@ export const setEventListeners = function () {
         }) 
 
     }
-    function setEventOnTaskElements(){
+     function setEventOnTaskElements(){
         const tasksList = document.querySelector(".tasksList");
         tasksList.addEventListener("change",function(event){
             if(event.target.classList.contains('importantInput')){
                 wrapFunctions.clickEventOnTaskImportantCheckBox(event);
             }
         });
+        tasksList.addEventListener("click",function(event){
+            if(event.target.classList.contains('editButton')){
+                const taskDiv = event.target.closest(".task");
+                wrapFunctions.clickEventOnEditButton(taskDiv);
+                setEventOnEditFormElements(taskDiv);
+            }
+        })
+    }
+    function setEventOnEditFormElements(taskDiv){
+        const editform = document.querySelector(".editform")
+        editform.addEventListener("click",function(event){
+            event.preventDefault();
+            if(event.target.classList.contains('TaskFormAddButton')){
+                wrapFunctions.clickEventOnEditAddTaskButton(taskDiv);
+            }
+        })
     }
     function setEventOnAddProjectButton() {
         const addProjectButton = document.querySelector(".addProjectButton");

@@ -47,7 +47,7 @@ export class ProjectList{
 
 export const handleProjects = function(){
 
-    const projectUtilFunctions = function(){
+  
     const addProjectButton = document.querySelector(".addProjectButton");
     const projectContainer = document.querySelector(".projectContainer");
      function createProjectForm(){
@@ -86,29 +86,25 @@ export const handleProjects = function(){
         const projectName = document.querySelector(".projectName");
         return projectName.value;
     }
-    return{
-        createProjectForm,
-        addProjectFormToDOM,
-        createProjectDiv,
-        appendProjectDivToProjectContainer,
-        getNameValueOfProjectForm,
-        }
-    }
-    const utilFunctions = projectUtilFunctions();
 
    function createAndAppendProjectFormOnProjectContainer(){
-        utilFunctions.addProjectFormToDOM(utilFunctions.createProjectForm());
+        addProjectFormToDOM(createProjectForm());
     }
     function createAndAppendProjectDivToProjectContainer(project){
-        utilFunctions.appendProjectDivToProjectContainer(utilFunctions.createProjectDiv(project))
+        appendProjectDivToProjectContainer(createProjectDiv(project))
     }
     function createProjectBasedOnProjectFormInput(){
-        return new Project(utilFunctions.getNameValueOfProjectForm());
+        return new Project(getNameValueOfProjectForm());
     }
     
     return{
         createAndAppendProjectFormOnProjectContainer,
         createAndAppendProjectDivToProjectContainer,
         createProjectBasedOnProjectFormInput,
+        createProjectForm,
+        addProjectFormToDOM,
+        createProjectDiv,
+        appendProjectDivToProjectContainer,
+        getNameValueOfProjectForm,
     }
 }

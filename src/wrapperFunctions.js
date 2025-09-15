@@ -87,6 +87,24 @@ export const wrapperFunctions = function(){
         }
          event.target.checked = targetTask.important;
     }
+    function clickEventOnEditButton(taskDiv){
+        const taskEditForm= taskFunctions.createTaskForm();
+        taskEditForm.classList.add("editform");
+        const inputValues = getInputValuesFromTask(taskDiv.id);
+        fillTaskValuesIntoTaskEditForm(taskEditForm,inputValues);
+        taskFunctions.insertTaskFormBefore(taskEditForm,taskDiv);
+        taskFunctions.addHiddenClass(taskDiv);
+    }
+    function clickEventOnEditAddTaskButton(taskDiv){
+        const activeProject = projectList.getActiveProject(); 
+        const targetTask = activeProject.getTaskByID(taskDiv.id);
+        const newValues = taskFunctions.getInputValuesOfEditForm();
+        taskFunctions.updateTask(targetTask, newValues);
+        taskFunctions.updateTaskDivValues(taskDiv,targetTask);
+        taskFunctions.removeHiddenClass(taskDiv);
+        const editform = document.querySelector(".editform");
+        editform.remove();
+    }
     function getActiveProjectDiv(){
         console.log(projectList.getActiveProject());
         const activeDivID = projectList.getActiveProject().id;
@@ -104,7 +122,44 @@ export const wrapperFunctions = function(){
        const tasksList= document.querySelector(".tasksList");
         tasksList.textContent = "";
     }
-    
+    function getInputValuesFromTask(taskID){
+        const activeProject = projectList.getActiveProject();
+        const targetTask = activeProject.getTaskByID(taskID);
+        const taskTitle = targetTask.title;
+        const taskDescription = targetTask.description;
+        const taskDate = targetTask.dueDate;
+        const important = targetTask.important;
+        console.log(taskDate);
+
+        return {
+            taskTitle,
+            taskDescription,
+            taskDate,
+            taskID,
+            important
+        }
+    }
+    function fillTaskValuesIntoTaskEditForm(taskEditForm,inputValues){
+        for(const element of taskEditForm.elements){
+            if(element.classList.contains("taskTitleInput")){
+                element.value=inputValues.taskTitle;
+            }else if(element.classList.contains("taskDescriptionInput")){
+                element.value=inputValues.taskDescription;
+            }else if(element.classList.contains("taskDateInput")){
+                 if(inputValues.taskDate && inputValues.taskDate instanceof Date){
+                        const day = String(inputValues.taskDate.getDate()).padStart(2, '0');
+                        const month = String(inputValues.taskDate.getMonth() + 1).padStart(2, '0');
+                        const year = inputValues.taskDate.getFullYear();
+                        element.value = `${year}-${month}-${day}`;
+                }else{
+                    element.value="";
+                }
+                
+            }else if(element.classList.contains("taskImportanceInput")){
+                element.checked=inputValues.important;
+            }
+        }
+    }
     function setDefaultProjectDiv(){
         const div = document.createElement("div");
         div.textContent="default";
@@ -239,11 +294,13 @@ export const wrapperFunctions = function(){
         clickEventOnTaskFormCancelButton,
         clickEventOnProjectDiv,
         clickEventOnAddTaskButton,
+        clickEventOnEditButton,
         getActiveProjectDiv,
         doesElementExistInDOM,
         createAndAppendAddTaskButtonToContentDiv,
         setDefaultProjectDiv,
         determineClickedFilter,
-        clickEventOnTaskImportantCheckBox
+        clickEventOnTaskImportantCheckBox,
+        clickEventOnEditAddTaskButton
     }
 }
