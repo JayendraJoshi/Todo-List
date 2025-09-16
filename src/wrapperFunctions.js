@@ -95,6 +95,12 @@ export const wrapperFunctions = function(){
         taskFunctions.insertTaskFormBefore(taskEditForm,taskDiv);
         taskFunctions.addHiddenClass(taskDiv);
     }
+    function clickEventOnEditCancelChangeButton(taskDiv){
+       const editform = document.querySelector(".editform");
+        editform.remove();
+        taskFunctions.removeHiddenClass(taskDiv);
+        console.log("removed");
+    }
     function clickEventOnEditAddTaskButton(taskDiv){
         const activeProject = projectList.getActiveProject(); 
         const targetTask = activeProject.getTaskByID(taskDiv.id);
@@ -105,6 +111,15 @@ export const wrapperFunctions = function(){
         const editform = document.querySelector(".editform");
         editform.remove();
     }
+    function clickEventOnDeleteTaskButton(taskDiv){
+        const activeProject = projectList.getActiveProject(); 
+        activeProject.deleteTaskByID(taskDiv.id);
+        const liParent = taskDiv.closest("li");
+        liParent.remove();
+        taskDiv.remove();
+        
+    }
+
     function getActiveProjectDiv(){
         console.log(projectList.getActiveProject());
         const activeDivID = projectList.getActiveProject().id;
@@ -301,6 +316,8 @@ export const wrapperFunctions = function(){
         setDefaultProjectDiv,
         determineClickedFilter,
         clickEventOnTaskImportantCheckBox,
-        clickEventOnEditAddTaskButton
+        clickEventOnEditAddTaskButton,
+        clickEventOnEditCancelChangeButton,
+        clickEventOnDeleteTaskButton
     }
 }

@@ -15,6 +15,10 @@ export class Project{
            return task.id === id;
         })
     }
+    deleteTaskByID(id){
+        const filteredTasks = this.tasks.filter(task => task.id!==id);
+        this.tasks = filteredTasks;    
+    }
 }
 export class ProjectList{
     constructor(){

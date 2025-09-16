@@ -44,7 +44,6 @@ export const setEventListeners = function () {
 
         taskFormAddButton.addEventListener("click",function(event){
             wrapFunctions.clickEventOnTaskFormAddButton(event);
-            setEventOnTaskElements();
         })
          taskFormCancelButton.addEventListener("click",function(event){
             wrapFunctions.clickEventOnTaskFormCancelButton(event);
@@ -54,25 +53,36 @@ export const setEventListeners = function () {
      function setEventOnTaskElements(){
         const tasksList = document.querySelector(".tasksList");
         tasksList.addEventListener("change",function(event){
-            if(event.target.classList.contains('importantInput')){
-                wrapFunctions.clickEventOnTaskImportantCheckBox(event);
+            if(tasksList.childElementCount > 0 ){
+                if(event.target.classList.contains('importantInput')){
+                    wrapFunctions.clickEventOnTaskImportantCheckBox(event);
+                }
             }
         });
         tasksList.addEventListener("click",function(event){
-            if(event.target.classList.contains('editButton')){
+            if(tasksList.childElementCount > 0 ){
                 const taskDiv = event.target.closest(".task");
-                wrapFunctions.clickEventOnEditButton(taskDiv);
-                setEventOnEditFormElements(taskDiv);
+                if(event.target.classList.contains('editButton')){
+                    wrapFunctions.clickEventOnEditButton(taskDiv);
+                    setEventOnEditFormElements(taskDiv);
+                }else if(event.target.classList.contains('deleteButton')){
+                    wrapFunctions.clickEventOnDeleteTaskButton(taskDiv);
+                }
             }
         })
+        
     }
+
+       
     function setEventOnEditFormElements(taskDiv){
         const editform = document.querySelector(".editform")
         editform.addEventListener("click",function(event){
             event.preventDefault();
             if(event.target.classList.contains('TaskFormAddButton')){
                 wrapFunctions.clickEventOnEditAddTaskButton(taskDiv);
-            }
+            }else if(event.target.classList.contains('TaskFormCancelButton')){
+                wrapFunctions.clickEventOnEditCancelChangeButton(taskDiv);
+            }        
         })
     }
     function setEventOnAddProjectButton() {
@@ -100,6 +110,7 @@ export const setEventListeners = function () {
         wrapFunctions.createAndAppendAddTaskButtonToContentDiv();
         setEventOnAddTaskButton();
         setEventOnFiltersList();
+        setEventOnTaskElements();
     }
     return{
         entryPointEventListener,
