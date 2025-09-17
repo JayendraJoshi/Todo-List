@@ -222,12 +222,6 @@ export const handleTasks = function(){
             return newTask;
         }
     }
-    function addHiddenClass(element){
-        element.classList.add("hidden");
-    }
-    function removeHiddenClass(element){
-        element.classList.remove("hidden");
-    }
     function createAndAppendAddTaskButtonToContentDiv(){
         const button = createButton();
         appendButtonOnContentDiv(addAttributesForAddTaskButton(button));
@@ -254,9 +248,7 @@ export const handleTasks = function(){
         createTaskDiv,
         appendTaskDivOnDOM,
         insertTaskFormBefore,
-        addHiddenClass,
         updateTaskDivValues,
-        removeHiddenClass,
         getInputValuesOfEditForm,
         updateTask,
     }    

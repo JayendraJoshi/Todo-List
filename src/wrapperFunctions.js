@@ -87,7 +87,7 @@ export const wrapperFunctions = function(){
     }
     function setFirstProjectToNewActiveProject(){
         const allProjects = projectList.getAllProjects();  
-        projectList.setActiveProjectByID(allProjects[0]).id;
+        projectList.setActiveProjectByID(allProjects[0].id);
         console.log(allProjects[0]);
         setContentContainerTitle(projectList.getActiveProject().name);     
         
