@@ -9,52 +9,112 @@ export const wrapperFunctions = function(){
     const projectFunctions = handleProjects();
     const taskFunctions = handleTasks();
 
-    function setContentContainerTitle(name){
-        const title = document.querySelector(".contentTitleContainer h2");
-        title.textContent = name;
+    function clickEventOnAddProjectButton(){
+        if (!doesElementExistInDOM(".projectForm")) {
+                projectFunctions.createAndAppendProjectFormOnProjectContainer();
+            }
     }
-    function doesElementExistInDOM(selector){
-        if(!document.querySelector(selector)){
-            return false;
-        }
-        return true;
-    }
-
-    function clickEventOnAddTaskButton(){
-        if(!doesElementExistInDOM(".taskForm")){
-            taskFunctions.createAndAppendTaskFormOnContentDiv();
-        }
+    function clickEventOnProjectDiv(targetProjectDiv){
+        const targetProject = projectList.getProjectByID(targetProjectDiv.id);
+        setContentContainerTitle(targetProject.name);
+        projectList.setActiveProjectByID(targetProject.id);
+        const tasks = getTasksOfProject(projectList.getActiveProject());
+        resetContentOfTasksList();
+        appendTasksToTasksList(tasks);  
     }
     function clickEventOnAddProjectFormButton(event){
         event.preventDefault();
         const projectForm = document.querySelector(".projectForm");
         const project = projectFunctions.createProjectBasedOnProjectFormInput();
         projectList.addProject(project);
-        projectList.setActiveProject(project.id);
+        projectList.setActiveProjectByID(project.id);
         projectFunctions.createAndAppendProjectDivToProjectContainer(project);
-        //clickEventOnProjectDiv();
+        setContentContainerTitle(project.name);
         projectForm.remove();
-    }
-    
+    } 
+
     function clickEventOnCancelProjectFormButton(event){
         event.preventDefault();
             const projectForm = document.querySelector(".projectForm");
             projectForm.remove();
     }
-    function clickEventOnAddProjectButton(){
-        if (!doesElementExistInDOM(".projectForm")) {
-                projectFunctions.createAndAppendProjectFormOnProjectContainer();
-            }
+      function clickEventOnProjectRenameButton(projectDiv){
+        const projectRenameForm = projectFunctions.createProjectForm();
+        projectRenameForm.classList.add("projectRenameForm");
+        const projectName = getNameFromProject(projectDiv.id);
+        fillCurrentProjectNameIntoProjectRenameForm(projectRenameForm,projectName);
+        projectFunctions.insertProjectEditFormBefore(projectRenameForm,projectDiv);
+        addHiddenClass(projectDiv);
     }
-    function clickEventOnProjectDiv(event){
-        setContentContainerTitle(projectList.getProjectByID(event.target.id).name);
-        projectList.setActiveProject(event.target.id);
-        const tasks = getTasksOfProject(projectList.getActiveProject());
-        resetContentOfTasksList();
-        appendTasksToTasksList(tasks);
+    function clickEventOnProjectRenameAddButton(projectDiv){
+        const newName =projectFunctions.getNameValueOfProjectForm();
+        const targetProject = projectList.getProjectByID(projectDiv.id);
+        projectFunctions.updateProject(targetProject,newName);
+        projectFunctions.updateProjectDivName(projectDiv,targetProject);
+        removeHiddenClass(projectDiv);
+        const projectEditForm = document.querySelector(".projectForm");
+        projectEditForm.remove();
+
+    }
+    function clickEventOnProjectRenameCancelButton(projectDiv){
+        const projectRenameForm = document.querySelector(".projectRenameForm");
+        projectRenameForm.remove();
+        removeHiddenClass(projectDiv);
+    }
+     function getActiveProjectDiv(){
+        console.log(projectList.getActiveProject());
+        const activeDivID = projectList.getActiveProject().id;
+       return document.querySelector(`div[id="${activeDivID}"]`);
+    }
+     function getNameFromProject(projectID){
+        const targetProject = projectList.getProjectByID(projectID);
+        const projectName = targetProject.name;
+        return projectName;
+    }
+     function fillCurrentProjectNameIntoProjectRenameForm(projectRenameForm,projectName){
+        for(const element of projectRenameForm){
+            if(element.classList.contains("projectNameInput")){
+                element.value = projectName;
+            }
+        }
+    }
+    function setDefaultProjectDiv(){
+        const defaultProject = new Project("default");
+        projectList.addProject(defaultProject);
+        projectList.setActiveProjectByID(defaultProject.id);
+        projectFunctions.createAndAppendProjectDivToProjectContainer(defaultProject);
+        setContentContainerTitle(defaultProject.name); 
+    }
+    function setFirstProjectToNewActiveProject(){
+        const allProjects = projectList.getAllProjects();  
+        projectList.setActiveProjectByID(allProjects[0]).id;
+        console.log(allProjects[0]);
+        setContentContainerTitle(projectList.getActiveProject().name);     
+        
         
     }
-    
+    function hasActiveProjectDivBeenDeleted(){
+        const activeDivID = projectList.getActiveProject().id;
+        if(document.querySelector(`div[id="${activeDivID}"]`)){
+            return false;
+        }else{
+            return true;
+        }
+    }
+    function areThereProjectDivsleft(){
+        const projectsList = document.querySelector(".projectsList");
+
+        if(projectsList.querySelector(".project")){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    function clickEventOnAddTaskButton(){
+        if(!doesElementExistInDOM(".taskForm")){
+            taskFunctions.createAndAppendTaskFormOnContentDiv();
+        }
+    }
     function createAndAppendAddTaskButtonToContentDiv(){
         taskFunctions.createAndAppendAddTaskButtonToContentDiv();
     }
@@ -93,7 +153,7 @@ export const wrapperFunctions = function(){
         const inputValues = getInputValuesFromTask(taskDiv.id);
         fillTaskValuesIntoTaskEditForm(taskEditForm,inputValues);
         taskFunctions.insertTaskFormBefore(taskEditForm,taskDiv);
-        taskFunctions.addHiddenClass(taskDiv);
+        addHiddenClass(taskDiv);
     }
     function clickEventOnEditCancelChangeButton(taskDiv){
        const editform = document.querySelector(".editform");
@@ -107,7 +167,7 @@ export const wrapperFunctions = function(){
         const newValues = taskFunctions.getInputValuesOfEditForm();
         taskFunctions.updateTask(targetTask, newValues);
         taskFunctions.updateTaskDivValues(taskDiv,targetTask);
-        taskFunctions.removeHiddenClass(taskDiv);
+        removeHiddenClass(taskDiv);
         const editform = document.querySelector(".editform");
         editform.remove();
     }
@@ -119,12 +179,37 @@ export const wrapperFunctions = function(){
         taskDiv.remove();
         
     }
-
-    function getActiveProjectDiv(){
-        console.log(projectList.getActiveProject());
-        const activeDivID = projectList.getActiveProject().id;
-       return document.querySelector(`div[id="${activeDivID}"]`);
+    function clickEventOnDeleteProjectButton(projectDiv){
+        projectList.deleteProjectByID(projectDiv.id);
+        projectDiv.remove();
+        const value = hasActiveProjectDivBeenDeleted();
+        if(!value){
+            return;
+        }else{
+            if(areThereProjectDivsleft()){
+                setFirstProjectToNewActiveProject();
+            }else{
+                setContentContainerTitle("");
+            }
+        }
     }
+    function setContentContainerTitle(name){
+        const title = document.querySelector(".contentTitleContainer h2");
+        title.textContent = name;
+    }
+    function doesElementExistInDOM(selector){
+        if(!document.querySelector(selector)){
+            return false;
+        }
+        return true;
+    }
+    function addHiddenClass(element){
+        element.classList.add("hidden");
+    }
+    function removeHiddenClass(element){
+        element.classList.remove("hidden");
+    }
+   
     function getTasksOfProject(project){
         return project.getTasks();
     }
@@ -144,7 +229,6 @@ export const wrapperFunctions = function(){
         const taskDescription = targetTask.description;
         const taskDate = targetTask.dueDate;
         const important = targetTask.important;
-        console.log(taskDate);
 
         return {
             taskTitle,
@@ -175,19 +259,7 @@ export const wrapperFunctions = function(){
             }
         }
     }
-    function setDefaultProjectDiv(){
-        const div = document.createElement("div");
-        div.textContent="default";
-        const defaultProject = new Project("default");
-        div.id = defaultProject.id;
-        projectList.addProject(defaultProject);
-        projectList.setActiveProject(defaultProject.id);
-        const projectsList = document.querySelector(".projectsList");
-        projectsList.appendChild(div);
-        setContentContainerTitle(defaultProject.name);
-        const tasks = getTasksOfProject(defaultProject);
-        appendTasksToTasksList(tasks);
-    }
+   
     function determineClickedFilter(className){
         switch(className){
             case 'allTasks':
@@ -207,6 +279,7 @@ export const wrapperFunctions = function(){
                 break;
         }
     }
+    
     function getAllTasks(){
         const allTasks = [];
         const allProjects = projectList.getAllProjects();
@@ -318,6 +391,10 @@ export const wrapperFunctions = function(){
         clickEventOnTaskImportantCheckBox,
         clickEventOnEditAddTaskButton,
         clickEventOnEditCancelChangeButton,
-        clickEventOnDeleteTaskButton
+        clickEventOnDeleteTaskButton,
+        clickEventOnProjectRenameButton,
+        clickEventOnProjectRenameAddButton,
+        clickEventOnDeleteProjectButton,
+        clickEventOnProjectRenameCancelButton,
     }
 }

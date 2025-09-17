@@ -3,25 +3,14 @@ import { wrapperFunctions } from "./wrapperFunctions";
 export const setEventListeners = function () {
     const wrapFunctions = wrapperFunctions();
 
-    function setEventOnProjectDivs(){
-        const projectsList = document.querySelector(".projectsList");
-        projectsList.addEventListener("click",function(event){
-            if(event.target.closest("div")){
-                wrapFunctions.clickEventOnProjectDiv(event);
-            }
-        })
-    }
-    function setEventOnAddTaskButton(){
-        const addTaskButton = document.querySelector(".addTaskButton");
-        addTaskButton.addEventListener("click",function(){
-            if(!wrapFunctions.doesElementExistInDOM(".taskForm")){
-                wrapFunctions.clickEventOnAddTaskButton();
-                setEventsOnTaskFormButtons();
-            }
-            
+    function setEventOnAddProjectButton() {
+        const addProjectButton = document.querySelector(".addProjectButton");
+
+        addProjectButton.addEventListener("click", function (event) {
+            wrapFunctions.clickEventOnAddProjectButton();
+            setEventsOnProjectFormButtons();
         })
     };
-    
     function setEventsOnProjectFormButtons() {
         const cancelButton = document.querySelector(".cancelButton");
         const addButton = document.querySelector(".addButton");
@@ -37,7 +26,51 @@ export const setEventListeners = function () {
             wrapFunctions.clickEventOnCancelProjectFormButton(event);
         });
     }
-    
+   function setEventOnProjectElements(){
+    const projectsList = document.querySelector(".projectsList");
+
+    projectsList.addEventListener("click", function(event){
+        const target = event.target;
+
+        if (target.closest(".projectForm")) {
+            return;
+        }
+        const targetProjectDiv = target.closest(".project");
+        if (!targetProjectDiv) {
+            return;
+        }
+        if (target.classList.contains("renameButton")) {
+            wrapFunctions.clickEventOnProjectRenameButton(targetProjectDiv);
+            setEventOnProjectRenameForm(targetProjectDiv);
+        }else if(target.classList.contains("deleteButton")){
+            wrapFunctions.clickEventOnDeleteProjectButton(targetProjectDiv);
+        }else {
+            wrapFunctions.clickEventOnProjectDiv(targetProjectDiv);
+        }
+    });
+}
+    function setEventOnProjectRenameForm(projectDiv){
+        const projectForm = document.querySelector(".projectForm");
+        projectForm.addEventListener("click",function(event){
+            if(event.target.classList.contains('addButton')){
+                 event.preventDefault();
+                wrapFunctions.clickEventOnProjectRenameAddButton(projectDiv);
+            }else if(event.target.classList.contains('cancelButton')){
+                event.preventDefault();
+                wrapFunctions.clickEventOnProjectRenameCancelButton(projectDiv);
+            }
+        })
+    }
+    function setEventOnAddTaskButton(){
+        const addTaskButton = document.querySelector(".addTaskButton");
+        addTaskButton.addEventListener("click",function(){
+            if(!wrapFunctions.doesElementExistInDOM(".taskForm")){
+                wrapFunctions.clickEventOnAddTaskButton();
+                setEventsOnTaskFormButtons();
+            }
+            
+        })
+    };
     function setEventsOnTaskFormButtons(){
         const taskFormCancelButton = document.querySelector(".TaskFormCancelButton");
         const taskFormAddButton = document.querySelector(".TaskFormAddButton");
@@ -64,7 +97,7 @@ export const setEventListeners = function () {
                 const taskDiv = event.target.closest(".task");
                 if(event.target.classList.contains('editButton')){
                     wrapFunctions.clickEventOnEditButton(taskDiv);
-                    setEventOnEditFormElements(taskDiv);
+                    setEventOnEditForm(taskDiv);
                 }else if(event.target.classList.contains('deleteButton')){
                     wrapFunctions.clickEventOnDeleteTaskButton(taskDiv);
                 }
@@ -72,9 +105,7 @@ export const setEventListeners = function () {
         })
         
     }
-
-       
-    function setEventOnEditFormElements(taskDiv){
+    function setEventOnEditForm(taskDiv){
         const editform = document.querySelector(".editform")
         editform.addEventListener("click",function(event){
             event.preventDefault();
@@ -85,15 +116,6 @@ export const setEventListeners = function () {
             }        
         })
     }
-    function setEventOnAddProjectButton() {
-        const addProjectButton = document.querySelector(".addProjectButton");
-
-        addProjectButton.addEventListener("click", function (event) {
-            wrapFunctions.clickEventOnAddProjectButton();
-            setEventsOnProjectFormButtons();
-        })
-    };
-    
     function setEventOnFiltersList(){
         const filtersList = document.querySelector(".filtersList");
         filtersList.addEventListener("click",function(event){
@@ -106,13 +128,15 @@ export const setEventListeners = function () {
     function entryPointEventListener(){
         setEventOnAddProjectButton();
         wrapFunctions.setDefaultProjectDiv();
-        setEventOnProjectDivs();
+        //setEventOnProjectDivs();
         wrapFunctions.createAndAppendAddTaskButtonToContentDiv();
         setEventOnAddTaskButton();
         setEventOnFiltersList();
         setEventOnTaskElements();
+        setEventOnProjectElements();
     }
     return{
         entryPointEventListener,
     }
 };
+
