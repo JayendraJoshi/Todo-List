@@ -25,15 +25,12 @@ export class Project {
 }
 
 export const handleProjects = function () {
-  function createProjectBasedOnProjectFormInput() {
-    return new Project(getNameValueOfProjectForm());
-  }
+
   function createProject(name){
     return new Project(name);
   }
 
   return {
-    createProjectBasedOnProjectFormInput,
     createProject
   };
 };
