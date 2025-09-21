@@ -17,7 +17,7 @@ export const setEventListeners = function () {
 
         addButton.addEventListener("click", function (event) {
             wrapFunctions.clickEventOnAddProjectFormButton(event);
-            if(!wrapFunctions.doesElementExistInDOM(".addTaskButton")){
+            if(!document.querySelector(".addTaskButton")){
                 wrapFunctions.createAndAppendAddTaskButtonToContentDiv();
                 setEventOnAddTaskButton();
             };
@@ -64,7 +64,7 @@ export const setEventListeners = function () {
     function setEventOnAddTaskButton(){
         const addTaskButton = document.querySelector(".addTaskButton");
         addTaskButton.addEventListener("click",function(){
-            if(!wrapFunctions.doesElementExistInDOM(".taskForm")){
+            if(!document.querySelector(".taskForm")){
                 wrapFunctions.clickEventOnAddTaskButton();
                 setEventsOnTaskFormButtons();
             }
@@ -87,7 +87,7 @@ export const setEventListeners = function () {
         const tasksList = document.querySelector(".tasksList");
         tasksList.addEventListener("change",function(event){
             if(tasksList.childElementCount > 0 ){
-                if(event.target.classList.contains('importantInput')){
+                if(event.target.classList.contains('isTaskImportantInput')){
                     wrapFunctions.clickEventOnTaskImportantCheckBox(event);
                 }
             }
@@ -120,16 +120,14 @@ export const setEventListeners = function () {
         const filtersList = document.querySelector(".filtersList");
         filtersList.addEventListener("click",function(event){
             if(event.target.closest("div")){
-                wrapFunctions.determineClickedFilter(event.target.className);
+                wrapFunctions.clickEventOnFilter(event.target.className);
             }
         })
  
     }
     function entryPointEventListener(){
         setEventOnAddProjectButton();
-        wrapFunctions.setDefaultProjectDiv();
-        //setEventOnProjectDivs();
-        wrapFunctions.createAndAppendAddTaskButtonToContentDiv();
+        wrapFunctions.startUpFunctions();
         setEventOnAddTaskButton();
         setEventOnFiltersList();
         setEventOnTaskElements();

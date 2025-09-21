@@ -1,255 +1,153 @@
-export class Task{
-    constructor(title,description,important){
-        this.title = title;
-        this.description = description;
-        this.dueDate = "";
-        this.id = crypto.randomUUID();
-        this.projectID = null;
-        this.important = important;
-    }
-    assignToProject(id){
-        this.projectID = id;
-    }
-    setDueDate(dueDate){
-        this.dueDate = new Date(dueDate);
-    }
-    setToImportant(){
-        this.important = true;
-    }
-    setToUnimportant(){
-        this.important = false;
-    }
+import { isToday, isAfter, isBefore, addDays, startOfDay } from "date-fns";
+export class Task {
+  constructor(name, description, isImportant) {
+    this.name = name;
+    this.description = description;
+    this.dueDate = "";
+    this.id = crypto.randomUUID();
+    this.projectID = null;
+    this.isImportant = isImportant;
+  }
+  setName(name) {
+    this.name = name;
+  }
+  getName() {
+    return this.name;
+  }
+  setDescription(description) {
+    this.description = description;
+  }
+  getDescription() {
+    return this.description;
+  }
+  setDueDate(dueDate) {
+    this.dueDate = new Date(dueDate);
+  }
+  getDueDate() {
+    return this.dueDate;
+  }
+  getID(){
+    return this.id;
+  }
+  setProjectID(id) {
+    this.projectID = id;
+  }
+  getProjectID() {
+    return this.projectID;
+  }
+  setIsImportant(isImportant) {
+    this.isImportant = isImportant;
+  }
+  getIsImportant() {
+    return this.isImportant;
+  }
 }
-export const handleTasks = function(){
-    const contentDiv = document.querySelector(".content");
-    function createButton(){
-        return document.createElement("button");    
+export const handleTasks = function () {
+  function updateTask(task, newValues) {
+    task.setName(newValues.taskName);
+    task.setDescription(newValues.taskDescription);
+    if (newValues.dueDate) {
+      task.setDueDate(newValues.taskDueDate);
+    } else {
+      task.setDueDate = "";
     }
-    function addAttributesForAddTaskButton(addTaskButton){
-        addTaskButton.classList.add("addTaskButton");
-        addTaskButton.textContent="+ Add Task";
-        return addTaskButton;
+    task.setIsImportant(newValues.isTaskImportant);
+  }
+  function createNewTask(values) {
+    if (values.taskDueDate == "") {
+      return new Task(
+        values.taskName,
+        values.taskDescription,
+        values.isTaskImportant
+      );
+    } else {
+      const newTask = new Task(
+        values.taskName,
+        values.taskDescription,
+        values.isTaskImportant
+      );
+      newTask.setDueDate(values.taskDueDate);
+      return newTask;
     }
-    function appendButtonOnContentDiv(button){
-        contentDiv.appendChild(button);
-    }
-    function createTaskForm(){
-        const taskForm = document.createElement("form");
-        taskForm.classList.add("taskForm");
-        const titleLabel = document.createElement("label");
-        const titleInput = document.createElement("input")
-        titleInput.name = "titleInput";
-        titleInput.type="text";
-        titleInput.classList.add("taskTitleInput");
-        titleLabel.appendChild(titleInput);
-
-        const descriptionLabel = document.createElement("label");
-        const descriptionInput = document.createElement("input");
-        descriptionInput.name = "descriptionInput";
-        descriptionInput.type="text";
-        descriptionInput.classList.add("taskDescriptionInput");
-        descriptionLabel.appendChild(descriptionInput);
-
-        const dateLabel = document.createElement("label");
-        const dateInput = document.createElement("input");
-        dateInput.name = "dateInput";
-        dateLabel.appendChild(dateInput);
-        dateInput.classList.add("taskDateInput");
-        dateInput.type="date";
-
-        const addButton = document.createElement("button");
-        addButton.textContent="Add";
-        addButton.classList.add("TaskFormAddButton");
-        addButton.type="submit";
-
-        const cancelButton = document.createElement("button");
-        cancelButton.textContent="Cancel";
-        cancelButton.classList.add("TaskFormCancelButton");
-
-        const importantInput = document.createElement("input");
-        importantInput.type="checkbox";
-        const importantLabel = document.createElement("label");
-        importantLabel.textContent="Important";
-        importantInput.classList.add("taskImportanceInput");
-
-        importantLabel.appendChild(importantInput);
-        
-
-        taskForm.appendChild(titleLabel);
-        taskForm.appendChild(descriptionLabel);
-        taskForm.appendChild(dateLabel);
-        taskForm.appendChild(importantLabel);
-        taskForm.appendChild(addButton);
-        taskForm.appendChild(cancelButton);
-        return taskForm;
-    }
-    function appendTaskFormOnContentDiv(taskForm){
-        const addTaskButton = document.querySelector(".addTaskButton");
-        contentDiv.insertBefore(taskForm,addTaskButton);
-    }
-    function insertTaskFormBefore(taskForm,referenceElement){
-        const li = document.querySelector(".tasksList li");
-        li.insertBefore(taskForm,referenceElement);
-    }
-    function getInputValuesOfTaskForm(){
-        const taskTitle = document.querySelector(".taskTitleInput").value;
-        const taskDescription = document.querySelector(".taskDescriptionInput").value;
-        const taskDueDate = document.querySelector(".taskDateInput").value;
-        const taskImportance = document.querySelector(".taskImportanceInput").checked;
-        return{
-            taskTitle,
-            taskDescription,
-            taskDueDate,
-            taskImportance
+  }
+  function getTodaysTasks(projectList) {
+    const todaysTasks = [];
+    const allProjects = projectList.getAllProjects();
+    for (let i = 0; i < allProjects.length; i++) {
+      let tasks = allProjects[i].getTasks();
+      for (let j = 0; j < tasks.length; j++) {
+        if (isToday(tasks[j].dueDate)) {
+          todaysTasks.push(tasks[j]);
         }
+      }
     }
-    function getInputValuesOfEditForm(){
-        const title = document.querySelector(".taskTitleInput").value;
-        const description = document.querySelector(".taskDescriptionInput").value;
-        const dueDate = document.querySelector(".taskDateInput").value;
-        const importance = document.querySelector(".taskImportanceInput").checked;
-        return{
-            title,
-            description,
-            dueDate,
-            importance
+    return todaysTasks;
+  }
+  function isDateInNext7Days(date) {
+    const today = startOfDay(new Date());
+    const sevenDaysFromNow = addDays(today, 7);
+    return isAfter(date, today) && isBefore(date, sevenDaysFromNow);
+  }
+  function getNext7DaysTasks(projectList) {
+    const next7DaysTasks = [];
+    const allProjects = projectList.getAllProjects();
+    for (let i = 0; i < allProjects.length; i++) {
+      let tasks = allProjects[i].getTasks();
+      for (let j = 0; j < tasks.length; j++) {
+        if (isDateInNext7Days(tasks[j].dueDate)) {
+          next7DaysTasks.push(tasks[j]);
+          console.log(tasks[j]);
         }
+      }
     }
-    function createTaskDiv(task){
-        const taskDiv = document.createElement("div");
-        const titleDiv = document.createElement("div");
-        titleDiv.textContent=task.title;
-        titleDiv.classList.add("title");
-        const descriptionDiv = document.createElement("div");
-        descriptionDiv.textContent = task.description;
-        descriptionDiv.classList.add("description");
-        const dueDateDiv = document.createElement("div");
-        dueDateDiv.classList.add("date");
-        const importantInput = document.createElement("input");
-        importantInput.type="checkbox";
-        const importantLabel = document.createElement("label");
-        importantLabel.textContent="Important";
-        importantLabel.appendChild(importantInput);
-        if(task.important===true){
-            importantInput.checked = true;
-        }else{
-            importantInput.checked = false;
+    return next7DaysTasks;
+  }
+  function getImportantTasks(projectList) {
+    const importantTasks = [];
+    const allProjects = projectList.getAllProjects();
+    for (let i = 0; i < allProjects.length; i++) {
+      let tasks = allProjects[i].getTasks();
+      for (let j = 0; j < tasks.length; j++) {
+        if (tasks[j].getIsImportant() === true) {
+          importantTasks.push(tasks[j]);
         }
-        importantInput.classList.add("importantInput");
-        if(task.dueDate instanceof Date) {
-        const day = String(task.dueDate.getDate()).padStart(2, '0');
-        const month = String(task.dueDate.getMonth() + 1).padStart(2, '0');
-        const year = task.dueDate.getFullYear();
-        dueDateDiv.textContent = `${day}-${month}-${year}`;
-        } else {
-        dueDateDiv.textContent = "";
-        }
-        const optionButton = document.createElement("button");
-        const editSpan1 = document.createElement("span");
-        const editSpan2 = document.createElement("span");
-        const editSpan3 = document.createElement("span");
-        optionButton.appendChild(editSpan1);
-        optionButton.appendChild(editSpan2);
-        optionButton.appendChild(editSpan3);
-        optionButton.classList.add("optionButton");
-        const editDiv = document.createElement("div");
-        editDiv.appendChild(optionButton);
-        const optionDiv = document.createElement("div");
-        const editButton = document.createElement("button");
-        editButton.textContent = "Edit";
-        editButton.classList.add("editButton");
-        const deleteButton = document.createElement("button");
-        deleteButton.textContent = "Delete";
-        deleteButton.classList.add("deleteButton");
-        optionDiv.appendChild(optionButton);
-        optionDiv.appendChild(editButton);
-        optionDiv.appendChild(deleteButton);
-        taskDiv.classList.add("task");
-        taskDiv.id =task.id;
-        taskDiv.appendChild(titleDiv);
-        taskDiv.appendChild(descriptionDiv);
-        taskDiv.appendChild(dueDateDiv);
-        taskDiv.appendChild(importantLabel);
-        taskDiv.appendChild(optionDiv);
-        return taskDiv;    
+      }
     }
-    function updateTaskDivValues(taskDiv, task){
-        
-        const taskTitle = taskDiv.querySelector(".title");
-        const taskDescription = taskDiv.querySelector(".description");
-        const taskDate = taskDiv.querySelector(".date");
-        const taskImportance = taskDiv.querySelector(".importantInput");
+    return importantTasks;
+  }
+  function getUnplannedTasks(projectList) {
+    const unplannedTasks = [];
+    const allProjects = projectList.getAllProjects();
+    for (let i = 0; i < allProjects.length; i++) {
+      let tasks = allProjects[i].getTasks();
+      for (let j = 0; j < tasks.length; j++) {
+        if (tasks[j].dueDate == "") {
+          unplannedTasks.push(tasks[j]);
+        }
+      }
+    }
+    return unplannedTasks;
+  }
+  function getAllInputValuesFromTask(targetTask) {
+    const taskName = targetTask.getName();
+    const taskDescription = targetTask.getDescription();
+    const taskDate = targetTask.getDueDate();
+    const isImportant = targetTask.getIsImportant();
 
-        taskTitle.textContent = task.title;
-        taskDescription.textContent = task.description;
-
-        if(task.dueDate instanceof Date) {
-        const day = String(task.dueDate.getDate()).padStart(2, '0');
-        const month = String(task.dueDate.getMonth() + 1).padStart(2, '0');
-        const year = task.dueDate.getFullYear();
-        taskDate.textContent = `${day}-${month}-${year}`;
-        } else {
-        taskDate.textContent = "";
-        }
-
-        taskImportance.checked = task.important;
-    }
-    
-     function updateTask(task,newValues){
-        task.title = newValues.title;
-        task.description = newValues.description;
-        if(newValues.dueDate){
-            task.setDueDate = newValues.dueDate;
-        }else{
-            task.setDueDate="";
-        }
-        task.important = newValues.importance;
-        }   
-    function appendTaskDivOnDOM(taskDiv){
-        const li = document.createElement("li");
-        const ul = document.querySelector(".tasksList");
-        li.appendChild(taskDiv);
-        ul.appendChild(li);
-    }
-    function createNewTaskWithInputValues(){
-        const values = getInputValuesOfTaskForm();
-        console.log(values.taskDueDate);
-        if(values.taskDueDate ==""){
-            return new Task(values.taskTitle,values.taskDescription,values.taskImportance);
-        }else {
-            const newTask = new Task(values.taskTitle,values.taskDescription,values.taskImportance);
-            newTask.setDueDate(values.taskDueDate);
-            return newTask;
-        }
-    }
-    function createAndAppendAddTaskButtonToContentDiv(){
-        const button = createButton();
-        appendButtonOnContentDiv(addAttributesForAddTaskButton(button));
-    }
-    function createAndAppendTaskDivToContentDiv(task){
-        appendTaskDivOnDOM(createTaskDiv(task));
-    }
-    function createAndAppendTaskFormOnContentDiv(){
-        appendTaskFormOnContentDiv(createTaskForm());
-    }
-    
     return {
-        createAndAppendAddTaskButtonToContentDiv,
-        createAndAppendTaskDivToContentDiv,
-        createAndAppendTaskFormOnContentDiv,
-        createNewTaskWithInputValues,
-        createTaskForm,
-        createButton,
-        addAttributesForAddTaskButton,
-        appendButtonOnContentDiv,
-        createTaskForm,
-        appendTaskFormOnContentDiv,
-        getInputValuesOfTaskForm,
-        createTaskDiv,
-        appendTaskDivOnDOM,
-        insertTaskFormBefore,
-        updateTaskDivValues,
-        getInputValuesOfEditForm,
-        updateTask,
-    }    
-}
+      taskName,
+      taskDescription,
+      taskDate,
+      isImportant,
+    };
+  }
+  return {
+    updateTask,
+    createNewTask,
+    getTodaysTasks,
+    getNext7DaysTasks,
+    getImportantTasks,
+    getUnplannedTasks,
+    getAllInputValuesFromTask,
+  };
+};
