@@ -115,6 +115,10 @@ export const wrapperFunctions = function () {
     event.target.checked = targetTask.getIsImportant();
   }
   function clickEventOnEditButton(taskDiv) {
+    if(document.querySelector(".editform")){
+      const hiddenTaskDiv = document.querySelector(".task.hidden");
+      clickEventOnEditCancelChangeButton(hiddenTaskDiv);
+    }
     const taskEditForm = taskDomFunctions.createTaskForm();
     taskEditForm.classList.add("editform");
     const activeProject = projectList.getActiveProject();
