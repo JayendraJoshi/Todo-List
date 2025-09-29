@@ -32,6 +32,7 @@ export const wrapperFunctions = function () {
     const tasks = activeProject.getTasks();
     taskDomFunctions.resetContentOfTasksList();
     taskDomFunctions.appendTasksToTasksList(tasks);
+    generalDomFunctions.removeHiddenClass(document.querySelector(".addTaskButton"));
   }
   function clickEventOnAddProjectFormButton(event) {
     event.preventDefault();
@@ -186,6 +187,7 @@ export const wrapperFunctions = function () {
     generalDomFunctions.setContentContainerTitle("Important");
   }
   function clickEventOnFilter(className) {
+    generalDomFunctions.addHiddenClass(document.querySelector(".addTaskButton"));
     switch (className) {
       case "allTasks":
         clickEventOnAllTasksDiv();

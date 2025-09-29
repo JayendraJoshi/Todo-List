@@ -16,6 +16,14 @@ export const handleTaskDomManipulation = function () {
   function appendButtonOnContentDiv(button) {
     contentDiv.appendChild(button);
   }
+  function hideAddTaskButtonFromContentDiv(){
+    const addTaskButton = document.querySelector(".addTaskButton");
+    addTaskButton.classList.add("hidden");
+  }
+  function showAddTaskButtonOnContentDiv(){
+    const addTaskButton = document.querySelector(".addTaskButton");
+    addTaskButton.classList.remove("hidden");
+  }
   function createTaskForm() {
     const taskForm = document.createElement("form");
     taskForm.classList.add("taskForm");
@@ -247,6 +255,8 @@ export const handleTaskDomManipulation = function () {
     appendTasksToTasksList,
     fillTaskValuesIntoTaskEditForm,
     createAndAppendAddTaskButtonToContentDiv,
+    hideAddTaskButtonFromContentDiv,
+    showAddTaskButtonOnContentDiv
   };
 };
 export const handleProjectDomManipulation = function () {
