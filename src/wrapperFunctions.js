@@ -154,7 +154,7 @@ export const wrapperFunctions = function () {
       return;
     } else {
       if (projectDomFunctions.areThereProjectDivsleft()) {
-        projectDomFunctions.setFirstProjectToNewActiveProject();
+        projectDomFunctions.setFirstProjectDivToNewActiveProject();
       } else {
         generalDomFunctions.setContentContainerTitle("");
       }

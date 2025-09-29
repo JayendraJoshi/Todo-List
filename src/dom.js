@@ -346,10 +346,14 @@ export const handleProjectDomManipulation = function () {
       return false;
     }
   }
-  function setFirstProjectToNewActiveProject() {
-    const allProjects = projectList.getAllProjects();
-    projectList.setActiveProjectByID(allProjects[0].id);
-    console.log(allProjects[0]);
+  function getFirstProjectDiv(){
+    const projectsList = document.querySelector(".projectsList");
+    return projectsList.firstElementChild;
+  }
+  function setFirstProjectDivToNewActiveProject() {
+    const firstProjectDiv = getFirstProjectDiv();
+    projectList.setActiveProjectByID(firstProjectDiv.id);
+    console.log("Active Project =" + projectList.getActiveProject());
     generalDomFunctions.setContentContainerTitle(projectList.getActiveProject().name);
   }
   function fillCurrentProjectNameIntoProjectRenameForm(
@@ -384,7 +388,7 @@ export const handleProjectDomManipulation = function () {
     areThereProjectDivsleft,
     hasActiveProjectDivBeenDeleted,
     setDefaultProjectDiv,
-    setFirstProjectToNewActiveProject,
+    setFirstProjectDivToNewActiveProject,
     fillCurrentProjectNameIntoProjectRenameForm,
     createDefaultProjectDiv,
   };
