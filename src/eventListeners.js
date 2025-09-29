@@ -108,12 +108,24 @@ export const setEventListeners = function () {
     function setEventOnEditForm(taskDiv){
         const editform = document.querySelector(".editform")
         editform.addEventListener("click",function(event){
-            event.preventDefault();
-            if(event.target.classList.contains('TaskFormAddButton')){
+            if (event.target.classList.contains('isTaskImportantInput')) {
+                event.stopPropagation(); 
+                return;
+            }
+            else if(event.target.classList.contains('TaskFormAddButton')){
+                event.preventDefault();
                 wrapFunctions.clickEventOnEditAddTaskButton(taskDiv);
+
             }else if(event.target.classList.contains('TaskFormCancelButton')){
+                event.preventDefault();
                 wrapFunctions.clickEventOnEditCancelChangeButton(taskDiv);
             }        
+        })
+        editform.addEventListener("change",function(event){
+            if (event.target.classList.contains('isTaskImportantInput')) {
+                event.stopPropagation(); 
+                return; 
+            }
         })
     }
     function setEventOnFiltersList(){

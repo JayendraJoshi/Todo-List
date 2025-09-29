@@ -46,7 +46,8 @@ export const handleTasks = function () {
   function updateTask(task, newValues) {
     task.setName(newValues.taskName);
     task.setDescription(newValues.taskDescription);
-    if (newValues.dueDate) {
+    console.log(newValues.taskDueDate);
+    if (newValues.taskDueDate) {
       task.setDueDate(newValues.taskDueDate);
     } else {
       task.setDueDate = "";

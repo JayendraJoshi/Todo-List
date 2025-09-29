@@ -16,14 +16,6 @@ export const handleTaskDomManipulation = function () {
   function appendButtonOnContentDiv(button) {
     contentDiv.appendChild(button);
   }
-  function hideAddTaskButtonFromContentDiv(){
-    const addTaskButton = document.querySelector(".addTaskButton");
-    addTaskButton.classList.add("hidden");
-  }
-  function showAddTaskButtonOnContentDiv(){
-    const addTaskButton = document.querySelector(".addTaskButton");
-    addTaskButton.classList.remove("hidden");
-  }
   function createTaskForm() {
     const taskForm = document.createElement("form");
     taskForm.classList.add("taskForm");
@@ -78,7 +70,7 @@ export const handleTaskDomManipulation = function () {
     contentDiv.insertBefore(taskForm, addTaskButton);
   }
   function insertTaskFormBefore(taskForm, referenceElement) {
-    const li = document.querySelector(".tasksList li");
+    const li = referenceElement.parentElement;
     li.insertBefore(taskForm, referenceElement);
   }
   function getInputValuesOfTaskForm() {
@@ -97,11 +89,15 @@ export const handleTaskDomManipulation = function () {
       isTaskImportant,
     };
   }
-  function getInputValuesOfEditForm() {
-    const taskName = document.querySelector(".taskNameInput").value;
-    const taskDescription = document.querySelector(".taskDescriptionInput").value;
-    const taskDueDate = document.querySelector(".taskDateInput").value;
-    const isTaskImportant = document.querySelector(".isTaskImportantInput").checked;
+  function getInputValuesOfGivenEditForm(formElement) {
+    const taskName = formElement.querySelector(".taskNameInput").value;
+    const taskDescription = formElement.querySelector(
+        ".taskDescriptionInput"
+    ).value;
+    const taskDueDate = formElement.querySelector(".taskDateInput").value; // ✅ Now selects the correct input!
+    const isTaskImportant = formElement.querySelector(
+        ".isTaskImportantInput"
+    ).checked;
     return {
       taskName,
       taskDescription,
@@ -217,7 +213,7 @@ export const handleTaskDomManipulation = function () {
           element.value = "";
         }
       } else if (element.classList.contains("isTaskImportantInput")) {
-        element.checked = inputValues.isTaskImportant;
+        element.checked = inputValues.isImportant;
       }
     }
   }
@@ -250,13 +246,11 @@ export const handleTaskDomManipulation = function () {
     appendTaskDivOnDOM,
     insertTaskFormBefore,
     updateTaskDivValues,
-    getInputValuesOfEditForm,
+    getInputValuesOfGivenEditForm,
     resetContentOfTasksList,
     appendTasksToTasksList,
     fillTaskValuesIntoTaskEditForm,
     createAndAppendAddTaskButtonToContentDiv,
-    hideAddTaskButtonFromContentDiv,
-    showAddTaskButtonOnContentDiv
   };
 };
 export const handleProjectDomManipulation = function () {

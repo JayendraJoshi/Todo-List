@@ -133,11 +133,11 @@ export const wrapperFunctions = function () {
   function clickEventOnEditAddTaskButton(taskDiv) {
     const activeProject = projectList.getActiveProject();
     const targetTask = activeProject.getTaskByID(taskDiv.id);
-    const newValues = taskDomFunctions.getInputValuesOfEditForm();
+    const editform = document.querySelector(".editform");
+    const newValues = taskDomFunctions.getInputValuesOfGivenEditForm(editform);
     taskFunctions.updateTask(targetTask, newValues);
     taskDomFunctions.updateTaskDivValues(taskDiv, targetTask);
     generalDomFunctions.removeHiddenClass(taskDiv);
-    const editform = document.querySelector(".editform");
     editform.remove();
   }
   function clickEventOnDeleteTaskButton(taskDiv) {
