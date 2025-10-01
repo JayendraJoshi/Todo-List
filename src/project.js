@@ -18,9 +18,15 @@ export class Project {
       return task.id === id;
     });
   }
+  setTasksArray(tasks){
+    this.tasks = tasks;
+  }
   deleteTaskByID(id) {
     const filteredTasks = this.tasks.filter((task) => task.id !== id);
     this.tasks = filteredTasks;
+  }
+  getID(){
+    return this.id;
   }
 }
 

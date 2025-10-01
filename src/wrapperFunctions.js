@@ -1,5 +1,5 @@
 import "./styles.css";
-import { ProjectList } from "./projectList";
+import { handleProjectList,ProjectList } from "./projectList";
 import { handleProjects, Project } from "./project";
 import { handleTasks, Task } from "./task";
 import {
@@ -10,6 +10,7 @@ import {
 
 export const wrapperFunctions = function () {
   const projectList = new ProjectList();
+  const projectListFunctions = handleProjectList();
 
   const projectFunctions = handleProjects();
   const projectDomFunctions = handleProjectDomManipulation();
@@ -29,10 +30,15 @@ export const wrapperFunctions = function () {
     generalDomFunctions.setContentContainerTitle(targetProject.name);
     projectList.setActiveProjectByID(targetProject.id);
     const activeProject = projectList.getActiveProject();
-    const tasks = activeProject.getTasks();
-    taskDomFunctions.resetContentOfTasksList();
-    taskDomFunctions.appendTasksToTasksList(tasks);
+    taskDomFunctions.updateTaskVisibility(activeProject.getTasks());
     generalDomFunctions.removeHiddenClass(document.querySelector(".addTaskButton"));
+  }
+  function adjustProjectList(){
+    projectListFunctions.reorderProjects(projectDomFunctions.getAllProjectDivs());
+  }
+  function adjustTaskList(){
+    const activeProject = projectList.getActiveProject();
+    projectListFunctions.reorderTasks(activeProject.getTasks(),activeProject.getID());
   }
   function clickEventOnAddProjectFormButton(event) {
     event.preventDefault();
@@ -43,6 +49,7 @@ export const wrapperFunctions = function () {
     projectList.setActiveProjectByID(project.id);
     projectDomFunctions.createAndAppendProjectDivToProjectContainer(project);
     generalDomFunctions.setContentContainerTitle(project.name);
+    taskDomFunctions.updateTaskVisibility(projectList.getActiveProject().getTasks());
     projectForm.remove();
   }
   function clickEventOnCancelProjectFormButton(event) {
@@ -83,7 +90,6 @@ export const wrapperFunctions = function () {
       taskDomFunctions.createAndAppendTaskFormOnContentDiv();
     }
   }
-
   function startUpFunctions() {
     taskDomFunctions.createAndAppendAddTaskButtonToContentDiv();
     projectDomFunctions.createDefaultProjectDiv();
@@ -166,28 +172,23 @@ export const wrapperFunctions = function () {
     }
   }
   function clickEventOnAllTasksDiv() {
-    taskDomFunctions.resetContentOfTasksList();
-    taskDomFunctions.appendTasksToTasksList(projectList.getAllTasks(projectList));
+    taskDomFunctions.updateTaskVisibility(projectList.getAllTasks());
     generalDomFunctions.setContentContainerTitle("All tasks");
   }
   function clickEventOnTodayTaskDiv() {
-    taskDomFunctions.resetContentOfTasksList();
-    taskDomFunctions.appendTasksToTasksList(taskFunctions.getTodaysTasks(projectList));
+    taskDomFunctions.updateTaskVisibility(taskFunctions.getTodaysTasks(projectList))
     generalDomFunctions.setContentContainerTitle("Today");
   }
   function clickEventOnUnplannedTaskDiv() {
-    taskDomFunctions.resetContentOfTasksList();
-    taskDomFunctions.appendTasksToTasksList(taskFunctions.getUnplannedTasks(projectList));
+    taskDomFunctions.updateTaskVisibility(taskFunctions.getUnplannedTasks(projectList)); 
     generalDomFunctions.setContentContainerTitle("Unplanned");
   }
   function clickEventOnNext7DaysDiv() {
-    taskDomFunctions.resetContentOfTasksList();
-    taskDomFunctions.appendTasksToTasksList(taskFunctions.getNext7DaysTasks(projectList));
+    taskDomFunctions.updateTaskVisibility(taskFunctions.getNext7DaysTasks(projectList));
     generalDomFunctions.setContentContainerTitle("Next 7 Days");
   }
   function clickEventOnImportantTaskDiv() {
-    taskDomFunctions.resetContentOfTasksList();
-    taskDomFunctions.appendTasksToTasksList(taskFunctions.getImportantTasks(projectList));
+    taskDomFunctions.updateTaskVisibility(taskFunctions.getImportantTasks(projectList));
     generalDomFunctions.setContentContainerTitle("Important");
   }
   function clickEventOnFilter(className) {
@@ -229,5 +230,7 @@ export const wrapperFunctions = function () {
     clickEventOnProjectRenameCancelButton,
     startUpFunctions,
     clickEventOnFilter,
+    adjustProjectList,
+    adjustTaskList
   };
 };

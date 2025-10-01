@@ -26,6 +26,9 @@ export class ProjectList{
     getAllProjects(){
         return this.list;
     }
+    setProjectsList(projectList){
+        this.list = projectList;
+    }
     setActiveProjectByID(id){
         this.activeProject = this.getProjectByID(id);
     }
@@ -55,3 +58,22 @@ export class ProjectList{
         return allTasks;
     }
 }
+    export const handleProjectList = function(){
+        const projectList = new ProjectList();
+        function reorderProjects(projectDivArray){
+            const reorderedProjectList = [];
+            for(const projectDiv of projectDivArray){
+                reorderedProjectList.push(projectList.getProjectByID(projectDiv.id));
+            }
+            projectList.setProjectsList(reorderedProjectList);
+        }
+        function reorderTasks(newTaskArray,projectID){
+            const targetProject = projectList.getProjectByID(projectID);
+            targetProject.setTasksArray(newTaskArray);
+        }
+        return{
+            reorderProjects,
+            reorderTasks,
+        }
+        
+    }

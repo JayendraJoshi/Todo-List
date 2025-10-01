@@ -4,6 +4,7 @@ import { ProjectList } from "./projectList";
 
 export const handleTaskDomManipulation = function () {
   const contentDiv = document.querySelector(".content");
+  const generalDomFunctions = handleGeneralDomManipulation();
 
   function createButton() {
     return document.createElement("button");
@@ -156,6 +157,7 @@ export const handleTaskDomManipulation = function () {
     optionDiv.appendChild(deleteTaskButton);
     taskDiv.classList.add("task");
     taskDiv.id = task.id;
+    taskDiv.draggable = true;
     taskDiv.appendChild(taskNameDiv);
     taskDiv.appendChild(taskDescriptionDiv);
     taskDiv.appendChild(taskDueDateDiv);
@@ -167,7 +169,7 @@ export const handleTaskDomManipulation = function () {
     const taskName = taskDiv.querySelector(".taskName");
     const taskDescription = taskDiv.querySelector(".taskDescription");
     const taskDate = taskDiv.querySelector(".taskDate");
-    const taskIsImportant = taskDiv.querySelector(".isTaskImportantInput");
+    const taskIsImportant = taskDiv.querySelectFor(".isTaskImportantInput");
 
     taskName.textContent = task.name;
     taskDescription.textContent = task.description;
@@ -185,6 +187,7 @@ export const handleTaskDomManipulation = function () {
   }
   function appendTaskDivOnDOM(taskDiv) {
     const li = document.createElement("li");
+    li.classList.add("liItem");
     const ul = document.querySelector(".tasksList");
     li.appendChild(taskDiv);
     ul.appendChild(li);
@@ -217,10 +220,31 @@ export const handleTaskDomManipulation = function () {
       }
     }
   }
-  function resetContentOfTasksList() {
-    const tasksList = document.querySelector(".tasksList");
-    tasksList.textContent = "";
+  function addHiddenCLassToTasks(tasksDivList) {
+     for (const taskDiv of tasksDivList){
+        const liItem = taskDiv.closest("li");
+      generalDomFunctions.addHiddenClass(liItem);
+    }
   }
+  function removeHiddenClassFromTasks(tasksDivList){
+     for (const taskDiv of tasksDivList) {
+      const liItem = taskDiv.closest("li");
+      generalDomFunctions.removeHiddenClass(liItem);
+    }
+  }
+  function getTaskDivsFromTaskIDSet(tasksSet){
+    const tasksDivList = document.querySelectorAll(".task");
+    const activeTaskDivsList = [];
+    for (const taskDiv of tasksDivList) {
+      if(tasksSet.has(taskDiv.id)){
+        activeTaskDivsList.push(taskDiv);
+      }
+    }
+    return activeTaskDivsList;
+  }
+  function getTaskIDsToMakeVisible(tasksToShow) {
+    return new Set(tasksToShow.map(task => task.getID()));
+}
   function createAndAppendAddTaskButtonToContentDiv() {
     const button = createButton();
     appendButtonOnContentDiv(addAttributesForAddTaskButton(button));
@@ -230,6 +254,12 @@ export const handleTaskDomManipulation = function () {
   }
   function createAndAppendTaskFormOnContentDiv() {
     appendTaskFormOnContentDiv(createTaskForm());
+  }
+  function updateTaskVisibility(tasksToDisplay){
+    addHiddenCLassToTasks(document.querySelectorAll(".task"));
+    const setOfTargetTaskIDs = getTaskIDsToMakeVisible(tasksToDisplay);
+    const targetTaskDivs = getTaskDivsFromTaskIDSet(setOfTargetTaskIDs);
+    removeHiddenClassFromTasks(targetTaskDivs);
   }
   return {
     createAndAppendAddTaskButtonToContentDiv,
@@ -247,10 +277,10 @@ export const handleTaskDomManipulation = function () {
     insertTaskFormBefore,
     updateTaskDivValues,
     getInputValuesOfGivenEditForm,
-    resetContentOfTasksList,
     appendTasksToTasksList,
     fillTaskValuesIntoTaskEditForm,
     createAndAppendAddTaskButtonToContentDiv,
+    updateTaskVisibility
   };
 };
 export const handleProjectDomManipulation = function () {
@@ -287,6 +317,7 @@ export const handleProjectDomManipulation = function () {
     nameElement.classList.add("projectName");
     nameElement.textContent = project.name;
     projectDiv.id = project.id;
+    projectDiv.draggable = true;
     projectDiv.classList.add("project");
     projectDiv.appendChild(nameElement);
     return projectDiv;
@@ -354,6 +385,12 @@ export const handleProjectDomManipulation = function () {
     const projectsList = document.querySelector(".projectsList");
     return projectsList.firstElementChild;
   }
+  function getAllProjectDivs(){
+    const projectsList = document.querySelector(".projectsList");
+    const projectsDivNodeList = projectsList.querySelectorAll(".project");
+    const projectsArray = Array.from(projectsDivNodeList);
+    return projectsArray;
+  }
   function setFirstProjectDivToNewActiveProject() {
     const firstProjectDiv = getFirstProjectDiv();
     projectList.setActiveProjectByID(firstProjectDiv.id);
@@ -395,6 +432,7 @@ export const handleProjectDomManipulation = function () {
     setFirstProjectDivToNewActiveProject,
     fillCurrentProjectNameIntoProjectRenameForm,
     createDefaultProjectDiv,
+    getAllProjectDivs
   };
 };
 export const handleGeneralDomManipulation = function () {

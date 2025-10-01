@@ -1,4 +1,5 @@
 import { wrapperFunctions } from "./wrapperFunctions";
+import Sortable from 'sortablejs';
 
 export const setEventListeners = function () {
     const wrapFunctions = wrapperFunctions();
@@ -26,29 +27,50 @@ export const setEventListeners = function () {
             wrapFunctions.clickEventOnCancelProjectFormButton(event);
         });
     }
+    function makeProjectsListItemsDraggalble(){
+        const projectsList = document.querySelector(".projectsList");
+        if(projectsList){
+            new Sortable(projectsList,{
+                draggable:".project",
+                onUpdate:function(event){
+                    wrapFunctions.adjustProjectList(); 
+                }
+            })
+        }
+    }
+    function makeTasksListItemsDraggable(){
+    const tasksList = document.querySelector(".tasksList");
+        if(tasksList){
+            new Sortable(tasksList,{
+                draggable:".liItem",
+                onUpdate:function(event){
+                    wrapFunctions.adjustTaskList(); 
+                }
+            })
+        }
+    }
    function setEventOnProjectElements(){
     const projectsList = document.querySelector(".projectsList");
-
-    projectsList.addEventListener("click", function(event){
-        const target = event.target;
-
-        if (target.closest(".projectForm")) {
+        projectsList.addEventListener("click", function(event){
+            if (event.target.closest(".projectForm")) {
             return;
-        }
-        const targetProjectDiv = target.closest(".project");
-        if (!targetProjectDiv) {
-            return;
-        }
-        if (target.classList.contains("renameButton")) {
-            wrapFunctions.clickEventOnProjectRenameButton(targetProjectDiv);
-            setEventOnProjectRenameForm(targetProjectDiv);
-        }else if(target.classList.contains("deleteButton")){
-            wrapFunctions.clickEventOnDeleteProjectButton(targetProjectDiv);
-        }else {
-            wrapFunctions.clickEventOnProjectDiv(targetProjectDiv);
-        }
-    });
-}
+            }
+
+            const targetProjectDiv = event.target.closest('.project');
+            if (targetProjectDiv) {
+                if (event.target.classList.contains("renameButton")) {
+                wrapFunctions.clickEventOnProjectRenameButton(targetProjectDiv);
+                setEventOnProjectRenameForm(targetProjectDiv);
+                }else if(event.target.classList.contains("deleteButton")){
+                    wrapFunctions.clickEventOnDeleteProjectButton(targetProjectDiv);
+                }else {
+                wrapFunctions.clickEventOnProjectDiv(targetProjectDiv);
+                
+                }
+            } 
+        });
+
+    }
     function setEventOnProjectRenameForm(projectDiv){
         const projectForm = document.querySelector(".projectForm");
         projectForm.addEventListener("click",function(event){
@@ -144,9 +166,12 @@ export const setEventListeners = function () {
         setEventOnFiltersList();
         setEventOnTaskElements();
         setEventOnProjectElements();
+        makeProjectsListItemsDraggalble();
+        makeTasksListItemsDraggable();
     }
     return{
         entryPointEventListener,
     }
-};
+}
+
 
