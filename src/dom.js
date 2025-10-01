@@ -169,7 +169,7 @@ export const handleTaskDomManipulation = function () {
     const taskName = taskDiv.querySelector(".taskName");
     const taskDescription = taskDiv.querySelector(".taskDescription");
     const taskDate = taskDiv.querySelector(".taskDate");
-    const taskIsImportant = taskDiv.querySelectFor(".isTaskImportantInput");
+    const taskIsImportant = taskDiv.querySelector(".isTaskImportantInput");
 
     taskName.textContent = task.name;
     taskDescription.textContent = task.description;
