@@ -52,6 +52,10 @@ export const wrapperFunctions = function () {
     taskDomFunctions.updateTaskVisibility(projectList.getActiveProject().getTasks());
     projectForm.remove();
   }
+  function clickEventOnTaskOptionIcon(taskDiv){
+    const optionsButtonsContainer = taskDiv.querySelector(".optionsButtonsContainer");
+    optionsButtonsContainer.classList.toggle("active");
+  }
   function clickEventOnCancelProjectFormButton(event) {
     event.preventDefault();
     const projectForm = document.querySelector(".projectForm");
@@ -231,6 +235,7 @@ export const wrapperFunctions = function () {
     startUpFunctions,
     clickEventOnFilter,
     adjustProjectList,
-    adjustTaskList
+    adjustTaskList,
+    clickEventOnTaskOptionIcon
   };
 };

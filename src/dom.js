@@ -135,26 +135,22 @@ export const handleTaskDomManipulation = function () {
     } else {
       taskDueDateDiv.textContent = "";
     }
-    const optionButton = document.createElement("button");
-    const editSpan1 = document.createElement("span");
-    const editSpan2 = document.createElement("span");
-    const editSpan3 = document.createElement("span");
-    optionButton.appendChild(editSpan1);
-    optionButton.appendChild(editSpan2);
-    optionButton.appendChild(editSpan3);
-    optionButton.classList.add("optionButton");
-    const editDiv = document.createElement("div");
-    editDiv.appendChild(optionButton);
-    const optionDiv = document.createElement("div");
-    const editButton = document.createElement("button");
-    editButton.textContent = "Edit";
-    editButton.classList.add("editButton");
+    const span = document.createElement("span");
+    span.classList.add("optionsSpan");
+    const editTaskButton = document.createElement("button");
+    editTaskButton.textContent = "Edit";
+    editTaskButton.classList.add("editButton");
     const deleteTaskButton = document.createElement("button");
     deleteTaskButton.textContent = "Delete";
     deleteTaskButton.classList.add("deleteButton");
-    optionDiv.appendChild(optionButton);
-    optionDiv.appendChild(editButton);
-    optionDiv.appendChild(deleteTaskButton);
+    const optionsButtonsContainer = document.createElement("div");
+    optionsButtonsContainer.classList.add("optionsButtonsContainer");
+    optionsButtonsContainer.appendChild(editTaskButton);
+    optionsButtonsContainer.appendChild(deleteTaskButton);
+    const optionsContainer = document.createElement("div");
+    optionsContainer.classList.add("optionsContainer");
+    optionsContainer.appendChild(optionsButtonsContainer);
+    optionsContainer.appendChild(span);
     taskDiv.classList.add("task");
     taskDiv.id = task.id;
     taskDiv.draggable = true;
@@ -162,7 +158,7 @@ export const handleTaskDomManipulation = function () {
     taskDiv.appendChild(taskDescriptionDiv);
     taskDiv.appendChild(taskDueDateDiv);
     taskDiv.appendChild(isTaskImportantLabel);
-    taskDiv.appendChild(optionDiv);
+    taskDiv.appendChild(optionsContainer);
     return taskDiv;
   }
   function updateTaskDivValues(taskDiv, task) {
@@ -295,6 +291,7 @@ export const handleProjectDomManipulation = function () {
     const projectInput = document.createElement("input");
     projectInput.classList.add("projectNameInput");
     projectInput.type = "text";
+    projectInput.required=true;
     const addButton = document.createElement("button");
     addButton.textContent = "Add";
     addButton.type = "submit";

@@ -103,7 +103,6 @@ export const setEventListeners = function () {
          taskFormCancelButton.addEventListener("click",function(event){
             wrapFunctions.clickEventOnTaskFormCancelButton(event);
         }) 
-
     }
      function setEventOnTaskElements(){
         const tasksList = document.querySelector(".tasksList");
@@ -123,10 +122,13 @@ export const setEventListeners = function () {
                 }else if(event.target.classList.contains('deleteButton')){
                     wrapFunctions.clickEventOnDeleteTaskButton(taskDiv);
                 }
-            }
+                else if(event.target.classList.contains('optionsSpan')){
+                    console.log("optionsSpan clicked");
+                    wrapFunctions.clickEventOnTaskOptionIcon(taskDiv);
+                }
+        }
         })
-        
-    }
+     }
     function setEventOnEditForm(taskDiv){
         const editform = document.querySelector(".editform")
         editform.addEventListener("click",function(event){
@@ -141,7 +143,7 @@ export const setEventListeners = function () {
             }else if(event.target.classList.contains('TaskFormCancelButton')){
                 event.preventDefault();
                 wrapFunctions.clickEventOnEditCancelChangeButton(taskDiv);
-            }        
+            }
         })
         editform.addEventListener("change",function(event){
             if (event.target.classList.contains('isTaskImportantInput')) {
