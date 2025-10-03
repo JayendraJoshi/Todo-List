@@ -63,6 +63,9 @@ export const setEventListeners = function () {
                 setEventOnProjectRenameForm(targetProjectDiv);
                 }else if(event.target.classList.contains("deleteButton")){
                     wrapFunctions.clickEventOnDeleteProjectButton(targetProjectDiv);
+                }else if(event.target.classList.contains('optionsSpan')){
+                    console.log("optionsSpan clicked");
+                    wrapFunctions.clickEventOnProjectOptionIcon(targetProjectDiv);
                 }else {
                 wrapFunctions.clickEventOnProjectDiv(targetProjectDiv);
                 

@@ -337,22 +337,34 @@ export const handleProjectDomManipulation = function () {
     createAndAppendProjectDivToProjectContainer(defaultProject);
     generalDomFunctions.setContentContainerTitle(defaultProject.name);
   }
-  function createProjectButtons() {
+  function createProjectDivChildren() {
     const renameButton = document.createElement("button");
     renameButton.textContent = "Rename";
     renameButton.classList.add("renameButton");
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "Delete";
     deleteButton.classList.add("deleteButton");
+    const optionsSpan = document.createElement("span");
+    optionsSpan.classList.add("optionsSpan");
     return {
       renameButton,
       deleteButton,
+      optionsSpan,
     };
   }
-  function appendButtonsToProjectDiv(buttons, projectDiv) {
-    projectDiv.appendChild(buttons.renameButton);
-    projectDiv.appendChild(buttons.deleteButton);
+  function appendElementsToProjectDiv(elements, projectDiv) {
+    const optionsButtonsContainer = document.createElement("div");
+    optionsButtonsContainer.classList.add("optionsButtonsContainer");
+    optionsButtonsContainer.appendChild(elements.renameButton);
+    optionsButtonsContainer.appendChild(elements.deleteButton);
+    const optionsContainer = document.createElement("div");
+    optionsContainer.classList.add("optionsContainer");
+    optionsContainer.appendChild(optionsButtonsContainer);
+    optionsContainer.appendChild(elements.optionsSpan);
+    projectDiv.appendChild(optionsContainer);
+ 
   }
+  
   function appendProjectDivToProjectContainer(projectDiv) {
     const projectsList = document.querySelector(".projectsList");
     projectsList.appendChild(projectDiv);
@@ -409,7 +421,7 @@ export const handleProjectDomManipulation = function () {
   }
   function createAndAppendProjectDivToProjectContainer(project) {
     const projectDiv = createProjectDiv(project);
-    appendButtonsToProjectDiv(createProjectButtons(), projectDiv);
+    appendElementsToProjectDiv(createProjectDivChildren(), projectDiv);
     appendProjectDivToProjectContainer(projectDiv);
   }
 

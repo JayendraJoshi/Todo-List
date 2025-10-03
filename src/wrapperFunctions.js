@@ -56,6 +56,10 @@ export const wrapperFunctions = function () {
     const optionsButtonsContainer = taskDiv.querySelector(".optionsButtonsContainer");
     optionsButtonsContainer.classList.toggle("active");
   }
+  function clickEventOnProjectOptionIcon(projectDiv){
+    const optionsButtonsContainer = projectDiv.querySelector(".optionsButtonsContainer");
+    optionsButtonsContainer.classList.toggle("active");
+  }
   function clickEventOnCancelProjectFormButton(event) {
     event.preventDefault();
     const projectForm = document.querySelector(".projectForm");
@@ -236,6 +240,7 @@ export const wrapperFunctions = function () {
     clickEventOnFilter,
     adjustProjectList,
     adjustTaskList,
-    clickEventOnTaskOptionIcon
+    clickEventOnTaskOptionIcon,
+    clickEventOnProjectOptionIcon
   };
 };
