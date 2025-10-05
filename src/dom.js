@@ -135,8 +135,14 @@ export const handleTaskDomManipulation = function () {
     } else {
       taskDueDateDiv.textContent = "";
     }
-    const span = document.createElement("span");
-    span.classList.add("optionsSpan");
+    const optionsSpan = document.createElement("span");
+    optionsSpan.classList.add("optionsSpan");
+    optionsSpan.classList.add("material-symbols-outlined");
+    optionsSpan.textContent="more_vert";
+    const dragSpan = document.createElement("span");
+    dragSpan.classList.add("dragSpan");
+    dragSpan.classList.add("material-symbols-outlined")
+    dragSpan.textContent="drag_indicator";
     const editTaskButton = document.createElement("button");
     editTaskButton.textContent = "Edit";
     editTaskButton.classList.add("editButton");
@@ -150,10 +156,11 @@ export const handleTaskDomManipulation = function () {
     const optionsContainer = document.createElement("div");
     optionsContainer.classList.add("optionsContainer");
     optionsContainer.appendChild(optionsButtonsContainer);
-    optionsContainer.appendChild(span);
+    optionsContainer.appendChild(optionsSpan);
     taskDiv.classList.add("task");
     taskDiv.id = task.id;
     taskDiv.draggable = true;
+    taskDiv.appendChild(dragSpan);
     taskDiv.appendChild(taskNameDiv);
     taskDiv.appendChild(taskDescriptionDiv);
     taskDiv.appendChild(taskDueDateDiv);
@@ -310,13 +317,9 @@ export const handleProjectDomManipulation = function () {
   }
   function createProjectDiv(project) {
     const projectDiv = document.createElement("div");
-    const nameElement = document.createElement("h3");
-    nameElement.classList.add("projectName");
-    nameElement.textContent = project.name;
     projectDiv.id = project.id;
     projectDiv.draggable = true;
     projectDiv.classList.add("project");
-    projectDiv.appendChild(nameElement);
     return projectDiv;
   }
   function hasActiveProjectDivBeenDeleted() {
@@ -337,7 +340,10 @@ export const handleProjectDomManipulation = function () {
     createAndAppendProjectDivToProjectContainer(defaultProject);
     generalDomFunctions.setContentContainerTitle(defaultProject.name);
   }
-  function createProjectDivChildren() {
+  function createProjectDivChildren(projectName) {
+    const nameElement = document.createElement("h3");
+    nameElement.classList.add("projectName");
+    nameElement.textContent = projectName;
     const renameButton = document.createElement("button");
     renameButton.textContent = "Rename";
     renameButton.classList.add("renameButton");
@@ -346,10 +352,18 @@ export const handleProjectDomManipulation = function () {
     deleteButton.classList.add("deleteButton");
     const optionsSpan = document.createElement("span");
     optionsSpan.classList.add("optionsSpan");
+    optionsSpan.classList.add("material-symbols-outlined");
+    optionsSpan.textContent="more_vert";
+    const dragSpan = document.createElement("span");
+    dragSpan.classList.add("dragSpan");
+    dragSpan.classList.add("material-symbols-outlined")
+    dragSpan.textContent="drag_indicator";
     return {
+      nameElement,
       renameButton,
       deleteButton,
       optionsSpan,
+      dragSpan,
     };
   }
   function appendElementsToProjectDiv(elements, projectDiv) {
@@ -361,8 +375,9 @@ export const handleProjectDomManipulation = function () {
     optionsContainer.classList.add("optionsContainer");
     optionsContainer.appendChild(optionsButtonsContainer);
     optionsContainer.appendChild(elements.optionsSpan);
+    projectDiv.appendChild(elements.dragSpan);
+    projectDiv.appendChild(elements.nameElement);
     projectDiv.appendChild(optionsContainer);
- 
   }
   
   function appendProjectDivToProjectContainer(projectDiv) {
@@ -421,7 +436,7 @@ export const handleProjectDomManipulation = function () {
   }
   function createAndAppendProjectDivToProjectContainer(project) {
     const projectDiv = createProjectDiv(project);
-    appendElementsToProjectDiv(createProjectDivChildren(), projectDiv);
+    appendElementsToProjectDiv(createProjectDivChildren(project.name), projectDiv);
     appendProjectDivToProjectContainer(projectDiv);
   }
 

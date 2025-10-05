@@ -32,6 +32,7 @@ export const setEventListeners = function () {
         if(projectsList){
             new Sortable(projectsList,{
                 draggable:".project",
+                 handle:".dragSpan",
                 onUpdate:function(event){
                     wrapFunctions.adjustProjectList(); 
                 }
@@ -43,6 +44,7 @@ export const setEventListeners = function () {
         if(tasksList){
             new Sortable(tasksList,{
                 draggable:".liItem",
+                handle:".dragSpan",
                 onUpdate:function(event){
                     wrapFunctions.adjustTaskList(); 
                 }
@@ -72,7 +74,6 @@ export const setEventListeners = function () {
                 }
             } 
         });
-
     }
     function setEventOnProjectRenameForm(projectDiv){
         const projectForm = document.querySelector(".projectForm");
