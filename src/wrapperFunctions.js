@@ -24,6 +24,7 @@ export const wrapperFunctions = function () {
     if (!document.querySelector(".projectForm")) {
       projectDomFunctions.createAndAppendProjectFormOnProjectContainer();
     }
+    updateStorage();
   }
   function clickEventOnProjectDiv(targetProjectDiv) {
     const targetProject = projectList.getProjectByID(targetProjectDiv.id);
@@ -32,13 +33,16 @@ export const wrapperFunctions = function () {
     const activeProject = projectList.getActiveProject();
     taskDomFunctions.updateTaskVisibility(activeProject.getTasks());
     generalDomFunctions.removeHiddenClass(document.querySelector(".addTaskButton"));
+    updateStorage();
   }
   function adjustProjectList(){
     projectListFunctions.reorderProjects(projectDomFunctions.getAllProjectDivs());
+    updateStorage();
   }
   function adjustTaskList(){
     const activeProject = projectList.getActiveProject();
     projectListFunctions.reorderTasks(activeProject.getTasks(),activeProject.getID());
+    updateStorage();
   }
   function clickEventOnAddProjectFormButton(event) {
     event.preventDefault();
@@ -51,6 +55,7 @@ export const wrapperFunctions = function () {
     generalDomFunctions.setContentContainerTitle(project.name);
     taskDomFunctions.updateTaskVisibility(projectList.getActiveProject().getTasks());
     projectForm.remove();
+    updateStorage();
   }
   function clickEventOnTaskOptionIcon(taskDiv){
     const optionsButtonsContainer = taskDiv.querySelector(".optionsButtonsContainer");
@@ -87,6 +92,7 @@ export const wrapperFunctions = function () {
     generalDomFunctions.removeHiddenClass(projectDiv);
     const projectEditForm = document.querySelector(".projectForm");
     projectEditForm.remove();
+    updateStorage();
   }
   function clickEventOnProjectRenameCancelButton(projectDiv) {
     const projectRenameForm = document.querySelector(".projectRenameForm");
@@ -97,10 +103,17 @@ export const wrapperFunctions = function () {
     if (!document.querySelector(".taskForm")) {
       taskDomFunctions.createAndAppendTaskFormOnContentDiv();
     }
+    updateStorage();
   }
   function startUpFunctions() {
     taskDomFunctions.createAndAppendAddTaskButtonToContentDiv();
-    projectDomFunctions.createDefaultProjectDiv();
+    if(storageAvailable("localStorage")){
+      if(localStorage.getItem("projectList")){
+        loadDataFromStorage();
+      }else{
+        projectDomFunctions.createDefaultProjectDiv();
+      }
+    }
   }
   function clickEventOnTaskFormAddButton(event) {
     const taskForm = document.querySelector(".taskForm");
@@ -112,6 +125,7 @@ export const wrapperFunctions = function () {
     activeProject.addTask(task);
     taskDomFunctions.createAndAppendTaskDivToContentDiv(task);
     taskForm.remove();
+    updateStorage();
   }
   function clickEventOnTaskFormCancelButton(event) {
     const taskForm = document.querySelector(".taskForm");
@@ -127,6 +141,7 @@ export const wrapperFunctions = function () {
       targetTask.setIsImportant(true);
     }
     event.target.checked = targetTask.getIsImportant();
+    updateStorage();
   }
   function clickEventOnEditButton(taskDiv) {
     if(document.querySelector(".editform")){
@@ -157,6 +172,7 @@ export const wrapperFunctions = function () {
     taskDomFunctions.updateTaskDivValues(taskDiv, targetTask);
     generalDomFunctions.removeHiddenClass(taskDiv);
     editform.remove();
+    updateStorage();
   }
   function clickEventOnDeleteTaskButton(taskDiv) {
     const activeProject = projectList.getActiveProject();
@@ -164,6 +180,7 @@ export const wrapperFunctions = function () {
     const liParent = taskDiv.closest("li");
     liParent.remove();
     taskDiv.remove();
+    updateStorage();
   }
   function clickEventOnDeleteProjectButton(projectDiv) {
     projectList.deleteProjectByID(projectDiv.id);
@@ -178,6 +195,7 @@ export const wrapperFunctions = function () {
         generalDomFunctions.setContentContainerTitle("");
       }
     }
+    updateStorage();
   }
   function clickEventOnAllTasksDiv() {
     taskDomFunctions.updateTaskVisibility(projectList.getAllTasks());
@@ -219,6 +237,43 @@ export const wrapperFunctions = function () {
         break;
     }
   }
+  function storageAvailable(type) {
+  let storage;
+  try {
+    storage = window[type];
+    const x = "__storage_test__";
+    storage.setItem(x, x);
+    storage.removeItem(x);
+    return true;
+  } catch (e) {
+    return (
+      e instanceof DOMException &&
+      e.name === "QuotaExceededError" &&
+      // acknowledge QuotaExceededError only if there's something already stored
+      storage &&
+      storage.length !== 0
+    );
+  }
+}
+  function updateStorage(){
+    if(storageAvailable("localStorage")){
+      localStorage.setItem("projectList",JSON.stringify(projectList));
+    }
+  }
+  function loadDataFromStorage(){
+     projectList.fromJson(JSON.parse(localStorage.getItem("projectList")));
+      //appends all project and tasks divs
+      for(const project of projectList.getAllProjects()){
+        projectDomFunctions.createAndAppendProjectDivToProjectContainer(project);
+        for(const task of project.getTasks()){
+          taskDomFunctions.createAndAppendTaskDivToContentDiv(task);
+        }
+      }
+      //sets title
+      generalDomFunctions.setContentContainerTitle(projectList.getActiveProject().getName());
+      //shows only active tasks 
+      taskDomFunctions.updateTaskVisibility(projectList.getActiveProject().getTasks());
+    }
   return {
     clickEventOnAddProjectButton,
     clickEventOnAddProjectFormButton,

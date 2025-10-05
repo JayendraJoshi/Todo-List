@@ -21,13 +21,20 @@ export class Task {
     return this.description;
   }
   setDueDate(dueDate) {
-    this.dueDate = new Date(dueDate);
+     if (dueDate) {
+        this.dueDate = new Date(dueDate);
+    } else {
+        this.dueDate = ""; 
+    }
   }
   getDueDate() {
     return this.dueDate;
   }
   getID(){
     return this.id;
+  }
+  setID(id){
+    this.id = id;
   }
   setProjectID(id) {
     this.projectID = id;
@@ -40,6 +47,13 @@ export class Task {
   }
   getIsImportant() {
     return this.isImportant;
+  }
+  static fromJson(jsonTask, projectID){
+    const task = new Task(jsonTask.name,jsonTask.description,jsonTask.isImportant);
+    task.setID(jsonTask.id);
+    task.setDueDate(jsonTask.dueDate);
+    task.setProjectID(projectID);
+    return task;
   }
 }
 export const handleTasks = function () {

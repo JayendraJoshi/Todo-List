@@ -1,3 +1,4 @@
+import { Project } from "./project";
 export class ProjectList{
     constructor(){
         if(ProjectList.instance){
@@ -56,6 +57,10 @@ export class ProjectList{
             }
         }
         return allTasks;
+    }
+    fromJson(jsonProjectList){
+        this.setProjectsList(jsonProjectList.list.map(jsonProject => Project.fromJson(jsonProject)));
+        this.setActiveProjectByID(jsonProjectList.activeProject.id); 
     }
 }
     export const handleProjectList = function(){

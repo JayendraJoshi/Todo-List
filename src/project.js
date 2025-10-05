@@ -1,3 +1,4 @@
+import { Task } from "./task";
 export class Project {
   constructor(name) {
     this.name = name;
@@ -6,6 +7,9 @@ export class Project {
   }
   setName(name) {
     this.name = name;
+  }
+  getName(){
+    return this.name;
   }
   addTask(task) {
     this.tasks.push(task);
@@ -27,6 +31,15 @@ export class Project {
   }
   getID(){
     return this.id;
+  }
+  setID(id){
+    this.id = id;
+  }
+  static fromJson(jsonProject){
+    const project = new Project(jsonProject.name);
+    project.setID(jsonProject.id);
+    project.setTasksArray(jsonProject.tasks.map(jsonTask => Task.fromJson(jsonTask, project.getID())));
+    return project;
   }
 }
 
