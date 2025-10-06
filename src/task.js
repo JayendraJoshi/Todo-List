@@ -136,7 +136,7 @@ export const handleTasks = function () {
     for (let i = 0; i < allProjects.length; i++) {
       let tasks = allProjects[i].getTasks();
       for (let j = 0; j < tasks.length; j++) {
-        if (tasks[j].dueDate == "") {
+        if (tasks[j].dueDate == "unplanned") {
           unplannedTasks.push(tasks[j]);
         }
       }

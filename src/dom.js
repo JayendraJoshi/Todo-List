@@ -125,7 +125,8 @@ export const handleTaskDomManipulation = function () {
       isTaskImportantInput.checked = false;
     }
     isTaskImportantInput.classList.add("isTaskImportantInput");
-    if (task.dueDate instanceof Date) {
+    if (task.dueDate instanceof Date && !isNaN(task.dueDate)) {
+      console.log("is valid date")
       const day = String(task.dueDate.getDate()).padStart(2, "0");
       const month = String(task.dueDate.getMonth() + 1).padStart(2, "0");
       const year = task.dueDate.getFullYear();
@@ -175,13 +176,13 @@ export const handleTaskDomManipulation = function () {
     taskName.textContent = task.name;
     taskDescription.textContent = task.description;
 
-    if (task.dueDate instanceof Date) {
+    if (task.dueDate instanceof Date && !isNaN(task.dueDate)) {
       const day = String(task.dueDate.getDate()).padStart(2, "0");
       const month = String(task.dueDate.getMonth() + 1).padStart(2, "0");
       const year = task.dueDate.getFullYear();
       taskDate.textContent = `${day}-${month}-${year}`;
     } else {
-      taskDate.textContent = "";
+      taskDate.textContent = "unplanned";
     }
 
     taskIsImportant.checked = task.getIsImportant();
