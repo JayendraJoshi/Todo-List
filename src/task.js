@@ -24,7 +24,7 @@ export class Task {
      if (dueDate) {
         this.dueDate = new Date(dueDate);
     } else {
-        this.dueDate = ""; 
+        this.dueDate = "unplanned"; 
     }
   }
   getDueDate() {
@@ -64,7 +64,7 @@ export const handleTasks = function () {
     if (newValues.taskDueDate) {
       task.setDueDate(newValues.taskDueDate);
     } else {
-      task.setDueDate = "";
+      task.setDueDate("");
     }
     task.setIsImportant(newValues.isTaskImportant);
   }

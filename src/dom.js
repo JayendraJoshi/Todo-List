@@ -53,7 +53,6 @@ export const handleTaskDomManipulation = function () {
     const taskImportantInput = document.createElement("input");
     taskImportantInput.type = "checkbox";
     const taskImportantLabel = document.createElement("label");
-    taskImportantLabel.textContent = "Important";
     taskImportantInput.classList.add("isTaskImportantInput");
 
     taskImportantLabel.appendChild(taskImportantInput);
@@ -119,7 +118,6 @@ export const handleTaskDomManipulation = function () {
     const isTaskImportantInput = document.createElement("input");
     isTaskImportantInput.type = "checkbox";
     const isTaskImportantLabel = document.createElement("label");
-    isTaskImportantLabel.textContent = "Important";
     isTaskImportantLabel.appendChild(isTaskImportantInput);
     if (task.getIsImportant() === true) {
       isTaskImportantInput.checked = true;
@@ -133,7 +131,7 @@ export const handleTaskDomManipulation = function () {
       const year = task.dueDate.getFullYear();
       taskDueDateDiv.textContent = `${day}-${month}-${year}`;
     } else {
-      taskDueDateDiv.textContent = "";
+      taskDueDateDiv.textContent = "unplanned";
     }
     const optionsSpan = document.createElement("span");
     optionsSpan.classList.add("optionsSpan");
