@@ -197,6 +197,10 @@ export const wrapperFunctions = function () {
     }
     updateStorage();
   }
+  function clickEventOnMenuSpan(){
+    const aside = document.querySelector("aside");
+    aside.classList.toggle("hidden");
+  }
   function clickEventOnAllTasksDiv() {
     taskDomFunctions.updateTaskVisibility(projectList.getAllTasks());
     generalDomFunctions.setContentContainerTitle("All tasks");
@@ -296,6 +300,7 @@ export const wrapperFunctions = function () {
     adjustProjectList,
     adjustTaskList,
     clickEventOnTaskOptionIcon,
-    clickEventOnProjectOptionIcon
+    clickEventOnProjectOptionIcon,
+    clickEventOnMenuSpan
   };
 };

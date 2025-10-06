@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=more_vert');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
 /* resets */
 *,
 *::before,
@@ -76,12 +77,6 @@ aside > div > h2{
     flex-grow: 1;
     max-height: 10vh;
 }
-.showLinks span{
-    display: block;
-    height: 4px;
-    background-color: #333;
-    border-radius: 2px;
-}
 li div{
     display:flex;
     gap:20px;
@@ -89,7 +84,7 @@ li div{
 .optionsSpan {
   font-variation-settings:
   'FILL' 0,
-  'wght' 400,
+  'wght' 500,
   'GRAD' 0,
   'opsz' 24
 }
@@ -127,8 +122,13 @@ pointer-events: none;
     pointer-events: auto;
     transform: translateY(0);
 }
-.dragSpan{
-
+.menuSpan{
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24;
+   font-size:2rem;
 }
 footer{
     flex-basis: 5vh;
