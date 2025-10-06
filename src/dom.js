@@ -223,7 +223,7 @@ export const handleTaskDomManipulation = function () {
       }
     }
   }
-  function addHiddenCLassToTasks(tasksDivList) {
+  function addHiddenClassToTasks(tasksDivList) {
      for (const taskDiv of tasksDivList){
         const liItem = taskDiv.closest("li");
       generalDomFunctions.addHiddenClass(liItem);
@@ -259,7 +259,7 @@ export const handleTaskDomManipulation = function () {
     appendTaskFormOnContentDiv(createTaskForm());
   }
   function updateTaskVisibility(tasksToDisplay){
-    addHiddenCLassToTasks(document.querySelectorAll(".task"));
+    addHiddenClassToTasks(document.querySelectorAll(".task"));
     const setOfTargetTaskIDs = getTaskIDsToMakeVisible(tasksToDisplay);
     const targetTaskDivs = getTaskDivsFromTaskIDSet(setOfTargetTaskIDs);
     removeHiddenClassFromTasks(targetTaskDivs);

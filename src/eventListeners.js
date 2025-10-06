@@ -102,10 +102,12 @@ export const setEventListeners = function () {
         const taskFormAddButton = document.querySelector(".TaskFormAddButton");
 
         taskFormAddButton.addEventListener("click",function(event){
-            wrapFunctions.clickEventOnTaskFormAddButton(event);
+            event.preventDefault();
+            wrapFunctions.clickEventOnTaskFormAddButton();
         })
          taskFormCancelButton.addEventListener("click",function(event){
-            wrapFunctions.clickEventOnTaskFormCancelButton(event);
+            event.preventDefault();
+            wrapFunctions.clickEventOnTaskFormCancelButton();
         }) 
     }
      function setEventOnTaskElements(){
@@ -170,7 +172,16 @@ export const setEventListeners = function () {
             wrapFunctions.clickEventOnMenuSpan();
         })
     }
+    function setEventOnDocument(){
+        document.addEventListener("click",function(event){
+            const isClickedInsideOptionsContainer = event.target.closest(".optionsContainer");
+            if(!isClickedInsideOptionsContainer){
+                wrapFunctions.removeActiveClassFromOptionsButtonsContainer();
+            }
+        })
+    }
     function entryPointEventListener(){
+        setEventOnDocument();
         setEventOnMenuSpan();
         setEventOnAddProjectButton();
         wrapFunctions.startUpFunctions();
