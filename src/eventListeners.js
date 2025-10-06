@@ -163,9 +163,15 @@ export const setEventListeners = function () {
                 wrapFunctions.clickEventOnFilter(event.target.className);
             }
         })
- 
+    }
+    function setEventOnMenuSpan(){
+        const menuSpan = document.querySelector(".menuSpan");
+        menuSpan.addEventListener("click",function(){
+            wrapFunctions.clickEventOnMenuSpan();
+        })
     }
     function entryPointEventListener(){
+        setEventOnMenuSpan();
         setEventOnAddProjectButton();
         wrapFunctions.startUpFunctions();
         setEventOnAddTaskButton();
