@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=more_vert');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
 /* resets */
 *,
 *::before,
@@ -146,3 +147,33 @@ footer{
     ease-out !important;
     opacity: 0 !important
   }
+.hidden-checkbox {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+.checkbox-icon {
+    font-size: 28px;
+    color: rgb(44, 44, 44); 
+    cursor: pointer;
+    user-select: none;
+    font-variation-settings: 
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 28;
+    transition: color 0.2s, font-variation-settings 0.2s;
+}
+
+.hidden-checkbox:checked + .checkbox-icon {
+    color: gold; 
+    
+    font-variation-settings: 
+      'FILL' 1,
+      'wght' 600,
+      'GRAD' 0,
+      'opsz' 28;
+}

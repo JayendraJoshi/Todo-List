@@ -117,14 +117,18 @@ export const handleTaskDomManipulation = function () {
     taskDueDateDiv.classList.add("taskDate");
     const isTaskImportantInput = document.createElement("input");
     isTaskImportantInput.type = "checkbox";
+    const importantIcon = document.createElement("span");
+    importantIcon.textContent="star";
+    importantIcon.classList.add("material-symbols-outlined", "checkbox-icon");
     const isTaskImportantLabel = document.createElement("label");
     isTaskImportantLabel.appendChild(isTaskImportantInput);
+    isTaskImportantLabel.appendChild(importantIcon);
     if (task.getIsImportant() === true) {
       isTaskImportantInput.checked = true;
     } else {
       isTaskImportantInput.checked = false;
     }
-    isTaskImportantInput.classList.add("isTaskImportantInput");
+    isTaskImportantInput.classList.add("isTaskImportantInput", "hidden-checkbox");
     if (task.dueDate instanceof Date && !isNaN(task.dueDate)) {
       console.log("is valid date")
       const day = String(task.dueDate.getDate()).padStart(2, "0");
