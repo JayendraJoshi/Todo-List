@@ -157,6 +157,9 @@ export const wrapperFunctions = function () {
       targetTask.setIsImportant(true);
     }
     event.target.checked = targetTask.getIsImportant();
+    if(document.querySelector(".contentTitleContainer h2").textContent=="Important"){
+      clickEventOnFilter("important");
+    }
     updateStorage();
   }
   function clickEventOnEditButton(taskDiv) {
