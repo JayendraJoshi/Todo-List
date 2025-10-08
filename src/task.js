@@ -156,6 +156,7 @@ export const handleTasks = function () {
       isImportant,
     };
   }
+
   return {
     updateTask,
     createNewTask,
@@ -163,6 +164,6 @@ export const handleTasks = function () {
     getNext7DaysTasks,
     getImportantTasks,
     getUnplannedTasks,
-    getAllInputValuesFromTask,
+    getAllInputValuesFromTask
   };
 };

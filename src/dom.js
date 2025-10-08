@@ -1,4 +1,3 @@
-import { handleTasks } from "./task";
 import { handleProjects} from "./project";
 import { ProjectList } from "./projectList";
 
@@ -242,14 +241,22 @@ export const handleTaskDomManipulation = function () {
     const tasksDivList = document.querySelectorAll(".task");
     const activeTaskDivsList = [];
     for (const taskDiv of tasksDivList) {
-      if(tasksSet.has(taskDiv.id)){
+      if(!tasksSet){
+        return [];
+      }
+      else if(tasksSet.has(taskDiv.id)){
         activeTaskDivsList.push(taskDiv);
       }
     }
     return activeTaskDivsList;
   }
   function getTaskIDsToMakeVisible(tasksToShow) {
-    return new Set(tasksToShow.map(task => task.getID()));
+     if (tasksToShow && tasksToShow.constructor.name === 'NodeList') {
+        tasksToShow = Array.from(tasksToShow);
+    }
+    if(tasksToShow.length!=0){
+      return new Set(tasksToShow.map(task => task.id));
+    }
 }
   function createAndAppendAddTaskButtonToContentDiv() {
     const button = createButton();
@@ -267,6 +274,7 @@ export const handleTaskDomManipulation = function () {
     const targetTaskDivs = getTaskDivsFromTaskIDSet(setOfTargetTaskIDs);
     removeHiddenClassFromTasks(targetTaskDivs);
   }
+   
   return {
     createAndAppendAddTaskButtonToContentDiv,
     createAndAppendTaskDivToContentDiv,
@@ -286,7 +294,7 @@ export const handleTaskDomManipulation = function () {
     appendTasksToTasksList,
     fillTaskValuesIntoTaskEditForm,
     createAndAppendAddTaskButtonToContentDiv,
-    updateTaskVisibility
+    updateTaskVisibility,
   };
 };
 export const handleProjectDomManipulation = function () {
@@ -340,8 +348,10 @@ export const handleProjectDomManipulation = function () {
     const defaultProject =projectFunctions.createProject("default");
     projectList.addProject(defaultProject);
     projectList.setActiveProjectByID(defaultProject.id);
-    createAndAppendProjectDivToProjectContainer(defaultProject);
-    generalDomFunctions.setContentContainerTitle(defaultProject.name);
+    const projectDiv = createProjectDiv(defaultProject);
+    appendElementsToProjectDiv(createProjectDivChildren(project.name), projectDiv);
+    appendProjectDivToProjectContainer(projectDiv);
+    updateContentContainerTitle();
   }
   function createProjectDivChildren(projectName) {
     const nameElement = document.createElement("h3");
@@ -422,7 +432,7 @@ export const handleProjectDomManipulation = function () {
     const firstProjectDiv = getFirstProjectDiv();
     projectList.setActiveProjectByID(firstProjectDiv.id);
     console.log("Active Project =" + projectList.getActiveProject());
-    generalDomFunctions.setContentContainerTitle(projectList.getActiveProject().name);
+    generalDomFunctions.updateContentContainerTitle();
   }
   function fillCurrentProjectNameIntoProjectRenameForm(
     projectRenameForm,
@@ -459,24 +469,58 @@ export const handleProjectDomManipulation = function () {
     setFirstProjectDivToNewActiveProject,
     fillCurrentProjectNameIntoProjectRenameForm,
     createDefaultProjectDiv,
-    getAllProjectDivs
+    getAllProjectDivs,
+    createProjectDivChildren,
+    appendElementsToProjectDiv,
+
   };
 };
 export const handleGeneralDomManipulation = function () {
+  const projectList = new ProjectList();
+
   function addHiddenClass(element) {
     element.classList.add("hidden");
   }
   function removeHiddenClass(element) {
     element.classList.remove("hidden");
   }
-  function setContentContainerTitle(name) {
+  function updateContentContainerTitle() {
     const title = document.querySelector(".contentTitleContainer h2");
-    title.textContent = name;
+    const activeFilter = document.querySelector(".activeFilter");
+    const activeProject = projectList.getActiveProject();
+    if(activeFilter){
+      if(activeFilter.classList.contains("today")){
+      title.textContent = "Today's Tasks";
+      }else if(activeFilter.classList.contains("important")){
+        title.textContent = "Important Tasks";
+      }else if(activeFilter.classList.contains("next7Days")){
+        title.textContent = "Tasks due in next 7 Days";
+      }else if(activeFilter.classList.contains("unplanned")){
+        title.textContent = "Unplanned Tasks";
+      }else if(activeFilter.classList.contains("allTasks")){
+        title.textContent = "All Tasks";
+      }
+    }else if(activeProject){
+      title.textContent= activeProject.name;
+    }else{
+      title.textContent = "Looks pretty empty in here..";
+    }
+  }
+  function setActiveFilterClass(element){
+    element.classList.add("activeFilter");
+  }
+  function removeCurrentActiveFilterClass(){
+    const currentActiveFilter = document.querySelector(".activeFilter");
+    if(currentActiveFilter){
+      currentActiveFilter.classList.remove("activeFilter");
+    }
   }
 
   return {
     addHiddenClass,
     removeHiddenClass,
-    setContentContainerTitle
+    updateContentContainerTitle,
+    setActiveFilterClass,
+    removeCurrentActiveFilterClass,
   };
 };

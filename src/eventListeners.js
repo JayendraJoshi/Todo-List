@@ -162,7 +162,7 @@ export const setEventListeners = function () {
         const filtersList = document.querySelector(".filtersList");
         filtersList.addEventListener("click",function(event){
             if(event.target.closest("div")){
-                wrapFunctions.clickEventOnFilter(event.target.className);
+                wrapFunctions.clickEventOnFilter(event.target);
             }
         })
     }
