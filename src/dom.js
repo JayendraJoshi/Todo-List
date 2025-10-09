@@ -51,10 +51,14 @@ export const handleTaskDomManipulation = function () {
 
     const taskImportantInput = document.createElement("input");
     taskImportantInput.type = "checkbox";
+    const importantIcon = document.createElement("span");
+    importantIcon.textContent="star";
+    importantIcon.classList.add("material-symbols-outlined", "checkbox-icon");
     const taskImportantLabel = document.createElement("label");
-    taskImportantInput.classList.add("isTaskImportantInput");
+    taskImportantInput.classList.add("isTaskImportantInput", "hidden-checkbox");
 
     taskImportantLabel.appendChild(taskImportantInput);
+    taskImportantLabel.appendChild(importantIcon);
 
     taskForm.appendChild(taskNameLabel);
     taskForm.appendChild(taskDescriptionLabel);
