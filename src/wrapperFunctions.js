@@ -105,11 +105,14 @@ export const wrapperFunctions = function () {
   function clickEventOnProjectRenameAddButton(projectDiv) {
     const newName = projectDomFunctions.getNameValueOfProjectForm();
     const targetProject = projectList.getProjectByID(projectDiv.id);
-    targetProject.setName(newName);
-    projectDomFunctions.updateProjectDivName(projectDiv, targetProject);
+    if(newName.length!=0){
+      targetProject.setName(newName);
+      projectDomFunctions.updateProjectDivName(projectDiv, targetProject);
+    }
     generalDomFunctions.removeHiddenClass(projectDiv);
     const projectEditForm = document.querySelector(".projectForm");
     projectEditForm.remove();
+    generalDomFunctions.updateContentContainerTitle();
     updateStorage();
   }
   function clickEventOnProjectRenameCancelButton(projectDiv) {

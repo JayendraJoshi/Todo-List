@@ -23,6 +23,7 @@ export const handleTaskDomManipulation = function () {
     const taskNameInput = document.createElement("input");
     taskNameInput.name = "nameInput";
     taskNameInput.type = "text";
+    taskNameInput.maxLength=25;
     taskNameInput.classList.add("taskNameInput");
     taskNameLabel.appendChild(taskNameInput);
 
@@ -313,6 +314,7 @@ export const handleProjectDomManipulation = function () {
     const projectInput = document.createElement("input");
     projectInput.classList.add("projectNameInput");
     projectInput.type = "text";
+    projectInput.maxLength = 20;
     projectInput.required=true;
     const addButton = document.createElement("button");
     addButton.textContent = "Add";
