@@ -31,6 +31,7 @@ export const handleTaskDomManipulation = function () {
     const taskDescriptionInput = document.createElement("input");
     taskDescriptionInput.name = "descriptionInput";
     taskDescriptionInput.type = "text";
+    taskDescriptionInput.maxLength = 500;
     taskDescriptionInput.classList.add("taskDescriptionInput");
     taskDescriptionLabel.appendChild(taskDescriptionInput);
 
@@ -115,8 +116,16 @@ export const handleTaskDomManipulation = function () {
     taskNameDiv.textContent = task.getName();
     taskNameDiv.classList.add("taskName");
     const taskDescriptionDiv = document.createElement("div");
-    taskDescriptionDiv.textContent = task.getDescription();
     taskDescriptionDiv.classList.add("taskDescription");
+    const taskDescriptionDetails = document.createElement("details");
+    const taskDescriptionParagraph = document.createElement("p");
+    taskDescriptionParagraph.textContent=task.getDescription();
+    taskDescriptionParagraph.classList.add("taskDescriptionText");
+    const taskDescriptionSummary = document.createElement("summary");
+    taskDescriptionSummary.textContent="Description";
+    taskDescriptionDetails.appendChild(taskDescriptionSummary);
+    taskDescriptionDetails.appendChild(taskDescriptionParagraph);
+    taskDescriptionDiv.appendChild(taskDescriptionDetails);
     const taskDueDateDiv = document.createElement("div");
     taskDueDateDiv.classList.add("taskDate");
     const isTaskImportantInput = document.createElement("input");
@@ -177,12 +186,12 @@ export const handleTaskDomManipulation = function () {
   }
   function updateTaskDivValues(taskDiv, task) {
     const taskName = taskDiv.querySelector(".taskName");
-    const taskDescription = taskDiv.querySelector(".taskDescription");
+    const taskDescriptionParagraph = taskDiv.querySelector(".taskDescriptionText");
     const taskDate = taskDiv.querySelector(".taskDate");
     const taskIsImportant = taskDiv.querySelector(".isTaskImportantInput");
 
-    taskName.textContent = task.name;
-    taskDescription.textContent = task.description;
+    taskName.textContent = task.getName();
+    taskDescriptionParagraph.textContent = task.getDescription();
 
     if (task.dueDate instanceof Date && !isNaN(task.dueDate)) {
       const day = String(task.dueDate.getDate()).padStart(2, "0");
