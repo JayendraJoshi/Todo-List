@@ -1,7 +1,7 @@
 import "./styles.css";
 import { handleProjectList,ProjectList } from "./projectList";
-import { handleProjects, Project } from "./project";
-import { handleTasks, Task } from "./task";
+import { handleProjects} from "./project";
+import { handleTasks} from "./task";
 import {
   handleProjectDomManipulation,
   handleTaskDomManipulation,
@@ -20,33 +20,66 @@ export const wrapperFunctions = function () {
 
   const generalDomFunctions = handleGeneralDomManipulation();
 
+  // general
+  function startUpFunctions() {
+    taskDomFunctions.createAndAppendAddTaskButtonToContentDiv();
+    if(storageAvailable("localStorage")){
+      if(localStorage.getItem("projectList")){
+        loadDataFromStorage();
+      }else{
+        projectDomFunctions.setDefaultProjectDiv(projectDomFunctions.createDefaultProjectDiv());
+      }
+    }
+  }
+  // filter
+  function clickEventOnAllTasksDiv() {
+    taskDomFunctions.updateTaskVisibility(projectList.getAllTasks());
+    generalDomFunctions.updateContentContainerTitle();
+  }
+  function clickEventOnTodayTaskDiv() {
+    taskDomFunctions.updateTaskVisibility(taskFunctions.getTodaysTasks(projectList))
+    generalDomFunctions.updateContentContainerTitle();
+  }
+  function clickEventOnUnplannedTaskDiv() {
+    taskDomFunctions.updateTaskVisibility(taskFunctions.getUnplannedTasks(projectList)); 
+    generalDomFunctions.updateContentContainerTitle();
+  }
+  function clickEventOnNext7DaysDiv() {
+    taskDomFunctions.updateTaskVisibility(taskFunctions.getNext7DaysTasks(projectList));
+   generalDomFunctions.updateContentContainerTitle();
+  }
+  function clickEventOnImportantTaskDiv() {
+    taskDomFunctions.updateTaskVisibility(taskFunctions.getImportantTasks(projectList));
+    generalDomFunctions.updateContentContainerTitle();
+  }
+  function updateFilterViewIfActive(){
+    const activeFilterElement = document.querySelector(".activeFilter");
+    if(activeFilterElement){
+      clickEventOnFilter(activeFilterElement);
+    }
+  }
+  function clickEventOnFilter(targetFilter) {
+    generalDomFunctions.addHiddenClass(document.querySelector(".addTaskButton"));
+    clickEventOnTaskFormCancelButton();
+    generalDomFunctions.removeCurrentActiveFilterClass();
+    generalDomFunctions.setActiveFilterClass(targetFilter);
+    if (targetFilter.classList.contains("allTasks")) {
+        clickEventOnAllTasksDiv();
+    } else if (targetFilter.classList.contains("today")) {
+        clickEventOnTodayTaskDiv();
+    } else if (targetFilter.classList.contains("unplanned")) {
+        clickEventOnUnplannedTaskDiv();
+    } else if (targetFilter.classList.contains("next7Days")) {
+        clickEventOnNext7DaysDiv();
+    } else if (targetFilter.classList.contains("important")) {
+        clickEventOnImportantTaskDiv();
+    }
+  }
+  // projects
   function clickEventOnAddProjectButton() {
     if (!document.querySelector(".projectForm")) {
       projectDomFunctions.createAndAppendProjectFormOnProjectContainer();
     }
-    updateStorage();
-  }
-  function clickEventOnProjectDiv(targetProjectDiv) {
-    const targetProject = projectList.getProjectByID(targetProjectDiv.id);
-    projectList.setActiveProjectByID(targetProject.id);
-    const activeProject = projectList.getActiveProject();
-    generalDomFunctions.removeCurrentActiveFilterClass();
-    generalDomFunctions.updateContentContainerTitle();
-    taskDomFunctions.updateTaskVisibility(activeProject.getTasks());
-    generalDomFunctions.removeHiddenClass(document.querySelector(".addTaskButton"));
-    if(document.querySelector(".editform")){
-      clickEventOnEditCancelChangeButton(document.querySelector(".task.hidden"));
-    }
-    clickEventOnTaskFormCancelButton();
-    updateStorage();
-  }
-  function adjustProjectList(){
-    projectListFunctions.reorderProjects(projectDomFunctions.getAllProjectDivs());
-    updateStorage();
-  }
-  function adjustTaskList(){
-    const activeProject = projectList.getActiveProject();
-    projectListFunctions.reorderTasks(activeProject.getTasks(),activeProject.getID());
     updateStorage();
   }
   function clickEventOnAddProjectFormButton(event) {
@@ -65,18 +98,24 @@ export const wrapperFunctions = function () {
     projectForm.remove();
     updateStorage();
   }
-  function clickEventOnTaskOptionIcon(taskDiv){
-    if(document.querySelector(".optionsButtonsContainer.active")){
-        removeActiveClassFromOptionsButtonsContainer();
-      }
-    const optionsButtonsContainer = taskDiv.querySelector(".optionsButtonsContainer");
-    optionsButtonsContainer.classList.toggle("active");
+  function clickEventOnCancelProjectFormButton(event) {
+    //event.preventDefault();
+    const projectForm = document.querySelector(".projectForm");
+    projectForm.remove();
   }
-  function removeActiveClassFromOptionsButtonsContainer(){
-    const activeContainer = document.querySelector(".optionsButtonsContainer.active");
-    if (activeContainer) {
-        activeContainer.classList.remove("active");
+  function clickEventOnProjectDiv(targetProjectDiv) {
+    const targetProject = projectList.getProjectByID(targetProjectDiv.id);
+    projectList.setActiveProjectByID(targetProject.id);
+    const activeProject = projectList.getActiveProject();
+    generalDomFunctions.removeCurrentActiveFilterClass();
+    generalDomFunctions.updateContentContainerTitle();
+    taskDomFunctions.updateTaskVisibility(activeProject.getTasks());
+    generalDomFunctions.removeHiddenClass(document.querySelector(".addTaskButton"));
+    if(document.querySelector(".editform")){
+      clickEventOnEditCancelChangeButton(document.querySelector(".task.hidden"));
     }
+    clickEventOnTaskFormCancelButton();
+    updateStorage();
   }
   function clickEventOnProjectOptionIcon(projectDiv){
     if(document.querySelector(".optionsButtonsContainer.active")){
@@ -85,21 +124,16 @@ export const wrapperFunctions = function () {
     const optionsButtonsContainer = projectDiv.querySelector(".optionsButtonsContainer");
     optionsButtonsContainer.classList.toggle("active");
   }
-  function clickEventOnCancelProjectFormButton(event) {
-    //event.preventDefault();
-    const projectForm = document.querySelector(".projectForm");
-    projectForm.remove();
-  }
-  function clickEventOnProjectRenameButton(projectDiv) {
-    const projectRenameForm = projectDomFunctions.createProjectForm();
-    projectRenameForm.classList.add("projectRenameForm");
+  function clickEventOnProjectButtonToRename(projectDiv) {
+    const projectForm = projectDomFunctions.createProjectForm();
+    projectForm.classList.add("projectRenameForm");
     const projectName = projectList.getNameOfProjectByID(projectDiv.id);
-    projectDomFunctions.fillCurrentProjectNameIntoProjectRenameForm(
-      projectRenameForm,
+    projectDomFunctions.fillCurrentProjectNameIntoProjectForm(
+      projectForm,
       projectName
     );
-    projectDomFunctions.insertProjectEditFormBefore(
-      projectRenameForm,
+    projectDomFunctions.insertProjectFormBefore(
+      projectForm,
       projectDiv
     );
     generalDomFunctions.addHiddenClass(projectDiv);
@@ -118,25 +152,57 @@ export const wrapperFunctions = function () {
     updateStorage();
   }
   function clickEventOnProjectRenameCancelButton(projectDiv) {
-    const projectRenameForm = document.querySelector(".projectRenameForm");
-    projectRenameForm.remove();
+    const projectForm = document.querySelector(".projectRenameForm");
+    projectForm.remove();
     generalDomFunctions.removeHiddenClass(projectDiv);
+  }
+  function clickEventOnDeleteProjectButton(projectDiv) {
+    projectList.deleteProjectByID(projectDiv.id);
+    projectDiv.remove();
+    const value = projectDomFunctions.hasActiveProjectDivBeenDeleted();
+    if (!value) {
+      return;
+    } else {
+      if (projectDomFunctions.areThereProjectDivsleft()) {
+        projectDomFunctions.setFirstProjectDivToNewActiveProject();
+        taskDomFunctions.updateTaskVisibility(projectList.getActiveProject().getTasks());
+      } else {
+        projectList.setActiveProjectByID(null);
+        generalDomFunctions.removeCurrentActiveFilterClass();
+        generalDomFunctions.updateContentContainerTitle();
+        taskDomFunctions.updateTaskVisibility([]);
+      }
+    }
+    updateStorage();
+  }
+  function adjustProjectList(){
+    projectListFunctions.reorderProjects(projectDomFunctions.getAllProjectDivs());
+    updateStorage();
+  }
+  // tasks
+  function adjustTaskList(){
+    const activeProject = projectList.getActiveProject();
+    projectListFunctions.reorderTasks(activeProject.getTasks(),activeProject.getID());
+    updateStorage();
+  }
+  function clickEventOnTaskOptionIcon(taskDiv){
+    if(document.querySelector(".optionsButtonsContainer.active")){
+        removeActiveClassFromOptionsButtonsContainer();
+      }
+    const optionsButtonsContainer = taskDiv.querySelector(".optionsButtonsContainer");
+    optionsButtonsContainer.classList.toggle("active");
+  }
+  function removeActiveClassFromOptionsButtonsContainer(){
+    const activeContainer = document.querySelector(".optionsButtonsContainer.active");
+    if (activeContainer) {
+        activeContainer.classList.remove("active");
+    }
   }
   function clickEventOnAddTaskButton() {
     if (!document.querySelector(".taskForm")) {
       taskDomFunctions.createAndAppendTaskFormOnContentDiv();
     }
     updateStorage();
-  }
-  function startUpFunctions() {
-    taskDomFunctions.createAndAppendAddTaskButtonToContentDiv();
-    if(storageAvailable("localStorage")){
-      if(localStorage.getItem("projectList")){
-        loadDataFromStorage();
-      }else{
-        projectDomFunctions.createDefaultProjectDiv();
-      }
-    }
   }
   function clickEventOnTaskFormAddButton(event) {
     const taskForm = event.target.closest(".taskForm");
@@ -206,72 +272,12 @@ export const wrapperFunctions = function () {
     taskDiv.remove();
     updateStorage();
   }
-  function clickEventOnDeleteProjectButton(projectDiv) {
-    projectList.deleteProjectByID(projectDiv.id);
-    projectDiv.remove();
-    const value = projectDomFunctions.hasActiveProjectDivBeenDeleted();
-    if (!value) {
-      return;
-    } else {
-      if (projectDomFunctions.areThereProjectDivsleft()) {
-        projectDomFunctions.setFirstProjectDivToNewActiveProject();
-        taskDomFunctions.updateTaskVisibility(projectList.getActiveProject().getTasks());
-      } else {
-        projectList.setActiveProjectByID(null);
-        generalDomFunctions.removeCurrentActiveFilterClass();
-        generalDomFunctions.updateContentContainerTitle();
-        taskDomFunctions.updateTaskVisibility([]);
-      }
-    }
-    updateStorage();
-  }
+  // common for projects and tasks 
   function clickEventOnMenuSpan(){
     const aside = document.querySelector("aside");
     aside.classList.toggle("hidden");
   }
-  function clickEventOnAllTasksDiv() {
-    taskDomFunctions.updateTaskVisibility(projectList.getAllTasks());
-    generalDomFunctions.updateContentContainerTitle();
-  }
-  function clickEventOnTodayTaskDiv() {
-    taskDomFunctions.updateTaskVisibility(taskFunctions.getTodaysTasks(projectList))
-    generalDomFunctions.updateContentContainerTitle();
-  }
-  function clickEventOnUnplannedTaskDiv() {
-    taskDomFunctions.updateTaskVisibility(taskFunctions.getUnplannedTasks(projectList)); 
-    generalDomFunctions.updateContentContainerTitle();
-  }
-  function clickEventOnNext7DaysDiv() {
-    taskDomFunctions.updateTaskVisibility(taskFunctions.getNext7DaysTasks(projectList));
-   generalDomFunctions.updateContentContainerTitle();
-  }
-  function clickEventOnImportantTaskDiv() {
-    taskDomFunctions.updateTaskVisibility(taskFunctions.getImportantTasks(projectList));
-    generalDomFunctions.updateContentContainerTitle();
-  }
-  function updateFilterViewIfActive(){
-    const activeFilterElement = document.querySelector(".activeFilter");
-    if(activeFilterElement){
-      clickEventOnFilter(activeFilterElement);
-    }
-  }
-  function clickEventOnFilter(targetFilter) {
-    generalDomFunctions.addHiddenClass(document.querySelector(".addTaskButton"));
-    clickEventOnTaskFormCancelButton();
-    generalDomFunctions.removeCurrentActiveFilterClass();
-    generalDomFunctions.setActiveFilterClass(targetFilter);
-    if (targetFilter.classList.contains("allTasks")) {
-        clickEventOnAllTasksDiv();
-    } else if (targetFilter.classList.contains("today")) {
-        clickEventOnTodayTaskDiv();
-    } else if (targetFilter.classList.contains("unplanned")) {
-        clickEventOnUnplannedTaskDiv();
-    } else if (targetFilter.classList.contains("next7Days")) {
-        clickEventOnNext7DaysDiv();
-    } else if (targetFilter.classList.contains("important")) {
-        clickEventOnImportantTaskDiv();
-    }
-  }
+  // storage
   function storageAvailable(type) {
   let storage;
   try {
@@ -289,7 +295,7 @@ export const wrapperFunctions = function () {
       storage.length !== 0
     );
   }
-}
+  }
   function updateStorage(){
     if(storageAvailable("localStorage")){
       localStorage.setItem("projectList",JSON.stringify(projectList));
@@ -324,7 +330,7 @@ export const wrapperFunctions = function () {
     clickEventOnEditAddTaskButton,
     clickEventOnEditCancelChangeButton,
     clickEventOnDeleteTaskButton,
-    clickEventOnProjectRenameButton,
+    clickEventOnProjectButtonToRename,
     clickEventOnProjectRenameAddButton,
     clickEventOnDeleteProjectButton,
     clickEventOnProjectRenameCancelButton,

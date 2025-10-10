@@ -306,7 +306,7 @@ export const handleProjectDomManipulation = function () {
   const projectFunctions = handleProjects();
   const projectList = new ProjectList();
   const generalDomFunctions = handleGeneralDomManipulation();
-
+  // projectform
   function createProjectForm() {
     const projectForm = document.createElement("form");
     const projectFormNameInput = document.createElement("input");
@@ -330,32 +330,28 @@ export const handleProjectDomManipulation = function () {
   function addProjectFormToDOM(projectForm) {
     projectContainer.insertBefore(projectForm, addProjectButton);
   }
+  function insertProjectFormBefore(projectEditForm, referenceElement) {
+    const projectsList = document.querySelector(".projectsList");
+    projectsList.insertBefore(projectEditForm, referenceElement);
+  }
+  function fillCurrentProjectNameIntoProjectForm(projectForm,projectName) {
+    for (const element of projectForm) {
+      if (element.classList.contains("projectNameInput")) {
+        element.value = projectName;
+      }
+    }
+  }
+  function getNameValueOfProjectForm() {
+    const projectName = document.querySelector(".projectNameInput");
+    return projectName.value;
+  }
+  // handle projectdivs
   function createProjectDiv(project) {
     const projectDiv = document.createElement("div");
     projectDiv.id = project.id;
     projectDiv.draggable = true;
     projectDiv.classList.add("project");
     return projectDiv;
-  }
-  function hasActiveProjectDivBeenDeleted() {
-    const activeDivID = projectList.getActiveProject().id;
-    if (document.querySelector(`div[id="${activeDivID}"]`)) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-  function createDefaultProjectDiv() {
-    setDefaultProjectDiv();
-  }
-  function setDefaultProjectDiv() {
-    const defaultProject =projectFunctions.createProject("default");
-    projectList.addProject(defaultProject);
-    projectList.setActiveProjectByID(defaultProject.id);
-    const projectDiv = createProjectDiv(defaultProject);
-    appendElementsToProjectDiv(createProjectDivChildren(project.name), projectDiv);
-    appendProjectDivToProjectContainer(projectDiv);
-    updateContentContainerTitle();
   }
   function createProjectDivChildren(projectName) {
     const nameElement = document.createElement("h3");
@@ -383,7 +379,19 @@ export const handleProjectDomManipulation = function () {
       dragSpan,
     };
   }
-  function appendElementsToProjectDiv(elements, projectDiv) {
+  function createDefaultProjectDiv() {
+    const defaultProject =projectFunctions.createProject("default");
+    projectList.addProject(defaultProject);
+    projectList.setActiveProjectByID(defaultProject.id);
+    const projectDiv = createProjectDiv(defaultProject);
+    return projectDiv;
+  }
+  function setDefaultProjectDiv(defaultProjectDiv) {
+    appendElementsToProjectDiv(createProjectDivChildren(project.name), projectDiv);
+    appendProjectDivToProjectContainer(projectDiv);
+    updateContentContainerTitle();
+  }
+   function appendElementsToProjectDiv(elements, projectDiv) {
     const optionsButtonsContainer = document.createElement("div");
     optionsButtonsContainer.classList.add("optionsButtonsContainer");
     optionsButtonsContainer.appendChild(elements.renameButton);
@@ -396,22 +404,21 @@ export const handleProjectDomManipulation = function () {
     projectDiv.appendChild(elements.nameElement);
     projectDiv.appendChild(optionsContainer);
   }  
-  function appendProjectDivToProjectContainer(projectDiv) {
-    const projectsList = document.querySelector(".projectsList");
-    projectsList.appendChild(projectDiv);
-  }
-  function getNameValueOfProjectForm() {
-    const projectName = document.querySelector(".projectNameInput");
-    return projectName.value;
-  }
-  function insertProjectEditFormBefore(projectEditForm, referenceElement) {
-    const projectsList = document.querySelector(".projectsList");
-    projectsList.insertBefore(projectEditForm, referenceElement);
-  }
   function updateProjectDivName(projectDiv, targetProject) {
     const projectNameElement = projectDiv.querySelector(".projectName");
     projectNameElement.textContent = targetProject.name;
   }
+  function setFirstProjectDivToNewActiveProject() {
+    const firstProjectDiv = getFirstProjectDiv();
+    projectList.setActiveProjectByID(firstProjectDiv.id);
+    console.log("Active Project =" + projectList.getActiveProject());
+    generalDomFunctions.updateContentContainerTitle();
+  }
+  function appendProjectDivToProjectContainer(projectDiv) {
+    const projectsList = document.querySelector(".projectsList");
+    projectsList.appendChild(projectDiv);
+  }
+  // get project divs or values
   function areThereProjectDivsleft() {
     const projectsList = document.querySelector(".projectsList");
 
@@ -431,22 +438,15 @@ export const handleProjectDomManipulation = function () {
     const projectsArray = Array.from(projectsDivNodeList);
     return projectsArray;
   }
-  function setFirstProjectDivToNewActiveProject() {
-    const firstProjectDiv = getFirstProjectDiv();
-    projectList.setActiveProjectByID(firstProjectDiv.id);
-    console.log("Active Project =" + projectList.getActiveProject());
-    generalDomFunctions.updateContentContainerTitle();
-  }
-  function fillCurrentProjectNameIntoProjectRenameForm(
-    projectRenameForm,
-    projectName
-  ) {
-    for (const element of projectRenameForm) {
-      if (element.classList.contains("projectNameInput")) {
-        element.value = projectName;
-      }
+  function hasActiveProjectDivBeenDeleted() {
+    const activeDivID = projectList.getActiveProject().id;
+    if (document.querySelector(`div[id="${activeDivID}"]`)) {
+      return false;
+    } else {
+      return true;
     }
   }
+  // helper functions
   function createAndAppendProjectFormOnProjectContainer() {
     addProjectFormToDOM(createProjectForm());
   }
@@ -455,7 +455,6 @@ export const handleProjectDomManipulation = function () {
     appendElementsToProjectDiv(createProjectDivChildren(project.name), projectDiv);
     appendProjectDivToProjectContainer(projectDiv);
   }
-
   return {
     createAndAppendProjectFormOnProjectContainer,
     createAndAppendProjectDivToProjectContainer,
@@ -464,18 +463,16 @@ export const handleProjectDomManipulation = function () {
     createProjectDiv,
     appendProjectDivToProjectContainer,
     getNameValueOfProjectForm,
-    insertProjectEditFormBefore,
+    insertProjectFormBefore,
     updateProjectDivName,
     areThereProjectDivsleft,
     hasActiveProjectDivBeenDeleted,
     setDefaultProjectDiv,
     setFirstProjectDivToNewActiveProject,
-    fillCurrentProjectNameIntoProjectRenameForm,
+    fillCurrentProjectNameIntoProjectForm,
     createDefaultProjectDiv,
     getAllProjectDivs,
     createProjectDivChildren,
-    appendElementsToProjectDiv,
-
   };
 };
 export const handleGeneralDomManipulation = function () {

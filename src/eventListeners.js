@@ -56,7 +56,7 @@ export const setEventListeners = function () {
             const targetProjectDiv = event.target.closest('.project');
             if (targetProjectDiv) {
                 if (event.target.classList.contains("renameButton")) {
-                wrapFunctions.clickEventOnProjectRenameButton(targetProjectDiv);
+                wrapFunctions.clickEventOnProjectButtonToRename(targetProjectDiv);
                 setEventOnProjectForm(targetProjectDiv);
                 }else if(event.target.classList.contains("deleteButton")){
                     wrapFunctions.clickEventOnDeleteProjectButton(targetProjectDiv);
@@ -64,8 +64,7 @@ export const setEventListeners = function () {
                     console.log("optionsSpan clicked");
                     wrapFunctions.clickEventOnProjectOptionIcon(targetProjectDiv);
                 }else {
-                wrapFunctions.clickEventOnProjectDiv(targetProjectDiv);
-                
+                wrapFunctions.clickEventOnProjectDiv(targetProjectDiv)    
                 }
             } 
         });
@@ -181,7 +180,7 @@ export const setEventListeners = function () {
             wrapFunctions.clickEventOnMenuSpan();
         })
     }
-    //entry
+    // entry
     function entryPointEventListener(){
         setEventOnAllObjectButtonContainer();
         setEventOnMenuSpan();
