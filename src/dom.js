@@ -386,7 +386,7 @@ export const handleProjectDomManipulation = function () {
     const projectDiv = createProjectDiv(defaultProject);
     return projectDiv;
   }
-  function setDefaultProjectDiv(defaultProjectDiv) {
+  function setDefaultProjectDiv(projectDiv) {
     appendElementsToProjectDiv(createProjectDivChildren(project.name), projectDiv);
     appendProjectDivToProjectContainer(projectDiv);
     updateContentContainerTitle();
