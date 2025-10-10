@@ -19,55 +19,55 @@ export const handleTaskDomManipulation = function () {
   function createTaskForm() {
     const taskForm = document.createElement("form");
     taskForm.classList.add("taskForm");
-    const taskNameLabel = document.createElement("label");
-    const taskNameInput = document.createElement("input");
-    taskNameInput.name = "nameInput";
-    taskNameInput.type = "text";
-    taskNameInput.maxLength=25;
-    taskNameInput.classList.add("taskNameInput");
-    taskNameLabel.appendChild(taskNameInput);
+    const taskFormNameLabel = document.createElement("label");
+    const taskFormNameInput = document.createElement("input");
+    taskFormNameInput.name = "nameInput";
+    taskFormNameInput.type = "text";
+    taskFormNameInput.maxLength=25;
+    taskFormNameInput.classList.add("taskFormNameInput");
+    taskFormNameLabel.appendChild(taskFormNameInput);
 
-    const taskDescriptionLabel = document.createElement("label");
-    const taskDescriptionInput = document.createElement("input");
-    taskDescriptionInput.name = "descriptionInput";
-    taskDescriptionInput.type = "text";
-    taskDescriptionInput.maxLength = 500;
-    taskDescriptionInput.classList.add("taskDescriptionInput");
-    taskDescriptionLabel.appendChild(taskDescriptionInput);
+    const taskFormDescriptionLabel = document.createElement("label");
+    const taskFormDescriptionInput = document.createElement("input");
+    taskFormDescriptionInput.name = "descriptionInput";
+    taskFormDescriptionInput.type = "text";
+    taskFormDescriptionInput.maxLength = 500;
+    taskFormDescriptionInput.classList.add("taskFormDescriptionInput");
+    taskFormDescriptionLabel.appendChild(taskFormDescriptionInput);
 
-    const taskDateLabel = document.createElement("label");
-    const taskDateInput = document.createElement("input");
-    taskDateInput.name = "dateInput";
-    taskDateLabel.appendChild(taskDateInput);
-    taskDateInput.classList.add("taskDateInput");
-    taskDateInput.type = "date";
+    const taskFormDateLabel = document.createElement("label");
+    const taskFormDateInput = document.createElement("input");
+    taskFormDateInput.name = "dateInput";
+    taskFormDateLabel.appendChild(taskFormDateInput);
+    taskFormDateInput.classList.add("taskFormDateInput");
+    taskFormDateInput.type = "date";
 
-    const taskAddButton = document.createElement("button");
-    taskAddButton.textContent = "Add";
-    taskAddButton.classList.add("TaskFormAddButton");
-    taskAddButton.type = "submit";
+    const taskFormAddButton = document.createElement("button");
+    taskFormAddButton.textContent = "Add";
+    taskFormAddButton.classList.add("TaskFormAddButton");
+    taskFormAddButton.type = "submit";
 
-    const taskCancelButton = document.createElement("button");
-    taskCancelButton.textContent = "Cancel";
-    taskCancelButton.classList.add("TaskFormCancelButton");
+    const taskFormCancelButton = document.createElement("button");
+    taskFormCancelButton.textContent = "Cancel";
+    taskFormCancelButton.classList.add("taskFormCancelButton");
 
-    const taskImportantInput = document.createElement("input");
-    taskImportantInput.type = "checkbox";
-    const importantIcon = document.createElement("span");
-    importantIcon.textContent="star";
-    importantIcon.classList.add("material-symbols-outlined", "checkbox-icon");
-    const taskImportantLabel = document.createElement("label");
-    taskImportantInput.classList.add("isTaskImportantInput", "hidden-checkbox");
+    const taskFormImportantInput = document.createElement("input");
+    taskFormImportantInput.type = "checkbox";
+    const taskFormImportantIcon = document.createElement("span");
+    taskFormImportantIcon.textContent="star";
+    taskFormImportantIcon.classList.add("material-symbols-outlined", "checkbox-icon");
+    const taskFormImportantLabel = document.createElement("label");
+    taskFormImportantInput.classList.add("isTaskImportantFormInput", "hidden-checkbox");
 
-    taskImportantLabel.appendChild(taskImportantInput);
-    taskImportantLabel.appendChild(importantIcon);
+    taskFormImportantLabel.appendChild(taskFormImportantInput);
+    taskFormImportantLabel.appendChild(taskFormImportantIcon);
 
-    taskForm.appendChild(taskNameLabel);
-    taskForm.appendChild(taskDescriptionLabel);
-    taskForm.appendChild(taskDateLabel);
-    taskForm.appendChild(taskImportantLabel);
-    taskForm.appendChild(taskAddButton);
-    taskForm.appendChild(taskCancelButton);
+    taskForm.appendChild(taskFormNameLabel);
+    taskForm.appendChild(taskFormDescriptionLabel);
+    taskForm.appendChild(taskFormDateLabel);
+    taskForm.appendChild(taskFormImportantLabel);
+    taskForm.appendChild(taskFormAddButton);
+    taskForm.appendChild(taskFormCancelButton);
     return taskForm;
   }
   function appendTaskFormOnContentDiv(taskForm) {
@@ -78,40 +78,34 @@ export const handleTaskDomManipulation = function () {
     const li = referenceElement.parentElement;
     li.insertBefore(taskForm, referenceElement);
   }
-  function getInputValuesOfTaskForm() {
-    const taskName = document.querySelector(".taskNameInput").value;
-    const taskDescription = document.querySelector(
-      ".taskDescriptionInput"
+  function getInputValuesOfGivenForm(formElement) {
+    const taskFormName = formElement.querySelector(".taskFormNameInput").value;
+    const taskFormDescription = formElement.querySelector(
+        ".taskFormDescriptionInput"
     ).value;
-    const taskDueDate = document.querySelector(".taskDateInput").value;
-    const isTaskImportant = document.querySelector(
-      ".isTaskImportantInput"
+    const taskFormDueDate = formElement.querySelector(".taskFormDateInput").value; 
+    const isTaskFormImportant = formElement.querySelector(
+        ".isTaskImportantFormInput"
     ).checked;
     return {
-      taskName,
-      taskDescription,
-      taskDueDate,
-      isTaskImportant,
-    };
-  }
-  function getInputValuesOfGivenEditForm(formElement) {
-    const taskName = formElement.querySelector(".taskNameInput").value;
-    const taskDescription = formElement.querySelector(
-        ".taskDescriptionInput"
-    ).value;
-    const taskDueDate = formElement.querySelector(".taskDateInput").value; // ✅ Now selects the correct input!
-    const isTaskImportant = formElement.querySelector(
-        ".isTaskImportantInput"
-    ).checked;
-    return {
-      taskName,
-      taskDescription,
-      taskDueDate,
-      isTaskImportant,
+      taskFormName,
+      taskFormDescription,
+      taskFormDueDate,
+      isTaskFormImportant,
     };
   }
   function createTaskDiv(task) {
     const taskDiv = document.createElement("div");
+
+    const taskLeftElements = document.createElement("div");
+    const dragSpan = document.createElement("span");
+    dragSpan.classList.add("dragSpan");
+    dragSpan.classList.add("material-symbols-outlined")
+    dragSpan.textContent="drag_indicator";
+
+    //taskLeftElements.appendChild(dragSpan);
+
+    const taskDetailElements = document.createElement("div");
     const taskNameDiv = document.createElement("div");
     taskNameDiv.textContent = task.getName();
     taskNameDiv.classList.add("taskName");
@@ -128,6 +122,7 @@ export const handleTaskDomManipulation = function () {
     taskDescriptionDiv.appendChild(taskDescriptionDetails);
     const taskDueDateDiv = document.createElement("div");
     taskDueDateDiv.classList.add("taskDate");
+
     const isTaskImportantInput = document.createElement("input");
     isTaskImportantInput.type = "checkbox";
     const importantIcon = document.createElement("span");
@@ -155,10 +150,6 @@ export const handleTaskDomManipulation = function () {
     optionsSpan.classList.add("optionsSpan");
     optionsSpan.classList.add("material-symbols-outlined");
     optionsSpan.textContent="more_vert";
-    const dragSpan = document.createElement("span");
-    dragSpan.classList.add("dragSpan");
-    dragSpan.classList.add("material-symbols-outlined")
-    dragSpan.textContent="drag_indicator";
     const editTaskButton = document.createElement("button");
     editTaskButton.textContent = "Edit";
     editTaskButton.classList.add("editButton");
@@ -216,13 +207,13 @@ export const handleTaskDomManipulation = function () {
       createAndAppendTaskDivToContentDiv(taskArray[i]);
     }
   }
-  function fillTaskValuesIntoTaskEditForm(taskEditForm, inputValues) {
-    for (const element of taskEditForm.elements) {
-      if (element.classList.contains("taskNameInput")) {
+  function fillTaskValuesIntoTaskForm(taskForm, inputValues) {
+    for (const element of taskForm.elements) {
+      if (element.classList.contains("taskFormNameInput")) {
         element.value = inputValues.taskName;
-      } else if (element.classList.contains("taskDescriptionInput")) {
+      } else if (element.classList.contains("taskFormDescriptionInput")) {
         element.value = inputValues.taskDescription;
-      } else if (element.classList.contains("taskDateInput")) {
+      } else if (element.classList.contains("taskFormDateInput")) {
         if (inputValues.taskDate && inputValues.taskDate instanceof Date) {
           const day = String(inputValues.taskDate.getDate()).padStart(2, "0");
           const month = String(inputValues.taskDate.getMonth() + 1).padStart(
@@ -234,7 +225,7 @@ export const handleTaskDomManipulation = function () {
         } else {
           element.value = "";
         }
-      } else if (element.classList.contains("isTaskImportantInput")) {
+      } else if (element.classList.contains("isTaskImportantFormInput")) {
         element.checked = inputValues.isImportant;
       }
     }
@@ -287,8 +278,7 @@ export const handleTaskDomManipulation = function () {
     const setOfTargetTaskIDs = getTaskIDsToMakeVisible(tasksToDisplay);
     const targetTaskDivs = getTaskDivsFromTaskIDSet(setOfTargetTaskIDs);
     removeHiddenClassFromTasks(targetTaskDivs);
-  }
-   
+  } 
   return {
     createAndAppendAddTaskButtonToContentDiv,
     createAndAppendTaskDivToContentDiv,
@@ -299,14 +289,13 @@ export const handleTaskDomManipulation = function () {
     appendButtonOnContentDiv,
     createTaskForm,
     appendTaskFormOnContentDiv,
-    getInputValuesOfTaskForm,
     createTaskDiv,
     appendTaskDivOnDOM,
     insertTaskFormBefore,
     updateTaskDivValues,
-    getInputValuesOfGivenEditForm,
+    getInputValuesOfGivenForm,
     appendTasksToTasksList,
-    fillTaskValuesIntoTaskEditForm,
+    fillTaskValuesIntoTaskForm,
     createAndAppendAddTaskButtonToContentDiv,
     updateTaskVisibility,
   };
@@ -320,21 +309,21 @@ export const handleProjectDomManipulation = function () {
 
   function createProjectForm() {
     const projectForm = document.createElement("form");
-    const projectInput = document.createElement("input");
-    projectInput.classList.add("projectNameInput");
-    projectInput.type = "text";
-    projectInput.maxLength = 20;
-    projectInput.required=true;
-    const addButton = document.createElement("button");
-    addButton.textContent = "Add";
-    addButton.type = "submit";
-    addButton.classList.add("addButton");
-    const cancelButton = document.createElement("button");
-    cancelButton.textContent = "Cancel";
-    cancelButton.classList.add("cancelButton");
-    projectForm.appendChild(projectInput);
-    projectForm.appendChild(addButton);
-    projectForm.appendChild(cancelButton);
+    const projectFormNameInput = document.createElement("input");
+    projectFormNameInput.classList.add("projectNameInput");
+    projectFormNameInput.type = "text";
+    projectFormNameInput.maxLength = 20;
+    projectFormNameInput.required=true;
+    const projectFormAddButton = document.createElement("button");
+    projectFormAddButton.textContent = "Add";
+    projectFormAddButton.type = "submit";
+    projectFormAddButton.classList.add("addButton");
+    const projectFormCancelButton = document.createElement("button");
+    projectFormCancelButton.textContent = "Cancel";
+    projectFormCancelButton.classList.add("cancelButton");
+    projectForm.appendChild(projectFormNameInput);
+    projectForm.appendChild(projectFormAddButton);
+    projectForm.appendChild(projectFormCancelButton);
     projectForm.classList.add("projectForm");
     return projectForm;
   }
@@ -406,8 +395,7 @@ export const handleProjectDomManipulation = function () {
     projectDiv.appendChild(elements.dragSpan);
     projectDiv.appendChild(elements.nameElement);
     projectDiv.appendChild(optionsContainer);
-  }
-  
+  }  
   function appendProjectDivToProjectContainer(projectDiv) {
     const projectsList = document.querySelector(".projectsList");
     projectsList.appendChild(projectDiv);

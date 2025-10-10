@@ -58,30 +58,30 @@ export class Task {
 }
 export const handleTasks = function () {
   function updateTask(task, newValues) {
-    task.setName(newValues.taskName);
-    task.setDescription(newValues.taskDescription);
+    task.setName(newValues.taskFormName);
+    task.setDescription(newValues.taskFormDescription);
     console.log(newValues.taskDueDate);
-    if (newValues.taskDueDate) {
-      task.setDueDate(newValues.taskDueDate);
+    if (newValues.taskFormDueDate) {
+      task.setDueDate(newValues.taskFormDueDate);
     } else {
       task.setDueDate("");
     }
-    task.setIsImportant(newValues.isTaskImportant);
+    task.setIsImportant(newValues.isTaskFormImportant);
   }
   function createNewTask(values) {
-    if (values.taskDueDate == "") {
+    if (values.taskFormDueDate == "") {
       return new Task(
-        values.taskName,
-        values.taskDescription,
-        values.isTaskImportant
+        values.taskFormName,
+        values.taskFormDescription,
+        values.isTaskFormImportant
       );
     } else {
       const newTask = new Task(
-        values.taskName,
-        values.taskDescription,
-        values.isTaskImportant
+       values.taskFormName,
+        values.taskFormDescription,
+        values.isTaskFormImportant
       );
-      newTask.setDueDate(values.taskDueDate);
+      newTask.setDueDate(values.taskFormDueDate);
       return newTask;
     }
   }

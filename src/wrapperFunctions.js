@@ -138,10 +138,10 @@ export const wrapperFunctions = function () {
       }
     }
   }
-  function clickEventOnTaskFormAddButton() {
-    const taskForm = document.querySelector(".taskForm");
+  function clickEventOnTaskFormAddButton(event) {
+    const taskForm = event.target.closest(".taskForm");
     const activeProject = projectList.getActiveProject();
-    const inputValues = taskDomFunctions.getInputValuesOfTaskForm();
+    const inputValues = taskDomFunctions.getInputValuesOfGivenForm(taskForm);
     const task = taskFunctions.createNewTask(inputValues);
     task.setProjectID(activeProject.id);
     activeProject.addTask(task);
@@ -172,13 +172,13 @@ export const wrapperFunctions = function () {
       const hiddenTaskDiv = document.querySelector(".task.hidden");
       clickEventOnEditCancelChangeButton(hiddenTaskDiv);
     }
-    const taskEditForm = taskDomFunctions.createTaskForm();
-    taskEditForm.classList.add("editform");
+    const taskForm = taskDomFunctions.createTaskForm();
+    taskForm.classList.add("editform");
     const activeProject = projectList.getActiveProject();
     const targetTask = activeProject.getTaskByID(taskDiv.id);
     const inputValues = taskFunctions.getAllInputValuesFromTask(targetTask);
-    taskDomFunctions.fillTaskValuesIntoTaskEditForm(taskEditForm, inputValues);
-    taskDomFunctions.insertTaskFormBefore(taskEditForm, taskDiv);
+    taskDomFunctions.fillTaskValuesIntoTaskForm(taskForm, inputValues);
+    taskDomFunctions.insertTaskFormBefore(taskForm, taskDiv);
     generalDomFunctions.addHiddenClass(taskDiv);
   }
   function clickEventOnEditCancelChangeButton(taskDiv) {
@@ -190,7 +190,7 @@ export const wrapperFunctions = function () {
     const activeProject = projectList.getActiveProject();
     const targetTask = activeProject.getTaskByID(taskDiv.id);
     const editform = document.querySelector(".editform");
-    const newValues = taskDomFunctions.getInputValuesOfGivenEditForm(editform);
+    const newValues = taskDomFunctions.getInputValuesOfGivenForm(editform);
     taskFunctions.updateTask(targetTask, newValues);
     taskDomFunctions.updateTaskDivValues(taskDiv, targetTask);
     generalDomFunctions.removeHiddenClass(taskDiv);
@@ -215,6 +215,7 @@ export const wrapperFunctions = function () {
     } else {
       if (projectDomFunctions.areThereProjectDivsleft()) {
         projectDomFunctions.setFirstProjectDivToNewActiveProject();
+        taskDomFunctions.updateTaskVisibility(projectList.getActiveProject().getTasks());
       } else {
         projectList.setActiveProjectByID(null);
         generalDomFunctions.removeCurrentActiveFilterClass();
