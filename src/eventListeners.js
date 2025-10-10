@@ -100,13 +100,12 @@ export const setEventListeners = function () {
     function setEventsOnTaskFormButtons(){
         const taskFormCancelButton = document.querySelector(".TaskFormCancelButton");
         const taskFormAddButton = document.querySelector(".TaskFormAddButton");
-
-        taskFormAddButton.addEventListener("click",function(event){
-            event.preventDefault();
+        const taskForm = document.querySelector(".taskForm");
+        taskForm.addEventListener("submit",function(event){
             wrapFunctions.clickEventOnTaskFormAddButton();
+            event.preventDefault();
         })
          taskFormCancelButton.addEventListener("click",function(event){
-            event.preventDefault();
             wrapFunctions.clickEventOnTaskFormCancelButton();
         }) 
     }
@@ -142,14 +141,14 @@ export const setEventListeners = function () {
                 event.stopPropagation(); 
                 return;
             }
-            else if(event.target.classList.contains('TaskFormAddButton')){
-                event.preventDefault();
-                wrapFunctions.clickEventOnEditAddTaskButton(taskDiv);
-
-            }else if(event.target.classList.contains('TaskFormCancelButton')){
+            else if(event.target.classList.contains('TaskFormCancelButton')){
                 event.preventDefault();
                 wrapFunctions.clickEventOnEditCancelChangeButton(taskDiv);
             }
+        })
+        editform.addEventListener("submit",function(event){
+            wrapFunctions.clickEventOnEditAddTaskButton(taskDiv);
+            event.preventDefault();
         })
         editform.addEventListener("change",function(event){
             if (event.target.classList.contains('isTaskImportantInput')) {

@@ -50,16 +50,18 @@ export const wrapperFunctions = function () {
     updateStorage();
   }
   function clickEventOnAddProjectFormButton(event) {
-    event.preventDefault();
+    //event.preventDefault();
     const projectForm = document.querySelector(".projectForm");
     const projectName = projectDomFunctions.getNameValueOfProjectForm();
-    const project = projectFunctions.createProject(projectName);
+    if(projectName.length!=0){
+     const project = projectFunctions.createProject(projectName);
     projectList.addProject(project);
     projectList.setActiveProjectByID(project.id);
     projectDomFunctions.createAndAppendProjectDivToProjectContainer(project);
     generalDomFunctions.removeCurrentActiveFilterClass();
     generalDomFunctions.updateContentContainerTitle();
-    taskDomFunctions.updateTaskVisibility(projectList.getActiveProject().getTasks());
+    taskDomFunctions.updateTaskVisibility(projectList.getActiveProject().getTasks()); 
+    }
     projectForm.remove();
     updateStorage();
   }
@@ -84,7 +86,7 @@ export const wrapperFunctions = function () {
     optionsButtonsContainer.classList.toggle("active");
   }
   function clickEventOnCancelProjectFormButton(event) {
-    event.preventDefault();
+    //event.preventDefault();
     const projectForm = document.querySelector(".projectForm");
     projectForm.remove();
   }
