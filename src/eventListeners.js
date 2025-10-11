@@ -17,6 +17,8 @@ export const setEventListeners = function () {
     function setEventOnAddProjectButton() {
         const addProjectButton = document.querySelector(".addProjectButton");
         addProjectButton.addEventListener("click", function (event) {
+            wrapFunctions.closeOpenTaskForm();
+            wrapFunctions.closeOpenProjectForm();
             wrapFunctions.clickEventOnAddProjectButton();
             setEventOnProjectForm();
         })
@@ -25,24 +27,24 @@ export const setEventListeners = function () {
         const projectForm = document.querySelector(".projectForm");
         if(projectDiv){
             projectForm.addEventListener("click",function(event){
-                if(event.target.classList.contains('addButton')){
+                if(event.target.classList.contains('projectFormAddButton')){
                     event.preventDefault();
-                    wrapFunctions.clickEventOnProjectRenameAddButton(projectDiv);
-                }else if(event.target.classList.contains('cancelButton')){
+                    wrapFunctions.clickEventOnProjectEditFormAddButton(projectDiv);
+                }else if(event.target.classList.contains('projectFormCancelButton')){
                     event.preventDefault();
-                    wrapFunctions.clickEventOnProjectRenameCancelButton(projectDiv);
+                    wrapFunctions.closeOpenProjectForm();
                 }
             })
         }else{
             projectForm.addEventListener("click",function(event){
-                if(event.target.classList.contains('addButton')){
+                if(event.target.classList.contains('projectFormAddButton')){
                     wrapFunctions.clickEventOnAddProjectFormButton(event);
                     if(!document.querySelector(".addTaskButton")){
                         wrapFunctions.createAndAppendAddTaskButtonToContentDiv();
                         setEventOnAddTaskButton();
                     };
-                }else if(event.target.classList.contains('cancelButton')){
-                    wrapFunctions.clickEventOnCancelProjectFormButton(event);          
+                }else if(event.target.classList.contains('projectFormCancelButton')){
+                    wrapFunctions.closeOpenProjectForm();         
                 }
             })
         }
@@ -56,6 +58,8 @@ export const setEventListeners = function () {
             const targetProjectDiv = event.target.closest('.project');
             if (targetProjectDiv) {
                 if (event.target.classList.contains("renameButton")) {
+                wrapFunctions.closeOpenTaskForm();
+                wrapFunctions.closeOpenProjectForm();
                 wrapFunctions.clickEventOnProjectButtonToRename(targetProjectDiv);
                 setEventOnProjectForm(targetProjectDiv);
                 }else if(event.target.classList.contains("deleteButton")){
@@ -64,11 +68,11 @@ export const setEventListeners = function () {
                     console.log("optionsSpan clicked");
                     wrapFunctions.clickEventOnProjectOptionIcon(targetProjectDiv);
                 }else {
-                wrapFunctions.clickEventOnProjectDiv(targetProjectDiv)    
+                    wrapFunctions.clickEventOnProjectDiv(targetProjectDiv)    
                 }
-            } 
+            }
         });
-    }   
+    }  
     function makeProjectsListItemsDraggalble(){
         const projectsList = document.querySelector(".projectsList");
         if(projectsList){
@@ -85,11 +89,10 @@ export const setEventListeners = function () {
     function setEventOnAddTaskButton(){
         const addTaskButton = document.querySelector(".addTaskButton");
         addTaskButton.addEventListener("click",function(){
-            if(!document.querySelector(".taskForm")){
-                wrapFunctions.clickEventOnAddTaskButton();
-                setEventOnTaskForm();
-            }
-            
+            wrapFunctions.closeOpenProjectForm();
+            wrapFunctions.closeOpenTaskForm();
+            wrapFunctions.clickEventOnAddTaskButton();
+            setEventOnTaskForm();           
         })
     }
     function setEventOnTaskForm(taskDiv){
@@ -100,9 +103,9 @@ export const setEventListeners = function () {
                     event.stopPropagation(); 
                     return;
                 }
-                else if(event.target.classList.contains('TaskFormCancelButton')){
+                else if(event.target.classList.contains('taskFormCancelButton')){
                     event.preventDefault();
-                    wrapFunctions.clickEventOnEditCancelChangeButton(taskDiv);
+                    wrapFunctions.closeOpenTaskForm();
                 }
             })
             taskForm.addEventListener("submit",function(event){
@@ -118,7 +121,7 @@ export const setEventListeners = function () {
         }else{
             taskForm.addEventListener("click",function(event){
                 if(event.target.classList.contains('taskFormCancelButton')){
-                    wrapFunctions.clickEventOnTaskFormCancelButton();
+                    wrapFunctions.closeOpenTaskForm();
                 }
             })
             taskForm.addEventListener("submit",function(event){
@@ -140,6 +143,8 @@ export const setEventListeners = function () {
             if(tasksList.childElementCount > 0 ){
                 const taskDiv = event.target.closest(".task");
                 if(event.target.classList.contains('editButton')){
+                    wrapFunctions.closeOpenProjectForm();
+                    wrapFunctions.closeOpenTaskForm();
                     wrapFunctions.clickEventOnEditButton(taskDiv);
                     setEventOnTaskForm(taskDiv);
                 }else if(event.target.classList.contains('deleteButton')){

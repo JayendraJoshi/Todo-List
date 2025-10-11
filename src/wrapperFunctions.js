@@ -60,7 +60,8 @@ export const wrapperFunctions = function () {
   }
   function clickEventOnFilter(targetFilter) {
     generalDomFunctions.addHiddenClass(document.querySelector(".addTaskButton"));
-    clickEventOnTaskFormCancelButton();
+    closeOpenTaskForm();
+    closeOpenProjectForm();
     generalDomFunctions.removeCurrentActiveFilterClass();
     generalDomFunctions.setActiveFilterClass(targetFilter);
     if (targetFilter.classList.contains("allTasks")) {
@@ -98,10 +99,18 @@ export const wrapperFunctions = function () {
     projectForm.remove();
     updateStorage();
   }
-  function clickEventOnCancelProjectFormButton(event) {
-    //event.preventDefault();
+  function closeOpenProjectForm(){
     const projectForm = document.querySelector(".projectForm");
-    projectForm.remove();
+    if(projectForm){
+      if(projectForm.classList.contains("projectEditForm")){
+        projectForm.remove();
+        const projectDiv = document.querySelector(".project-beeing-edited");
+        generalDomFunctions.removeHiddenClass(projectDiv);
+        projectDiv.classList.remove("project-beeing-edited");
+      }else{
+        projectForm.remove();
+      }
+    }
   }
   function clickEventOnProjectDiv(targetProjectDiv) {
     const targetProject = projectList.getProjectByID(targetProjectDiv.id);
@@ -111,10 +120,7 @@ export const wrapperFunctions = function () {
     generalDomFunctions.updateContentContainerTitle();
     taskDomFunctions.updateTaskVisibility(activeProject.getTasks());
     generalDomFunctions.removeHiddenClass(document.querySelector(".addTaskButton"));
-    if(document.querySelector(".editform")){
-      clickEventOnEditCancelChangeButton(document.querySelector(".task.hidden"));
-    }
-    clickEventOnTaskFormCancelButton();
+    closeOpenTaskForm();
     updateStorage();
   }
   function clickEventOnProjectOptionIcon(projectDiv){
@@ -126,7 +132,7 @@ export const wrapperFunctions = function () {
   }
   function clickEventOnProjectButtonToRename(projectDiv) {
     const projectForm = projectDomFunctions.createProjectForm();
-    projectForm.classList.add("projectRenameForm");
+    projectForm.classList.add("projectEditForm");
     const projectName = projectList.getNameOfProjectByID(projectDiv.id);
     projectDomFunctions.fillCurrentProjectNameIntoProjectForm(
       projectForm,
@@ -137,8 +143,9 @@ export const wrapperFunctions = function () {
       projectDiv
     );
     generalDomFunctions.addHiddenClass(projectDiv);
+    projectDiv.classList.add("project-beeing-edited");
   }
-  function clickEventOnProjectRenameAddButton(projectDiv) {
+  function clickEventOnProjectEditFormAddButton(projectDiv) {
     const newName = projectDomFunctions.getNameValueOfProjectForm();
     const targetProject = projectList.getProjectByID(projectDiv.id);
     if(newName.length!=0){
@@ -150,11 +157,6 @@ export const wrapperFunctions = function () {
     projectEditForm.remove();
     generalDomFunctions.updateContentContainerTitle();
     updateStorage();
-  }
-  function clickEventOnProjectRenameCancelButton(projectDiv) {
-    const projectForm = document.querySelector(".projectRenameForm");
-    projectForm.remove();
-    generalDomFunctions.removeHiddenClass(projectDiv);
   }
   function clickEventOnDeleteProjectButton(projectDiv) {
     projectList.deleteProjectByID(projectDiv.id);
@@ -198,10 +200,21 @@ export const wrapperFunctions = function () {
         activeContainer.classList.remove("active");
     }
   }
-  function clickEventOnAddTaskButton() {
-    if (!document.querySelector(".taskForm")) {
-      taskDomFunctions.createAndAppendTaskFormOnContentDiv();
+  function closeOpenTaskForm(){
+    const taskForm = document.querySelector(".taskForm");
+    if(taskForm){
+      if(taskForm.classList.contains("taskEditForm")){
+        taskForm.remove();
+        const taskDiv = document.querySelector(".task-beeing-edited");
+        generalDomFunctions.removeHiddenClass(taskDiv);
+        taskDiv.classList.remove("task-beeing-edited");
+      }else{
+        taskForm.remove();
+      }
     }
+  }
+  function clickEventOnAddTaskButton() {
+    taskDomFunctions.createAndAppendTaskFormOnContentDiv();
     updateStorage();
   }
   function clickEventOnTaskFormAddButton(event) {
@@ -214,12 +227,6 @@ export const wrapperFunctions = function () {
     taskDomFunctions.createAndAppendTaskDivToContentDiv(task);
     taskForm.remove();
     updateStorage();
-  }
-  function clickEventOnTaskFormCancelButton() {
-    const taskForm = document.querySelector(".taskForm");
-    if(taskForm){
-      taskForm.remove();
-    }
   }
   function clickEventOnTaskImportantCheckBox(event) {
     const taskID = event.target.closest("div").id;
@@ -234,33 +241,25 @@ export const wrapperFunctions = function () {
     updateStorage();
   }
   function clickEventOnEditButton(taskDiv) {
-    if(document.querySelector(".editform")){
-      const hiddenTaskDiv = document.querySelector(".task.hidden");
-      clickEventOnEditCancelChangeButton(hiddenTaskDiv);
-    }
     const taskForm = taskDomFunctions.createTaskForm();
-    taskForm.classList.add("editform");
+    taskForm.classList.add("taskEditForm");
     const activeProject = projectList.getActiveProject();
     const targetTask = activeProject.getTaskByID(taskDiv.id);
     const inputValues = taskFunctions.getAllInputValuesFromTask(targetTask);
     taskDomFunctions.fillTaskValuesIntoTaskForm(taskForm, inputValues);
     taskDomFunctions.insertTaskFormBefore(taskForm, taskDiv);
     generalDomFunctions.addHiddenClass(taskDiv);
-  }
-  function clickEventOnEditCancelChangeButton(taskDiv) {
-    const editform = document.querySelector(".editform");
-    editform.remove();
-    generalDomFunctions.removeHiddenClass(taskDiv);
+    taskDiv.classList.add("task-beeing-edited");
   }
   function clickEventOnEditAddTaskButton(taskDiv) {
     const activeProject = projectList.getActiveProject();
     const targetTask = activeProject.getTaskByID(taskDiv.id);
-    const editform = document.querySelector(".editform");
-    const newValues = taskDomFunctions.getInputValuesOfGivenForm(editform);
+    const taskEditForm = document.querySelector(".taskEditForm");
+    const newValues = taskDomFunctions.getInputValuesOfGivenForm(taskEditForm);
     taskFunctions.updateTask(targetTask, newValues);
     taskDomFunctions.updateTaskDivValues(taskDiv, targetTask);
     generalDomFunctions.removeHiddenClass(taskDiv);
-    editform.remove();
+    taskEditForm.remove();
     updateFilterViewIfActive();
     updateStorage();
   }
@@ -320,20 +319,16 @@ export const wrapperFunctions = function () {
   return {
     clickEventOnAddProjectButton,
     clickEventOnAddProjectFormButton,
-    clickEventOnCancelProjectFormButton,
     clickEventOnTaskFormAddButton,
-    clickEventOnTaskFormCancelButton,
     clickEventOnProjectDiv,
     clickEventOnAddTaskButton,
     clickEventOnEditButton,
     clickEventOnTaskImportantCheckBox,
     clickEventOnEditAddTaskButton,
-    clickEventOnEditCancelChangeButton,
     clickEventOnDeleteTaskButton,
     clickEventOnProjectButtonToRename,
-    clickEventOnProjectRenameAddButton,
+    clickEventOnProjectEditFormAddButton,
     clickEventOnDeleteProjectButton,
-    clickEventOnProjectRenameCancelButton,
     startUpFunctions,
     clickEventOnFilter,
     adjustProjectList,
@@ -342,5 +337,7 @@ export const wrapperFunctions = function () {
     clickEventOnProjectOptionIcon,
     clickEventOnMenuSpan,
     removeActiveClassFromOptionsButtonsContainer,
+    closeOpenProjectForm,
+    closeOpenTaskForm
   };
 };

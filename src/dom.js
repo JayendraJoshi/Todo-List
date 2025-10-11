@@ -310,17 +310,17 @@ export const handleProjectDomManipulation = function () {
   function createProjectForm() {
     const projectForm = document.createElement("form");
     const projectFormNameInput = document.createElement("input");
-    projectFormNameInput.classList.add("projectNameInput");
+    projectFormNameInput.classList.add("projectFormNameInput");
     projectFormNameInput.type = "text";
     projectFormNameInput.maxLength = 20;
     projectFormNameInput.required=true;
     const projectFormAddButton = document.createElement("button");
     projectFormAddButton.textContent = "Add";
     projectFormAddButton.type = "submit";
-    projectFormAddButton.classList.add("addButton");
+    projectFormAddButton.classList.add("projectFormAddButton");
     const projectFormCancelButton = document.createElement("button");
     projectFormCancelButton.textContent = "Cancel";
-    projectFormCancelButton.classList.add("cancelButton");
+    projectFormCancelButton.classList.add("projectFormCancelButton");
     projectForm.appendChild(projectFormNameInput);
     projectForm.appendChild(projectFormAddButton);
     projectForm.appendChild(projectFormCancelButton);
@@ -336,13 +336,13 @@ export const handleProjectDomManipulation = function () {
   }
   function fillCurrentProjectNameIntoProjectForm(projectForm,projectName) {
     for (const element of projectForm) {
-      if (element.classList.contains("projectNameInput")) {
+      if (element.classList.contains("projectFormNameInput")) {
         element.value = projectName;
       }
     }
   }
   function getNameValueOfProjectForm() {
-    const projectName = document.querySelector(".projectNameInput");
+    const projectName = document.querySelector(".projectFormNameInput");
     return projectName.value;
   }
   // handle projectdivs
