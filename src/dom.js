@@ -478,6 +478,14 @@ export const handleProjectDomManipulation = function () {
 export const handleGeneralDomManipulation = function () {
   const projectList = new ProjectList();
 
+  const FILTER_TITLES = {
+    "today": "Today's Tasks",
+    "important": "Important Tasks",
+    "next7Days": "Tasks due in next 7 Days",
+    "unplanned": "Unplanned Tasks",
+    "allTasks": "All Tasks"
+};
+
   function addHiddenClass(element) {
     element.classList.add("hidden");
   }
@@ -486,41 +494,26 @@ export const handleGeneralDomManipulation = function () {
   }
   function updateContentContainerTitle() {
     const title = document.querySelector(".contentTitleContainer h2");
-    const activeFilter = document.querySelector(".activeFilter");
+    const activeFilter = projectList.getActiveFilterKey();
     const activeProject = projectList.getActiveProject();
     if(activeFilter){
-      if(activeFilter.classList.contains("today")){
-      title.textContent = "Today's Tasks";
-      }else if(activeFilter.classList.contains("important")){
-        title.textContent = "Important Tasks";
-      }else if(activeFilter.classList.contains("next7Days")){
-        title.textContent = "Tasks due in next 7 Days";
-      }else if(activeFilter.classList.contains("unplanned")){
-        title.textContent = "Unplanned Tasks";
-      }else if(activeFilter.classList.contains("allTasks")){
-        title.textContent = "All Tasks";
-      }
+     title.textContent = FILTER_TITLES[projectList.getActiveFilterKey()];
     }else if(activeProject){
       title.textContent= activeProject.name;
     }else{
       title.textContent = "Looks pretty empty in here..";
     }
   }
-  function setActiveFilterClass(element){
-    element.classList.add("activeFilter");
-  }
-  function removeCurrentActiveFilterClass(){
-    const currentActiveFilter = document.querySelector(".activeFilter");
-    if(currentActiveFilter){
-      currentActiveFilter.classList.remove("activeFilter");
-    }
+  function getClassOfFilter(filter){
+    const classes = Array.from(filter.classList);
+    const filterClass = classes.find(className => classes.includes(className));
+    return filterClass
   }
 
   return {
     addHiddenClass,
     removeHiddenClass,
     updateContentContainerTitle,
-    setActiveFilterClass,
-    removeCurrentActiveFilterClass,
+    getClassOfFilter
   };
 };

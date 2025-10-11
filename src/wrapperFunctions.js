@@ -50,7 +50,6 @@ export const wrapperFunctions = function () {
   }
   function clickEventOnImportantTaskDiv() {
     taskDomFunctions.updateTaskVisibility(taskFunctions.getImportantTasks(projectList));
-    generalDomFunctions.updateContentContainerTitle();
   }
   function updateFilterViewIfActive(){
     const activeFilterElement = document.querySelector(".activeFilter");
@@ -62,8 +61,8 @@ export const wrapperFunctions = function () {
     generalDomFunctions.addHiddenClass(document.querySelector(".addTaskButton"));
     closeOpenTaskForm();
     closeOpenProjectForm();
-    generalDomFunctions.removeCurrentActiveFilterClass();
-    generalDomFunctions.setActiveFilterClass(targetFilter);
+
+    projectList.setActiveFilterKey(generalDomFunctions.getClassOfFilter(targetFilter));
     if (targetFilter.classList.contains("allTasks")) {
         clickEventOnAllTasksDiv();
     } else if (targetFilter.classList.contains("today")) {
@@ -75,6 +74,7 @@ export const wrapperFunctions = function () {
     } else if (targetFilter.classList.contains("important")) {
         clickEventOnImportantTaskDiv();
     }
+    generalDomFunctions.updateContentContainerTitle();
   }
   // projects
   function clickEventOnAddProjectButton() {
@@ -92,7 +92,6 @@ export const wrapperFunctions = function () {
     projectList.addProject(project);
     projectList.setActiveProjectByID(project.id);
     projectDomFunctions.createAndAppendProjectDivToProjectContainer(project);
-    generalDomFunctions.removeCurrentActiveFilterClass();
     generalDomFunctions.updateContentContainerTitle();
     taskDomFunctions.updateTaskVisibility(projectList.getActiveProject().getTasks()); 
     }
@@ -116,7 +115,6 @@ export const wrapperFunctions = function () {
     const targetProject = projectList.getProjectByID(targetProjectDiv.id);
     projectList.setActiveProjectByID(targetProject.id);
     const activeProject = projectList.getActiveProject();
-    generalDomFunctions.removeCurrentActiveFilterClass();
     generalDomFunctions.updateContentContainerTitle();
     taskDomFunctions.updateTaskVisibility(activeProject.getTasks());
     generalDomFunctions.removeHiddenClass(document.querySelector(".addTaskButton"));
@@ -170,7 +168,6 @@ export const wrapperFunctions = function () {
         taskDomFunctions.updateTaskVisibility(projectList.getActiveProject().getTasks());
       } else {
         projectList.setActiveProjectByID(null);
-        generalDomFunctions.removeCurrentActiveFilterClass();
         generalDomFunctions.updateContentContainerTitle();
         taskDomFunctions.updateTaskVisibility([]);
       }

@@ -7,6 +7,7 @@ export class ProjectList{
         ProjectList.instance=this;
         this.list = [];
         this.activeProject = null;
+        this.activeFilterKey = null;
     }
     addProject(project){
         this.list.push(project);
@@ -31,10 +32,18 @@ export class ProjectList{
         this.list = projectList;
     }
     setActiveProjectByID(id){
+        this.activeFilter = null;
         this.activeProject = this.getProjectByID(id);
     }
     getActiveProject(){
         return this.activeProject;
+    }
+    setActiveFilterKey(key){
+        this.activeFilter = key;
+        this.activeProject = null;
+    }
+    getActiveFilterKey(){
+        return this.activeFilter;
     }
     getSpecificTaskByID(id){
         const allProjects = this.list;
