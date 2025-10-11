@@ -411,7 +411,8 @@ export const handleProjectDomManipulation = function () {
   function setFirstProjectDivToNewActiveProject() {
     const firstProjectDiv = getFirstProjectDiv();
     projectList.setActiveProjectByID(firstProjectDiv.id);
-    console.log("Active Project =" + projectList.getActiveProject());
+    generalDomFunctions.removeActiveViewClass();
+    generalDomFunctions.addActiveViewClass(firstProjectDiv);
     generalDomFunctions.updateContentContainerTitle();
   }
   function appendProjectDivToProjectContainer(projectDiv) {
@@ -439,11 +440,14 @@ export const handleProjectDomManipulation = function () {
     return projectsArray;
   }
   function hasActiveProjectDivBeenDeleted() {
-    const activeDivID = projectList.getActiveProject().id;
+    const activeProject = projectList.getActiveProject();
+    if(activeProject){
+      const activeDivID = activeProject.id;
     if (document.querySelector(`div[id="${activeDivID}"]`)) {
       return false;
     } else {
       return true;
+    }
     }
   }
   // helper functions
@@ -473,6 +477,7 @@ export const handleProjectDomManipulation = function () {
     createDefaultProjectDiv,
     getAllProjectDivs,
     createProjectDivChildren,
+    getFirstProjectDiv
   };
 };
 export const handleGeneralDomManipulation = function () {
@@ -483,7 +488,7 @@ export const handleGeneralDomManipulation = function () {
     "important": "Important Tasks",
     "next7Days": "Tasks due in next 7 Days",
     "unplanned": "Unplanned Tasks",
-    "allTasks": "All Tasks"
+    "all": "All Tasks"
 };
 
   function addHiddenClass(element) {
@@ -494,10 +499,10 @@ export const handleGeneralDomManipulation = function () {
   }
   function updateContentContainerTitle() {
     const title = document.querySelector(".contentTitleContainer h2");
-    const activeFilter = projectList.getActiveFilterKey();
+    const activeFilter = projectList.getActiveFilterType();
     const activeProject = projectList.getActiveProject();
     if(activeFilter){
-     title.textContent = FILTER_TITLES[projectList.getActiveFilterKey()];
+     title.textContent = FILTER_TITLES[projectList.getActiveFilterType()];
     }else if(activeProject){
       title.textContent= activeProject.name;
     }else{
@@ -509,11 +514,22 @@ export const handleGeneralDomManipulation = function () {
     const filterClass = classes.find(className => classes.includes(className));
     return filterClass
   }
-
+  function addActiveViewClass(element){
+    element.classList.add("active-view");
+  }
+  function removeActiveViewClass(){
+    const activelyViewedElement = document.querySelector(".active-view")
+    if(activelyViewedElement){
+      activelyViewedElement.classList.remove("active-view");
+    }
+    
+  }
   return {
     addHiddenClass,
     removeHiddenClass,
     updateContentContainerTitle,
-    getClassOfFilter
+    getClassOfFilter,
+    addActiveViewClass,
+    removeActiveViewClass
   };
 };
