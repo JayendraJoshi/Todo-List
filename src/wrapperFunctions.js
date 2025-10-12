@@ -22,14 +22,17 @@ export const wrapperFunctions = function () {
 
   // general
   function startUpFunctions() {
-    taskDomFunctions.createAndAppendAddTaskButtonToContentDiv();
     if(storageAvailable("localStorage")){
       if(localStorage.getItem("projectList")){
         loadDataFromStorage();
       }else{
         projectDomFunctions.setDefaultProjectDiv(projectDomFunctions.createDefaultProjectDiv());
+        taskDomFunctions.createAndAppendAddTaskButtonToContentDiv();
       }
     }
+  }
+  function createAndAppendAddTaskButtonToContentDiv(){
+    taskDomFunctions.createAndAppendAddTaskButtonToContentDiv();
   }
   // filter
   function clickEventOnAllTasksDiv() {
@@ -46,7 +49,7 @@ export const wrapperFunctions = function () {
   }
   function clickEventOnNext7DaysDiv() {
     taskDomFunctions.updateTaskVisibility(taskFunctions.getNext7DaysTasks(projectList));
-   generalDomFunctions.updateContentContainerTitle();
+    generalDomFunctions.updateContentContainerTitle();
   }
   function clickEventOnImportantTaskDiv() {
     taskDomFunctions.updateTaskVisibility(taskFunctions.getImportantTasks(projectList));
@@ -58,13 +61,16 @@ export const wrapperFunctions = function () {
     }
   }
   function clickEventOnFilter(targetFilter) {
-    generalDomFunctions.addHiddenClass(document.querySelector(".addTaskButton"));
-    closeOpenTaskForm();
-    closeOpenProjectForm();
     generalDomFunctions.removeActiveViewClass();
     generalDomFunctions.addActiveViewClass(targetFilter);
     const filterType = targetFilter.dataset.filterType;
     projectList.setActiveFilterType(filterType);
+    callTargetFilterEvent(filterType);
+  }
+  function callTargetFilterEvent(filterType){
+    closeOpenTaskForm();
+    closeOpenProjectForm();
+    taskDomFunctions.hideAddTaskButton();
     if (filterType == "all") {
         clickEventOnAllTasksDiv();
     } else if (filterType == "today") {
@@ -77,6 +83,7 @@ export const wrapperFunctions = function () {
         clickEventOnImportantTaskDiv();
     }
     generalDomFunctions.updateContentContainerTitle();
+    updateStorage();
   }
   // projects
   function clickEventOnAddProjectButton() {
@@ -96,6 +103,9 @@ export const wrapperFunctions = function () {
     projectDomFunctions.createAndAppendProjectDivToProjectContainer(project);
     generalDomFunctions.updateContentContainerTitle();
     taskDomFunctions.updateTaskVisibility(projectList.getActiveProject().getTasks()); 
+    if(document.querySelector(".addTaskButton")){
+      generalDomFunctions.removeHiddenClass(document.querySelector(".addTaskButton"));
+    }
     }
     projectForm.remove();
     updateStorage();
@@ -178,6 +188,7 @@ export const wrapperFunctions = function () {
         projectList.setActiveProjectByID(null);
         generalDomFunctions.updateContentContainerTitle();
         taskDomFunctions.updateTaskVisibility([]);
+        generalDomFunctions.addHiddenClass(document.querySelector(".addTaskButton"));
       }
     }
     updateStorage();
@@ -304,9 +315,11 @@ export const wrapperFunctions = function () {
     if(storageAvailable("localStorage")){
       localStorage.setItem("projectList",JSON.stringify(projectList));
     }
+    //actie-view muss noch gespeichert werden
   }
   function loadDataFromStorage(){
      projectList.fromJson(JSON.parse(localStorage.getItem("projectList")));
+
       //appends all project and tasks divs
       for(const project of projectList.getAllProjects()){
         projectDomFunctions.createAndAppendProjectDivToProjectContainer(project);
@@ -317,9 +330,26 @@ export const wrapperFunctions = function () {
       //sets title
       generalDomFunctions.updateContentContainerTitle();
       //shows only active tasks 
+      if(!document.querySelector(".addTaskButton")){
+        taskDomFunctions.createAndAppendAddTaskButtonToContentDiv();
+      }
       if(projectList.getActiveProject()){
+        console.log("activeProject found");
         taskDomFunctions.updateTaskVisibility(projectList.getActiveProject().getTasks());
       }
+      else if(projectList.getActiveFilterType()){
+        console.log("activeFilter found");
+        callTargetFilterEvent(projectList.getActiveFilterType());
+        if(projectList.getAllProjects.length==0){
+          console.log("no project found");
+          taskDomFunctions.hideAddTaskButton();
+        }
+      }
+      else{
+        console.log("nothing applies");
+        taskDomFunctions.hideAddTaskButton();
+      }
+      
     }
   return {
     clickEventOnAddProjectButton,
@@ -343,6 +373,7 @@ export const wrapperFunctions = function () {
     clickEventOnMenuSpan,
     removeActiveClassFromOptionsButtonsContainer,
     closeOpenProjectForm,
-    closeOpenTaskForm
+    closeOpenTaskForm,
+    createAndAppendAddTaskButtonToContentDiv
   };
 };

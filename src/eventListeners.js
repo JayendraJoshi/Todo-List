@@ -40,10 +40,12 @@ export const setEventListeners = function () {
                 if(event.target.classList.contains('projectFormAddButton')){
                     wrapFunctions.clickEventOnAddProjectFormButton(event);
                     if(!document.querySelector(".addTaskButton")){
+                        event.preventDefault();
                         wrapFunctions.createAndAppendAddTaskButtonToContentDiv();
                         setEventOnAddTaskButton();
                     };
                 }else if(event.target.classList.contains('projectFormCancelButton')){
+                    event.preventDefault();
                     wrapFunctions.closeOpenProjectForm();         
                 }
             })
@@ -88,13 +90,16 @@ export const setEventListeners = function () {
     // task events
     function setEventOnAddTaskButton(){
         const addTaskButton = document.querySelector(".addTaskButton");
-        addTaskButton.addEventListener("click",function(){
+        if(addTaskButton){
+            addTaskButton.addEventListener("click",function(){
             wrapFunctions.closeOpenProjectForm();
             wrapFunctions.closeOpenTaskForm();
             wrapFunctions.clickEventOnAddTaskButton();
             setEventOnTaskForm();           
         })
     }
+        }
+        
     function setEventOnTaskForm(taskDiv){
         const taskForm = document.querySelector(".taskForm")
         if(taskDiv){

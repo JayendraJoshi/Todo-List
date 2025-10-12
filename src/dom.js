@@ -242,6 +242,12 @@ export const handleTaskDomManipulation = function () {
       generalDomFunctions.removeHiddenClass(liItem);
     }
   }
+  function hideAddTaskButton(){
+    const addTaskButton = document.querySelector(".addTaskButton");
+    if(addTaskButton){
+      generalDomFunctions.addHiddenClass(addTaskButton);
+    }
+  }
   function getTaskDivsFromTaskIDSet(tasksSet){
     const tasksDivList = document.querySelectorAll(".task");
     const activeTaskDivsList = [];
@@ -298,6 +304,7 @@ export const handleTaskDomManipulation = function () {
     fillTaskValuesIntoTaskForm,
     createAndAppendAddTaskButtonToContentDiv,
     updateTaskVisibility,
+    hideAddTaskButton
   };
 };
 export const handleProjectDomManipulation = function () {

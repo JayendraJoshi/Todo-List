@@ -32,18 +32,18 @@ export class ProjectList{
         this.list = projectList;
     }
     setActiveProjectByID(id){
-        this.activeFilter = null;
+        this.activeFilterType = null;
         this.activeProject = this.getProjectByID(id);
     }
     getActiveProject(){
         return this.activeProject;
     }
     setActiveFilterType(type){
-        this.activeFilter = type;
+        this.activeFilterType = type;
         this.activeProject = null;
     }
     getActiveFilterType(){
-        return this.activeFilter;
+        return this.activeFilterType;
     }
     getSpecificTaskByID(id){
         const allProjects = this.list;
@@ -69,7 +69,13 @@ export class ProjectList{
     }
     fromJson(jsonProjectList){
         this.setProjectsList(jsonProjectList.list.map(jsonProject => Project.fromJson(jsonProject)));
-        this.setActiveProjectByID(jsonProjectList.activeProject.id); 
+        if(jsonProjectList.activeProject){
+            this.setActiveProjectByID(jsonProjectList.activeProject.id); 
+        }else if(jsonProjectList.activeFilterType){
+            this.setActiveFilterType(jsonProjectList.activeFilterType);
+        }else{
+            this.setActiveFilterType(null);
+        }
     }
 }
     export const handleProjectList = function(){
