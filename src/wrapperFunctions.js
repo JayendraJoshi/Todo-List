@@ -108,6 +108,7 @@ export const wrapperFunctions = function () {
     }
     }
     projectForm.remove();
+    generalDomFunctions.removeActiveViewClass();
     updateStorage();
   }
   function closeOpenProjectForm(){
@@ -340,6 +341,8 @@ export const wrapperFunctions = function () {
       else if(projectList.getActiveFilterType()){
         console.log("activeFilter found");
         callTargetFilterEvent(projectList.getActiveFilterType());
+        const activeFilterDiv = document.querySelector(`[data-filter-type="${projectList.getActiveFilterType()}"]`);
+        generalDomFunctions.addActiveViewClass(activeFilterDiv);
         if(projectList.getAllProjects.length==0){
           console.log("no project found");
           taskDomFunctions.hideAddTaskButton();
