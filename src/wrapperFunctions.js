@@ -246,7 +246,7 @@ export const wrapperFunctions = function () {
     updateStorage();
   }
   function clickEventOnTaskImportantCheckBox(event) {
-    const taskID = event.target.closest("div").id;
+    const taskID = event.target.closest(".task").id;
     const targetTask = projectList.getSpecificTaskByID(taskID);
     if (targetTask.getIsImportant() === true) {
       targetTask.setIsImportant(false);

@@ -98,14 +98,32 @@ export const handleTaskDomManipulation = function () {
     const taskDiv = document.createElement("div");
 
     const taskLeftElements = document.createElement("div");
+    taskLeftElements.classList.add("taskLeftElements");
     const dragSpan = document.createElement("span");
     dragSpan.classList.add("dragSpan");
     dragSpan.classList.add("material-symbols-outlined")
     dragSpan.textContent="drag_indicator";
+    const circleLabel = document.createElement("label");
+    const circleChecked = document.createElement("span");
+    circleChecked.classList.add("material-symbols-outlined");
+    circleChecked.textContent="check_circle";
+    circleChecked.classList.add("checkedCircle");
+    const circleUnchecked = document.createElement("span");
+    circleUnchecked.classList.add("material-symbols-outlined");
+    circleUnchecked.textContent="circle";
+    circleUnchecked.classList.add("uncheckedCircle");
+    const circleCheckBox = document.createElement("input");
+    circleCheckBox.type = "checkbox";
+    circleCheckBox.classList.add("hidden-circleCheckbox");
+    circleLabel.appendChild(circleCheckBox);
+    circleLabel.appendChild(circleUnchecked);
+    circleLabel.appendChild(circleChecked);
+    taskLeftElements.appendChild(dragSpan);
+    taskLeftElements.appendChild(circleLabel);
+    
 
-    //taskLeftElements.appendChild(dragSpan);
-
-    const taskDetailElements = document.createElement("div");
+    const taskDetailsElements = document.createElement("div");
+    taskDetailsElements.classList.add("taskDetailsElements");
     const taskNameDiv = document.createElement("div");
     taskNameDiv.textContent = task.getName();
     taskNameDiv.classList.add("taskName");
@@ -120,6 +138,13 @@ export const handleTaskDomManipulation = function () {
     taskDescriptionDetails.appendChild(taskDescriptionSummary);
     taskDescriptionDetails.appendChild(taskDescriptionParagraph);
     taskDescriptionDiv.appendChild(taskDescriptionDetails);
+
+    taskDetailsElements.appendChild(taskNameDiv);
+    taskDetailsElements.appendChild(taskDescriptionDiv);
+
+    const taskRightElements = document.createElement("div");
+    taskRightElements.classList.add("taskRightElements");
+
     const taskDueDateDiv = document.createElement("div");
     taskDueDateDiv.classList.add("taskDate");
 
@@ -164,15 +189,18 @@ export const handleTaskDomManipulation = function () {
     optionsContainer.classList.add("optionsContainer");
     optionsContainer.appendChild(optionsButtonsContainer);
     optionsContainer.appendChild(optionsSpan);
+
+    taskRightElements.appendChild(taskDueDateDiv);
+    taskRightElements.appendChild(isTaskImportantLabel);
+    taskRightElements.appendChild(optionsContainer);
+
     taskDiv.classList.add("task");
     taskDiv.id = task.id;
     taskDiv.draggable = true;
-    taskDiv.appendChild(dragSpan);
-    taskDiv.appendChild(taskNameDiv);
-    taskDiv.appendChild(taskDescriptionDiv);
-    taskDiv.appendChild(taskDueDateDiv);
-    taskDiv.appendChild(isTaskImportantLabel);
-    taskDiv.appendChild(optionsContainer);
+    taskDiv.appendChild(taskLeftElements);
+    taskDiv.appendChild(taskDetailsElements);
+    taskDiv.appendChild(taskRightElements);
+    
     return taskDiv;
   }
   function updateTaskDivValues(taskDiv, task) {
