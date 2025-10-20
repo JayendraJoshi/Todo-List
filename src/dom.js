@@ -20,6 +20,9 @@ export const handleTaskDomManipulation = function () {
     const taskForm = document.createElement("form");
     taskForm.classList.add("taskForm");
     const taskFormNameLabel = document.createElement("label");
+    const taskFormNameLabelText = document.createElement("span");
+    taskFormNameLabelText.textContent = "Name";
+    taskFormNameLabel.appendChild(taskFormNameLabelText);
     const taskFormNameInput = document.createElement("input");
     taskFormNameInput.name = "nameInput";
     taskFormNameInput.type = "text";
@@ -28,6 +31,9 @@ export const handleTaskDomManipulation = function () {
     taskFormNameLabel.appendChild(taskFormNameInput);
 
     const taskFormDescriptionLabel = document.createElement("label");
+    const taskFormDescriptionLabelText = document.createElement("span");
+    taskFormDescriptionLabelText.textContent = "Description";
+    taskFormDescriptionLabel.appendChild(taskFormDescriptionLabelText);
     const taskFormDescriptionInput = document.createElement("input");
     taskFormDescriptionInput.name = "descriptionInput";
     taskFormDescriptionInput.type = "text";
@@ -36,6 +42,9 @@ export const handleTaskDomManipulation = function () {
     taskFormDescriptionLabel.appendChild(taskFormDescriptionInput);
 
     const taskFormDateLabel = document.createElement("label");
+    const taskFormDateLabelText = document.createElement("span");
+    taskFormDateLabelText.textContent = "Due Date";
+    taskFormDateLabel.appendChild(taskFormDateLabelText);
     const taskFormDateInput = document.createElement("input");
     taskFormDateInput.name = "dateInput";
     taskFormDateLabel.appendChild(taskFormDateInput);
@@ -57,6 +66,9 @@ export const handleTaskDomManipulation = function () {
     taskFormImportantIcon.textContent="star";
     taskFormImportantIcon.classList.add("material-symbols-outlined", "checkbox-icon");
     const taskFormImportantLabel = document.createElement("label");
+    const taskFormImportantLabelText = document.createElement("span");
+    taskFormImportantLabelText.textContent = "Important";
+    taskFormImportantLabel.appendChild(taskFormImportantLabelText);
     taskFormImportantInput.classList.add("isTaskImportantFormInput", "hidden-checkbox");
 
     taskFormImportantLabel.appendChild(taskFormImportantInput);
@@ -344,11 +356,16 @@ export const handleProjectDomManipulation = function () {
   // projectform
   function createProjectForm() {
     const projectForm = document.createElement("form");
+    const projectFormNameLabel = document.createElement("label");
+    const projectFormNameLabelText = document.createElement("span");
+    projectFormNameLabelText.textContent = "Project Name";
+    projectFormNameLabel.appendChild(projectFormNameLabelText);
     const projectFormNameInput = document.createElement("input");
     projectFormNameInput.classList.add("projectFormNameInput");
     projectFormNameInput.type = "text";
-    projectFormNameInput.maxLength = 20;
+    projectFormNameInput.maxLength = 25;
     projectFormNameInput.required=true;
+    projectFormNameLabel.appendChild(projectFormNameInput);
     const projectFormAddButton = document.createElement("button");
     projectFormAddButton.textContent = "Add";
     projectFormAddButton.type = "submit";
@@ -356,7 +373,7 @@ export const handleProjectDomManipulation = function () {
     const projectFormCancelButton = document.createElement("button");
     projectFormCancelButton.textContent = "Cancel";
     projectFormCancelButton.classList.add("projectFormCancelButton");
-    projectForm.appendChild(projectFormNameInput);
+    projectForm.appendChild(projectFormNameLabel);
     projectForm.appendChild(projectFormAddButton);
     projectForm.appendChild(projectFormCancelButton);
     projectForm.classList.add("projectForm");

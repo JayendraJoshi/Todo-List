@@ -180,6 +180,7 @@ export const wrapperFunctions = function () {
     projectList.deleteProjectByID(projectDiv.id);
     projectDiv.remove();
     if(wasActive){
+       closeOpenTaskForm();
        if (projectDomFunctions.areThereProjectDivsLeft()) {
           const firstProjectDiv = projectDomFunctions.getFirstProjectDiv();
           projectList.setActiveProjectByID(firstProjectDiv.id);
@@ -270,8 +271,7 @@ export const wrapperFunctions = function () {
   function clickEventOnEditButton(taskDiv) {
     const taskForm = taskDomFunctions.createTaskForm();
     taskForm.classList.add("taskEditForm");
-    const activeProject = projectList.getActiveProject();
-    const task = activeProject.getTaskByID(taskDiv.id);
+    const task = projectList.getSpecificTaskByID(taskDiv.id);
     const formValues = taskFunctions.getTaskFormValues(task);
     taskDomFunctions.fillTaskValuesIntoTaskForm(taskForm, formValues);
     taskDomFunctions.insertTaskFormBefore(taskForm, taskDiv);
@@ -279,8 +279,7 @@ export const wrapperFunctions = function () {
     taskDiv.classList.add("task-beeing-edited");
   }
   function clickEventOnEditAddTaskButton(taskDiv) {
-    const activeProject = projectList.getActiveProject();
-    const task = activeProject.getTaskByID(taskDiv.id);
+    const task = projectList.getSpecificTaskByID(taskDiv.id);
     const taskEditForm = document.querySelector(".taskEditForm");
     const formValues = taskDomFunctions.getInputValuesOfGivenForm(taskEditForm);
     taskFunctions.updateTask(task, formValues);
