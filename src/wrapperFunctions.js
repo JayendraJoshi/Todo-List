@@ -338,8 +338,10 @@ export const wrapperFunctions = function () {
       }
       if(projectList.getActiveProject()){
         console.log("activeProject found");
-        taskDomFunctions.updateTaskVisibility(projectList.getActiveProject().getTasks());
-        generalDomFunctions.addActiveViewClass(projectList.getActiveProject());
+        const activeProject = projectList.getActiveProject();
+        taskDomFunctions.updateTaskVisibility(activeProject.getTasks());
+        const activeProjectDiv = document.querySelector(`.project[id="${activeProject.id}"]`);
+        generalDomFunctions.addActiveViewClass(activeProjectDiv);
       }
       else if(projectList.getActiveFilterType()){
         console.log("activeFilter found");
