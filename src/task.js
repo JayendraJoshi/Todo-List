@@ -69,21 +69,13 @@ export const handleTasks = function () {
     task.setIsImportant(newValues.isTaskFormImportant);
   }
   function createNewTask(values) {
-    if (values.taskFormDueDate == "") {
-      return new Task(
-        values.taskFormName,
-        values.taskFormDescription,
-        values.isTaskFormImportant
-      );
-    } else {
       const newTask = new Task(
-       values.taskFormName,
+        values.taskFormName,
         values.taskFormDescription,
         values.isTaskFormImportant
       );
       newTask.setDueDate(values.taskFormDueDate);
       return newTask;
-    }
   }
   function getTodaysTasks(projectList) {
     const todaysTasks = [];

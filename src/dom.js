@@ -414,18 +414,6 @@ export const handleProjectDomManipulation = function () {
       dragSpan,
     };
   }
-  function createDefaultProjectDiv() {
-    const defaultProject =projectFunctions.createProject("default");
-    projectList.addProject(defaultProject);
-    projectList.setActiveProjectByID(defaultProject.id);
-    const projectDiv = createProjectDiv(defaultProject);
-    return projectDiv;
-  }
-  function setDefaultProjectDiv(projectDiv) {
-    appendElementsToProjectDiv(createProjectDivChildren(project.name), projectDiv);
-    appendProjectDivToProjectContainer(projectDiv);
-    updateContentContainerTitle();
-  }
    function appendElementsToProjectDiv(elements, projectDiv) {
     const optionsButtonsContainer = document.createElement("div");
     optionsButtonsContainer.classList.add("optionsButtonsContainer");
@@ -474,17 +462,6 @@ export const handleProjectDomManipulation = function () {
     const projectsArray = Array.from(projectsDivNodeList);
     return projectsArray;
   }
-  function hasActiveProjectDivBeenDeleted() {
-    const activeProject = projectList.getActiveProject();
-    if(activeProject){
-      const activeDivID = activeProject.id;
-    if (document.querySelector(`div[id="${activeDivID}"]`)) {
-      return false;
-    } else {
-      return true;
-    }
-    }
-  }
   // helper functions
   function createAndAppendProjectFormOnProjectContainer() {
     addProjectFormToDOM(createProjectForm());
@@ -505,11 +482,8 @@ export const handleProjectDomManipulation = function () {
     insertProjectFormBefore,
     updateProjectDivName,
     areThereProjectDivsleft,
-    hasActiveProjectDivBeenDeleted,
-    setDefaultProjectDiv,
     setFirstProjectDivToNewActiveProject,
     fillCurrentProjectNameIntoProjectForm,
-    createDefaultProjectDiv,
     getAllProjectDivs,
     createProjectDivChildren,
     getFirstProjectDiv

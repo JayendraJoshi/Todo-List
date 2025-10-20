@@ -8,8 +8,9 @@ export const setEventListeners = function () {
     function setEventOnFiltersList(){
         const filtersList = document.querySelector(".filtersList");
         filtersList.addEventListener("click",function(event){
-            if(event.target.closest("div")){
-                wrapFunctions.clickEventOnFilter(event.target);
+            const targetFilter = event.target.closest(".filter");
+            if(targetFilter){
+                wrapFunctions.clickEventOnFilter(targetFilter);
             }
         })
     }
