@@ -170,7 +170,8 @@ export const setEventListeners = function () {
                 draggable:".liItem",
                 handle:".dragSpan",
                 onUpdate:function(event){
-                    wrapFunctions.adjustTaskList(); 
+                    const taskDiv = event.item.querySelector(".task");
+                    wrapFunctions.adjustTaskList(taskDiv); 
                 }
             })
         }

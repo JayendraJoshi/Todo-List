@@ -35,19 +35,19 @@ export const wrapperFunctions = function () {
     taskDomFunctions.createAndAppendAddTaskButtonToContentDiv();
   }
   // filter
-  function clickEventOnAllTasksDiv() {
+  function showAllTasks() {
     taskDomFunctions.updateTaskVisibility(projectList.getAllTasks());
   }
-  function clickEventOnTodayTaskDiv() {
+  function showTodayTasks() {
     taskDomFunctions.updateTaskVisibility(taskFunctions.getTodaysTasks(projectList));
   }
-  function clickEventOnUnplannedTaskDiv() {
+  function showUnplannedTasks() {
     taskDomFunctions.updateTaskVisibility(taskFunctions.getUnplannedTasks(projectList)); 
   }
-  function clickEventOnNext7DaysDiv() {
+  function showNext7DaysTasks() {
     taskDomFunctions.updateTaskVisibility(taskFunctions.getNext7DaysTasks(projectList));
   }
-  function clickEventOnImportantTaskDiv() {
+  function showImportantTasks() {
     taskDomFunctions.updateTaskVisibility(taskFunctions.getImportantTasks(projectList));
   }
   function updateFilterViewIfActive(){
@@ -56,27 +56,27 @@ export const wrapperFunctions = function () {
       clickEventOnFilter(activeFilterElement);
     }
   }
-  function clickEventOnFilter(targetFilter) {
+  function clickEventOnFilter(filterDiv) {
     generalDomFunctions.removeActiveViewClass();
-    generalDomFunctions.addActiveViewClass(targetFilter);
-    const filterType = targetFilter.dataset.filterType;
+    generalDomFunctions.addActiveViewClass(filterDiv);
+    const filterType = filterDiv.dataset.filterType;
     projectList.setActiveFilterType(filterType);
-    callTargetFilterEvent(filterType);
+    applyFilter(filterType);
   }
-  function callTargetFilterEvent(filterType){
+  function applyFilter(filterType){
     closeOpenTaskForm();
     closeOpenProjectForm();
     taskDomFunctions.hideAddTaskButton();
     if (filterType == "all") {
-        clickEventOnAllTasksDiv();
+        showAllTasks();
     } else if (filterType == "today") {
-        clickEventOnTodayTaskDiv();
+        showTodayTasks();
     } else if (filterType == "unplanned") {
-        clickEventOnUnplannedTaskDiv();
+        showUnplannedTasks();
     } else if (filterType == "next7Days") {
-        clickEventOnNext7DaysDiv();
+        showNext7DaysTasks();
     } else if (filterType == "important") {
-        clickEventOnImportantTaskDiv();
+        showImportantTasks();
     }
     generalDomFunctions.updateContentContainerTitle();
     updateStorage();
@@ -128,16 +128,16 @@ export const wrapperFunctions = function () {
       }
     }
   }
-  function clickEventOnProjectDiv(targetProjectDiv) {
-    const targetProject = projectList.getProjectByID(targetProjectDiv.id);
-    projectList.setActiveProjectByID(targetProject.id);
+  function clickEventOnProjectDiv(projectDiv) {
+    const project = projectList.getProjectByID(projectDiv.id);
+    projectList.setActiveProjectByID(project.id);
     const activeProject = projectList.getActiveProject();
     generalDomFunctions.updateContentContainerTitle();
     taskDomFunctions.updateTaskVisibility(activeProject.getTasks());
     generalDomFunctions.removeHiddenClass(document.querySelector(".addTaskButton"));
     closeOpenTaskForm();
     generalDomFunctions.removeActiveViewClass();
-    generalDomFunctions.addActiveViewClass(targetProjectDiv);
+    generalDomFunctions.addActiveViewClass(projectDiv);
     updateStorage();
   }
   function clickEventOnProjectOptionIcon(projectDiv){
@@ -180,7 +180,7 @@ export const wrapperFunctions = function () {
     projectList.deleteProjectByID(projectDiv.id);
     projectDiv.remove();
     if(wasActive){
-       if (projectDomFunctions.areThereProjectDivsleft()) {
+       if (projectDomFunctions.areThereProjectDivsLeft()) {
           const firstProjectDiv = projectDomFunctions.getFirstProjectDiv();
           projectList.setActiveProjectByID(firstProjectDiv.id);
           generalDomFunctions.removeActiveViewClass();
@@ -201,9 +201,17 @@ export const wrapperFunctions = function () {
     updateStorage();
   }
   // tasks
-  function adjustTaskList(){
+  function adjustTaskList(taskDiv){
     const activeProject = projectList.getActiveProject();
-    projectListFunctions.reorderTasks(activeProject.getTasks(),activeProject.getID());
+    if(activeProject){
+      projectListFunctions.reorderTasks(activeProject.getTasks(),activeProject.getID());
+    }else{
+      const task = projectList.getSpecificTaskByID(taskDiv.id);
+      const projectID = task.getProjectID();
+      const project = projectList.getProjectByID(projectID);
+      projectListFunctions.reorderTasks(project.getTasks(),projectID);
+    }
+    
     updateStorage();
   }
   function clickEventOnTaskOptionIcon(taskDiv){
@@ -239,8 +247,8 @@ export const wrapperFunctions = function () {
   function clickEventOnTaskFormAddButton(event) {
     const taskForm = event.target.closest(".taskForm");
     const activeProject = projectList.getActiveProject();
-    const inputValues = taskDomFunctions.getInputValuesOfGivenForm(taskForm);
-    const task = taskFunctions.createNewTask(inputValues);
+    const formValues = taskDomFunctions.getInputValuesOfGivenForm(taskForm);
+    const task = taskFunctions.createNewTask(formValues);
     task.setProjectID(activeProject.id);
     activeProject.addTask(task);
     taskDomFunctions.createAndAppendTaskDivToContentDiv(task);
@@ -249,13 +257,13 @@ export const wrapperFunctions = function () {
   }
   function clickEventOnTaskImportantCheckBox(event) {
     const taskID = event.target.closest(".task").id;
-    const targetTask = projectList.getSpecificTaskByID(taskID);
-    if (targetTask.getIsImportant() === true) {
-      targetTask.setIsImportant(false);
+    const task = projectList.getSpecificTaskByID(taskID);
+    if (task.getIsImportant() === true) {
+      task.setIsImportant(false);
     } else {
-      targetTask.setIsImportant(true);
+      task.setIsImportant(true);
     }
-    event.target.checked = targetTask.getIsImportant();
+    event.target.checked = task.getIsImportant();
     updateFilterViewIfActive();
     updateStorage();
   }
@@ -263,31 +271,34 @@ export const wrapperFunctions = function () {
     const taskForm = taskDomFunctions.createTaskForm();
     taskForm.classList.add("taskEditForm");
     const activeProject = projectList.getActiveProject();
-    const targetTask = activeProject.getTaskByID(taskDiv.id);
-    const inputValues = taskFunctions.getAllInputValuesFromTask(targetTask);
-    taskDomFunctions.fillTaskValuesIntoTaskForm(taskForm, inputValues);
+    const task = activeProject.getTaskByID(taskDiv.id);
+    const formValues = taskFunctions.getTaskFormValues(task);
+    taskDomFunctions.fillTaskValuesIntoTaskForm(taskForm, formValues);
     taskDomFunctions.insertTaskFormBefore(taskForm, taskDiv);
     generalDomFunctions.addHiddenClass(taskDiv);
     taskDiv.classList.add("task-beeing-edited");
   }
   function clickEventOnEditAddTaskButton(taskDiv) {
     const activeProject = projectList.getActiveProject();
-    const targetTask = activeProject.getTaskByID(taskDiv.id);
+    const task = activeProject.getTaskByID(taskDiv.id);
     const taskEditForm = document.querySelector(".taskEditForm");
-    const newValues = taskDomFunctions.getInputValuesOfGivenForm(taskEditForm);
-    taskFunctions.updateTask(targetTask, newValues);
-    taskDomFunctions.updateTaskDivValues(taskDiv, targetTask);
+    const formValues = taskDomFunctions.getInputValuesOfGivenForm(taskEditForm);
+    taskFunctions.updateTask(task, formValues);
+    taskDomFunctions.updateTaskDivValues(taskDiv, task);
     generalDomFunctions.removeHiddenClass(taskDiv);
     taskEditForm.remove();
     updateFilterViewIfActive();
     updateStorage();
   }
   function clickEventOnDeleteTaskButton(taskDiv) {
-    const activeProject = projectList.getActiveProject();
-    activeProject.deleteTaskByID(taskDiv.id);
+    const task = projectList.getSpecificTaskByID(taskDiv.id);
+    const projectID = task.getProjectID();
+    const project = projectList.getProjectByID(projectID);
+    project.deleteTaskByID(taskDiv.id);
     const liParent = taskDiv.closest("li");
     liParent.remove();
     taskDiv.remove();
+    updateFilterViewIfActive();
     updateStorage();
   }
   // common for projects and tasks 
@@ -345,7 +356,7 @@ export const wrapperFunctions = function () {
       }
       else if(projectList.getActiveFilterType()){
         console.log("activeFilter found");
-        callTargetFilterEvent(projectList.getActiveFilterType());
+        applyFilter(projectList.getActiveFilterType());
         const activeFilterDiv = document.querySelector(`[data-filter-type="${projectList.getActiveFilterType()}"]`);
         generalDomFunctions.addActiveViewClass(activeFilterDiv);
         if(projectList.getAllProjects().length==0){

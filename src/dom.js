@@ -79,19 +79,19 @@ export const handleTaskDomManipulation = function () {
     li.insertBefore(taskForm, referenceElement);
   }
   function getInputValuesOfGivenForm(formElement) {
-    const taskFormName = formElement.querySelector(".taskFormNameInput").value;
-    const taskFormDescription = formElement.querySelector(
+    const name = formElement.querySelector(".taskFormNameInput").value;
+    const description = formElement.querySelector(
         ".taskFormDescriptionInput"
     ).value;
-    const taskFormDueDate = formElement.querySelector(".taskFormDateInput").value; 
-    const isTaskFormImportant = formElement.querySelector(
+    const dueDate = formElement.querySelector(".taskFormDateInput").value; 
+    const isImportant = formElement.querySelector(
         ".isTaskImportantFormInput"
     ).checked;
     return {
-      taskFormName,
-      taskFormDescription,
-      taskFormDueDate,
-      isTaskFormImportant,
+      name,
+      description,
+      dueDate,
+      isImportant,
     };
   }
   function createTaskDiv(task) {
@@ -235,26 +235,26 @@ export const handleTaskDomManipulation = function () {
       createAndAppendTaskDivToContentDiv(taskArray[i]);
     }
   }
-  function fillTaskValuesIntoTaskForm(taskForm, inputValues) {
+  function fillTaskValuesIntoTaskForm(taskForm, formValues) {
     for (const element of taskForm.elements) {
       if (element.classList.contains("taskFormNameInput")) {
-        element.value = inputValues.taskName;
+        element.value = formValues.name;
       } else if (element.classList.contains("taskFormDescriptionInput")) {
-        element.value = inputValues.taskDescription;
+        element.value = formValues.description;
       } else if (element.classList.contains("taskFormDateInput")) {
-        if (inputValues.taskDate && inputValues.taskDate instanceof Date) {
-          const day = String(inputValues.taskDate.getDate()).padStart(2, "0");
-          const month = String(inputValues.taskDate.getMonth() + 1).padStart(
+        if (formValues.dueDate && formValues.dueDate instanceof Date) {
+          const day = String(formValues.dueDate.getDate()).padStart(2, "0");
+          const month = String(formValues.dueDate.getMonth() + 1).padStart(
             2,
             "0"
           );
-          const year = inputValues.taskDate.getFullYear();
+          const year = formValues.dueDate.getFullYear();
           element.value = `${year}-${month}-${day}`;
         } else {
           element.value = "";
         }
       } else if (element.classList.contains("isTaskImportantFormInput")) {
-        element.checked = inputValues.isImportant;
+        element.checked = formValues.isImportant;
       }
     }
   }
@@ -427,9 +427,9 @@ export const handleProjectDomManipulation = function () {
     projectDiv.appendChild(elements.nameElement);
     projectDiv.appendChild(optionsContainer);
   }  
-  function updateProjectDivName(projectDiv, targetProject) {
+  function updateProjectDivName(projectDiv, project) {
     const projectNameElement = projectDiv.querySelector(".projectName");
-    projectNameElement.textContent = targetProject.name;
+    projectNameElement.textContent = project.name;
   }
   function setFirstProjectDivToNewActiveProject() {
     const firstProjectDiv = getFirstProjectDiv();
@@ -443,7 +443,7 @@ export const handleProjectDomManipulation = function () {
     projectsList.appendChild(projectDiv);
   }
   // get project divs or values
-  function areThereProjectDivsleft() {
+  function areThereProjectDivsLeft() {
     const projectsList = document.querySelector(".projectsList");
 
     if (projectsList.querySelector(".project")) {
@@ -481,7 +481,7 @@ export const handleProjectDomManipulation = function () {
     getNameValueOfProjectForm,
     insertProjectFormBefore,
     updateProjectDivName,
-    areThereProjectDivsleft,
+    areThereProjectDivsLeft,
     setFirstProjectDivToNewActiveProject,
     fillCurrentProjectNameIntoProjectForm,
     getAllProjectDivs,

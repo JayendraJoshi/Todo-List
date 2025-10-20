@@ -57,24 +57,23 @@ export class Task {
   }
 }
 export const handleTasks = function () {
-  function updateTask(task, newValues) {
-    task.setName(newValues.taskFormName);
-    task.setDescription(newValues.taskFormDescription);
-    console.log(newValues.taskDueDate);
-    if (newValues.taskFormDueDate) {
-      task.setDueDate(newValues.taskFormDueDate);
+  function updateTask(task, formValues) {
+    task.setName(formValues.name);
+    task.setDescription(formValues.description);
+    if (formValues.dueDate) {
+      task.setDueDate(formValues.dueDate);
     } else {
       task.setDueDate("");
     }
-    task.setIsImportant(newValues.isTaskFormImportant);
+    task.setIsImportant(formValues.isImportant);
   }
-  function createNewTask(values) {
+  function createNewTask(formValues) {
       const newTask = new Task(
-        values.taskFormName,
-        values.taskFormDescription,
-        values.isTaskFormImportant
+        formValues.name,
+        formValues.description,
+        formValues.isImportant
       );
-      newTask.setDueDate(values.taskFormDueDate);
+      newTask.setDueDate(formValues.dueDate);
       return newTask;
   }
   function getTodaysTasks(projectList) {
@@ -135,17 +134,12 @@ export const handleTasks = function () {
     }
     return unplannedTasks;
   }
-  function getAllInputValuesFromTask(targetTask) {
-    const taskName = targetTask.getName();
-    const taskDescription = targetTask.getDescription();
-    const taskDate = targetTask.getDueDate();
-    const isImportant = targetTask.getIsImportant();
-
+  function getTaskFormValues(task) {
     return {
-      taskName,
-      taskDescription,
-      taskDate,
-      isImportant,
+      name: task.getName(),
+      description: task.getDescription(),
+      dueDate: task.getDueDate(),
+      isImportant: task.getIsImportant(),
     };
   }
 
@@ -156,6 +150,6 @@ export const handleTasks = function () {
     getNext7DaysTasks,
     getImportantTasks,
     getUnplannedTasks,
-    getAllInputValuesFromTask
+    getTaskFormValues
   };
 };
