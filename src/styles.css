@@ -153,10 +153,6 @@ aside > div > h2{
 .filter[data-filter-type="all"] .filter-icon{
     color: #8b5cf6;
 }
-
-/* ========================================
-   PROJECTS
-   ======================================== */
 .project{
     display:flex;
     align-items: center;
@@ -271,7 +267,7 @@ pointer-events: none;
     opacity: 0;
     flex-direction: column;
     bottom: 30px;
-    right: 10px;
+    right: 0;
     z-index: 2;
     border-radius: 6px;
     background-color: var(--bg-elevated);
