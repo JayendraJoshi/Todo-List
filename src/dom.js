@@ -175,7 +175,6 @@ export const handleTaskDomManipulation = function () {
     }
     isTaskImportantInput.classList.add("isTaskImportantInput", "hidden-checkbox");
     if (task.dueDate instanceof Date && !isNaN(task.dueDate)) {
-      console.log("is valid date")
       const day = String(task.dueDate.getDate()).padStart(2, "0");
       const month = String(task.dueDate.getMonth() + 1).padStart(2, "0");
       const year = task.dueDate.getFullYear();

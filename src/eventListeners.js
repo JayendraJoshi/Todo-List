@@ -68,7 +68,6 @@ export const setEventListeners = function () {
                 }else if(event.target.classList.contains("deleteButton")){
                     wrapFunctions.clickEventOnDeleteProjectButton(targetProjectDiv);
                 }else if(event.target.classList.contains('optionsSpan')){
-                    console.log("optionsSpan clicked");
                     wrapFunctions.clickEventOnProjectOptionIcon(targetProjectDiv);
                 }else {
                     wrapFunctions.clickEventOnProjectDiv(targetProjectDiv)    
@@ -157,7 +156,6 @@ export const setEventListeners = function () {
                     wrapFunctions.clickEventOnDeleteTaskButton(taskDiv);
                 }
                 else if(event.target.classList.contains('optionsSpan')){
-                    console.log("optionsSpan clicked");
                     wrapFunctions.clickEventOnTaskOptionIcon(taskDiv);
                 }
         }

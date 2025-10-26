@@ -102,7 +102,6 @@ export const handleTasks = function () {
       for (let j = 0; j < tasks.length; j++) {
         if (isDateInNext7Days(tasks[j].dueDate)) {
           next7DaysTasks.push(tasks[j]);
-          console.log(tasks[j]);
         }
       }
     }
