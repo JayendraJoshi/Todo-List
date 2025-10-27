@@ -1,4 +1,3 @@
-import { handleProjects} from "./project";
 import { ProjectList } from "./projectList";
 
 export const handleTaskDomManipulation = function () {
@@ -26,7 +25,7 @@ export const handleTaskDomManipulation = function () {
     const taskFormNameInput = document.createElement("input");
     taskFormNameInput.name = "nameInput";
     taskFormNameInput.type = "text";
-    taskFormNameInput.maxLength=25;
+    taskFormNameInput.maxLength = 25;
     taskFormNameInput.classList.add("taskFormNameInput");
     taskFormNameLabel.appendChild(taskFormNameInput);
 
@@ -63,13 +62,19 @@ export const handleTaskDomManipulation = function () {
     const taskFormImportantInput = document.createElement("input");
     taskFormImportantInput.type = "checkbox";
     const taskFormImportantIcon = document.createElement("span");
-    taskFormImportantIcon.textContent="star";
-    taskFormImportantIcon.classList.add("material-symbols-outlined", "checkbox-icon");
+    taskFormImportantIcon.textContent = "star";
+    taskFormImportantIcon.classList.add(
+      "material-symbols-outlined",
+      "checkbox-icon",
+    );
     const taskFormImportantLabel = document.createElement("label");
     const taskFormImportantLabelText = document.createElement("span");
     taskFormImportantLabelText.textContent = "Important";
     taskFormImportantLabel.appendChild(taskFormImportantLabelText);
-    taskFormImportantInput.classList.add("isTaskImportantFormInput", "hidden-checkbox");
+    taskFormImportantInput.classList.add(
+      "isTaskImportantFormInput",
+      "hidden-checkbox",
+    );
 
     taskFormImportantLabel.appendChild(taskFormImportantInput);
     taskFormImportantLabel.appendChild(taskFormImportantIcon);
@@ -93,11 +98,11 @@ export const handleTaskDomManipulation = function () {
   function getInputValuesOfGivenForm(formElement) {
     const name = formElement.querySelector(".taskFormNameInput").value;
     const description = formElement.querySelector(
-        ".taskFormDescriptionInput"
+      ".taskFormDescriptionInput",
     ).value;
-    const dueDate = formElement.querySelector(".taskFormDateInput").value; 
+    const dueDate = formElement.querySelector(".taskFormDateInput").value;
     const isImportant = formElement.querySelector(
-        ".isTaskImportantFormInput"
+      ".isTaskImportantFormInput",
     ).checked;
     return {
       name,
@@ -113,16 +118,16 @@ export const handleTaskDomManipulation = function () {
     taskLeftElements.classList.add("taskLeftElements");
     const dragSpan = document.createElement("span");
     dragSpan.classList.add("dragSpan");
-    dragSpan.classList.add("material-symbols-outlined")
-    dragSpan.textContent="drag_indicator";
+    dragSpan.classList.add("material-symbols-outlined");
+    dragSpan.textContent = "drag_indicator";
     const circleLabel = document.createElement("label");
     const circleChecked = document.createElement("span");
     circleChecked.classList.add("material-symbols-outlined");
-    circleChecked.textContent="check_circle";
+    circleChecked.textContent = "check_circle";
     circleChecked.classList.add("checkedCircle");
     const circleUnchecked = document.createElement("span");
     circleUnchecked.classList.add("material-symbols-outlined");
-    circleUnchecked.textContent="circle";
+    circleUnchecked.textContent = "circle";
     circleUnchecked.classList.add("uncheckedCircle");
     const circleCheckBox = document.createElement("input");
     circleCheckBox.type = "checkbox";
@@ -132,7 +137,6 @@ export const handleTaskDomManipulation = function () {
     circleLabel.appendChild(circleChecked);
     taskLeftElements.appendChild(dragSpan);
     taskLeftElements.appendChild(circleLabel);
-    
 
     const taskDetailsElements = document.createElement("div");
     taskDetailsElements.classList.add("taskDetailsElements");
@@ -143,10 +147,10 @@ export const handleTaskDomManipulation = function () {
     taskDescriptionDiv.classList.add("taskDescription");
     const taskDescriptionDetails = document.createElement("details");
     const taskDescriptionParagraph = document.createElement("p");
-    taskDescriptionParagraph.textContent=task.getDescription();
+    taskDescriptionParagraph.textContent = task.getDescription();
     taskDescriptionParagraph.classList.add("taskDescriptionText");
     const taskDescriptionSummary = document.createElement("summary");
-    taskDescriptionSummary.textContent="Description";
+    taskDescriptionSummary.textContent = "Description";
     taskDescriptionDetails.appendChild(taskDescriptionSummary);
     taskDescriptionDetails.appendChild(taskDescriptionParagraph);
     taskDescriptionDiv.appendChild(taskDescriptionDetails);
@@ -163,7 +167,7 @@ export const handleTaskDomManipulation = function () {
     const isTaskImportantInput = document.createElement("input");
     isTaskImportantInput.type = "checkbox";
     const importantIcon = document.createElement("span");
-    importantIcon.textContent="star";
+    importantIcon.textContent = "star";
     importantIcon.classList.add("material-symbols-outlined", "checkbox-icon");
     const isTaskImportantLabel = document.createElement("label");
     isTaskImportantLabel.appendChild(isTaskImportantInput);
@@ -173,7 +177,10 @@ export const handleTaskDomManipulation = function () {
     } else {
       isTaskImportantInput.checked = false;
     }
-    isTaskImportantInput.classList.add("isTaskImportantInput", "hidden-checkbox");
+    isTaskImportantInput.classList.add(
+      "isTaskImportantInput",
+      "hidden-checkbox",
+    );
     if (task.dueDate instanceof Date && !isNaN(task.dueDate)) {
       const day = String(task.dueDate.getDate()).padStart(2, "0");
       const month = String(task.dueDate.getMonth() + 1).padStart(2, "0");
@@ -185,7 +192,7 @@ export const handleTaskDomManipulation = function () {
     const optionsSpan = document.createElement("span");
     optionsSpan.classList.add("optionsSpan");
     optionsSpan.classList.add("material-symbols-outlined");
-    optionsSpan.textContent="more_vert";
+    optionsSpan.textContent = "more_vert";
     const editTaskButton = document.createElement("button");
     editTaskButton.textContent = "Edit";
     editTaskButton.classList.add("editButton");
@@ -211,12 +218,14 @@ export const handleTaskDomManipulation = function () {
     taskDiv.appendChild(taskLeftElements);
     taskDiv.appendChild(taskDetailsElements);
     taskDiv.appendChild(taskRightElements);
-    
+
     return taskDiv;
   }
   function updateTaskDivValues(taskDiv, task) {
     const taskName = taskDiv.querySelector(".taskName");
-    const taskDescriptionParagraph = taskDiv.querySelector(".taskDescriptionText");
+    const taskDescriptionParagraph = taskDiv.querySelector(
+      ".taskDescriptionText",
+    );
     const taskDate = taskDiv.querySelector(".taskDate");
     const taskIsImportant = taskDiv.querySelector(".isTaskImportantInput");
 
@@ -257,7 +266,7 @@ export const handleTaskDomManipulation = function () {
           const day = String(formValues.dueDate.getDate()).padStart(2, "0");
           const month = String(formValues.dueDate.getMonth() + 1).padStart(
             2,
-            "0"
+            "0",
           );
           const year = formValues.dueDate.getFullYear();
           element.value = `${year}-${month}-${day}`;
@@ -270,44 +279,43 @@ export const handleTaskDomManipulation = function () {
     }
   }
   function addHiddenClassToTasks(tasksDivList) {
-     for (const taskDiv of tasksDivList){
-        const liItem = taskDiv.closest("li");
+    for (const taskDiv of tasksDivList) {
+      const liItem = taskDiv.closest("li");
       generalDomFunctions.addHiddenClass(liItem);
     }
   }
-  function removeHiddenClassFromTasks(tasksDivList){
-     for (const taskDiv of tasksDivList) {
+  function removeHiddenClassFromTasks(tasksDivList) {
+    for (const taskDiv of tasksDivList) {
       const liItem = taskDiv.closest("li");
       generalDomFunctions.removeHiddenClass(liItem);
     }
   }
-  function hideAddTaskButton(){
+  function hideAddTaskButton() {
     const addTaskButton = document.querySelector(".addTaskButton");
-    if(addTaskButton){
+    if (addTaskButton) {
       generalDomFunctions.addHiddenClass(addTaskButton);
     }
   }
-  function getTaskDivsFromTaskIDSet(tasksSet){
+  function getTaskDivsFromTaskIDSet(tasksSet) {
     const tasksDivList = document.querySelectorAll(".task");
     const activeTaskDivsList = [];
     for (const taskDiv of tasksDivList) {
-      if(!tasksSet){
+      if (!tasksSet) {
         return [];
-      }
-      else if(tasksSet.has(taskDiv.id)){
+      } else if (tasksSet.has(taskDiv.id)) {
         activeTaskDivsList.push(taskDiv);
       }
     }
     return activeTaskDivsList;
   }
   function getTaskIDsToMakeVisible(tasksToShow) {
-     if (tasksToShow && tasksToShow.constructor.name === 'NodeList') {
-        tasksToShow = Array.from(tasksToShow);
+    if (tasksToShow && tasksToShow.constructor.name === "NodeList") {
+      tasksToShow = Array.from(tasksToShow);
     }
-    if(tasksToShow.length!=0){
-      return new Set(tasksToShow.map(task => task.id));
+    if (tasksToShow.length != 0) {
+      return new Set(tasksToShow.map((task) => task.id));
     }
-}
+  }
   function createAndAppendAddTaskButtonToContentDiv() {
     const button = createButton();
     appendButtonOnContentDiv(addAttributesForAddTaskButton(button));
@@ -318,12 +326,12 @@ export const handleTaskDomManipulation = function () {
   function createAndAppendTaskFormOnContentDiv() {
     appendTaskFormOnContentDiv(createTaskForm());
   }
-  function updateTaskVisibility(tasksToDisplay){
+  function updateTaskVisibility(tasksToDisplay) {
     addHiddenClassToTasks(document.querySelectorAll(".task"));
     const setOfTargetTaskIDs = getTaskIDsToMakeVisible(tasksToDisplay);
     const targetTaskDivs = getTaskDivsFromTaskIDSet(setOfTargetTaskIDs);
     removeHiddenClassFromTasks(targetTaskDivs);
-  } 
+  }
   return {
     createAndAppendAddTaskButtonToContentDiv,
     createAndAppendTaskDivToContentDiv,
@@ -332,7 +340,6 @@ export const handleTaskDomManipulation = function () {
     createButton,
     addAttributesForAddTaskButton,
     appendButtonOnContentDiv,
-    createTaskForm,
     appendTaskFormOnContentDiv,
     createTaskDiv,
     appendTaskDivOnDOM,
@@ -341,15 +348,13 @@ export const handleTaskDomManipulation = function () {
     getInputValuesOfGivenForm,
     appendTasksToTasksList,
     fillTaskValuesIntoTaskForm,
-    createAndAppendAddTaskButtonToContentDiv,
     updateTaskVisibility,
-    hideAddTaskButton
+    hideAddTaskButton,
   };
 };
 export const handleProjectDomManipulation = function () {
   const addProjectButton = document.querySelector(".addProjectButton");
   const projectContainer = document.querySelector(".projectContainer");
-  const projectFunctions = handleProjects();
   const projectList = new ProjectList();
   const generalDomFunctions = handleGeneralDomManipulation();
   // projectform
@@ -363,7 +368,7 @@ export const handleProjectDomManipulation = function () {
     projectFormNameInput.classList.add("projectFormNameInput");
     projectFormNameInput.type = "text";
     projectFormNameInput.maxLength = 25;
-    projectFormNameInput.required=true;
+    projectFormNameInput.required = true;
     projectFormNameLabel.appendChild(projectFormNameInput);
     const projectFormAddButton = document.createElement("button");
     projectFormAddButton.textContent = "Add";
@@ -385,7 +390,7 @@ export const handleProjectDomManipulation = function () {
     const projectsList = document.querySelector(".projectsList");
     projectsList.insertBefore(projectEditForm, referenceElement);
   }
-  function fillCurrentProjectNameIntoProjectForm(projectForm,projectName) {
+  function fillCurrentProjectNameIntoProjectForm(projectForm, projectName) {
     for (const element of projectForm) {
       if (element.classList.contains("projectFormNameInput")) {
         element.value = projectName;
@@ -417,11 +422,11 @@ export const handleProjectDomManipulation = function () {
     const optionsSpan = document.createElement("span");
     optionsSpan.classList.add("optionsSpan");
     optionsSpan.classList.add("material-symbols-outlined");
-    optionsSpan.textContent="more_vert";
+    optionsSpan.textContent = "more_vert";
     const dragSpan = document.createElement("span");
     dragSpan.classList.add("dragSpan");
-    dragSpan.classList.add("material-symbols-outlined")
-    dragSpan.textContent="drag_indicator";
+    dragSpan.classList.add("material-symbols-outlined");
+    dragSpan.textContent = "drag_indicator";
     return {
       nameElement,
       renameButton,
@@ -430,7 +435,7 @@ export const handleProjectDomManipulation = function () {
       dragSpan,
     };
   }
-   function appendElementsToProjectDiv(elements, projectDiv) {
+  function appendElementsToProjectDiv(elements, projectDiv) {
     const optionsButtonsContainer = document.createElement("div");
     optionsButtonsContainer.classList.add("optionsButtonsContainer");
     optionsButtonsContainer.appendChild(elements.renameButton);
@@ -442,7 +447,7 @@ export const handleProjectDomManipulation = function () {
     projectDiv.appendChild(elements.dragSpan);
     projectDiv.appendChild(elements.nameElement);
     projectDiv.appendChild(optionsContainer);
-  }  
+  }
   function updateProjectDivName(projectDiv, project) {
     const projectNameElement = projectDiv.querySelector(".projectName");
     projectNameElement.textContent = project.name;
@@ -468,11 +473,11 @@ export const handleProjectDomManipulation = function () {
       return false;
     }
   }
-  function getFirstProjectDiv(){
+  function getFirstProjectDiv() {
     const projectsList = document.querySelector(".projectsList");
     return projectsList.firstElementChild;
   }
-  function getAllProjectDivs(){
+  function getAllProjectDivs() {
     const projectsList = document.querySelector(".projectsList");
     const projectsDivNodeList = projectsList.querySelectorAll(".project");
     const projectsArray = Array.from(projectsDivNodeList);
@@ -484,7 +489,10 @@ export const handleProjectDomManipulation = function () {
   }
   function createAndAppendProjectDivToProjectContainer(project) {
     const projectDiv = createProjectDiv(project);
-    appendElementsToProjectDiv(createProjectDivChildren(project.name), projectDiv);
+    appendElementsToProjectDiv(
+      createProjectDivChildren(project.name),
+      projectDiv,
+    );
     appendProjectDivToProjectContainer(projectDiv);
   }
   return {
@@ -502,19 +510,19 @@ export const handleProjectDomManipulation = function () {
     fillCurrentProjectNameIntoProjectForm,
     getAllProjectDivs,
     createProjectDivChildren,
-    getFirstProjectDiv
+    getFirstProjectDiv,
   };
 };
 export const handleGeneralDomManipulation = function () {
   const projectList = new ProjectList();
 
   const FILTER_TITLES = {
-    "today": "Today's Tasks",
-    "important": "Important Tasks",
-    "next7Days": "Tasks due in next 7 Days",
-    "unplanned": "Unplanned Tasks",
-    "all": "All Tasks"
-};
+    today: "Today's Tasks",
+    important: "Important Tasks",
+    next7Days: "Tasks due in next 7 Days",
+    unplanned: "Unplanned Tasks",
+    all: "All Tasks",
+  };
 
   function addHiddenClass(element) {
     element.classList.add("hidden");
@@ -526,28 +534,29 @@ export const handleGeneralDomManipulation = function () {
     const title = document.querySelector(".contentTitleContainer h2");
     const activeFilter = projectList.getActiveFilterType();
     const activeProject = projectList.getActiveProject();
-    if(activeFilter){
-     title.textContent = FILTER_TITLES[projectList.getActiveFilterType()];
-    }else if(activeProject){
-      title.textContent= activeProject.name;
-    }else{
+    if (activeFilter) {
+      title.textContent = FILTER_TITLES[projectList.getActiveFilterType()];
+    } else if (activeProject) {
+      title.textContent = activeProject.name;
+    } else {
       title.textContent = "Looks pretty empty in here..";
     }
   }
-  function getClassOfFilter(filter){
+  function getClassOfFilter(filter) {
     const classes = Array.from(filter.classList);
-    const filterClass = classes.find(className => classes.includes(className));
-    return filterClass
+    const filterClass = classes.find((className) =>
+      classes.includes(className),
+    );
+    return filterClass;
   }
-  function addActiveViewClass(element){
+  function addActiveViewClass(element) {
     element.classList.add("active-view");
   }
-  function removeActiveViewClass(){
-    const activelyViewedElement = document.querySelector(".active-view")
-    if(activelyViewedElement){
+  function removeActiveViewClass() {
+    const activelyViewedElement = document.querySelector(".active-view");
+    if (activelyViewedElement) {
       activelyViewedElement.classList.remove("active-view");
     }
-    
   }
   return {
     addHiddenClass,
@@ -555,6 +564,6 @@ export const handleGeneralDomManipulation = function () {
     updateContentContainerTitle,
     getClassOfFilter,
     addActiveViewClass,
-    removeActiveViewClass
+    removeActiveViewClass,
   };
 };

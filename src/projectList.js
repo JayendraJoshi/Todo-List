@@ -1,99 +1,100 @@
 import { Project } from "./project";
-export class ProjectList{
-    constructor(){
-        if(ProjectList.instance){
-            return ProjectList.instance;
+export class ProjectList {
+  constructor() {
+    if (ProjectList.instance) {
+      return ProjectList.instance;
+    }
+    ProjectList.instance = this;
+    this.list = [];
+    this.activeProject = null;
+    this.activeFilterType = null;
+  }
+  addProject(project) {
+    this.list.push(project);
+  }
+  getProjectByID(id) {
+    return this.list.find(function (project) {
+      return project.id === id;
+    });
+  }
+  getNameOfProjectByID(id) {
+    const targetProject = this.getProjectByID(id);
+    return targetProject.name;
+  }
+  deleteProjectByID(id) {
+    const filteredProjects = this.list.filter((project) => project.id !== id);
+    this.list = filteredProjects;
+  }
+  getAllProjects() {
+    return this.list;
+  }
+  setProjectsList(projectList) {
+    this.list = projectList;
+  }
+  setActiveProjectByID(id) {
+    this.activeFilterType = null;
+    this.activeProject = this.getProjectByID(id);
+  }
+  getActiveProject() {
+    return this.activeProject;
+  }
+  setActiveFilterType(type) {
+    this.activeFilterType = type;
+    this.activeProject = null;
+  }
+  getActiveFilterType() {
+    return this.activeFilterType;
+  }
+  getSpecificTaskByID(id) {
+    const allProjects = this.list;
+    for (let i = 0; i < allProjects.length; i++) {
+      let tasks = allProjects[i].getTasks();
+      for (let j = 0; j < tasks.length; j++) {
+        if (tasks[j].getID() === id) {
+          return tasks[j];
         }
-        ProjectList.instance=this;
-        this.list = [];
-        this.activeProject = null;
-        this.activeFilterType = null;
+      }
     }
-    addProject(project){
-        this.list.push(project);
+  }
+  getAllTasks() {
+    const allTasks = [];
+    const allProjects = this.list;
+    for (let i = 0; i < allProjects.length; i++) {
+      let tasks = allProjects[i].getTasks();
+      for (let j = 0; j < tasks.length; j++) {
+        allTasks.push(tasks[j]);
+      }
     }
-    getProjectByID(id){
-       return this.list.find(function(project){
-           return project.id === id;
-        })
+    return allTasks;
+  }
+  fromJson(jsonProjectList) {
+    this.setProjectsList(
+      jsonProjectList.list.map((jsonProject) => Project.fromJson(jsonProject)),
+    );
+    if (jsonProjectList.activeProject) {
+      this.setActiveProjectByID(jsonProjectList.activeProject.id);
+    } else if (jsonProjectList.activeFilterType) {
+      this.setActiveFilterType(jsonProjectList.activeFilterType);
+    } else {
+      this.setActiveFilterType(null);
     }
-    getNameOfProjectByID(id){
-        const targetProject = this.getProjectByID(id);
-        return targetProject.name;
-    }
-    deleteProjectByID(id){
-        const filteredProjects = this.list.filter(project => project.id!==id);
-        this.list = filteredProjects;   
-    }
-    getAllProjects(){
-        return this.list;
-    }
-    setProjectsList(projectList){
-        this.list = projectList;
-    }
-    setActiveProjectByID(id){
-        this.activeFilterType = null;
-        this.activeProject = this.getProjectByID(id);
-    }
-    getActiveProject(){
-        return this.activeProject;
-    }
-    setActiveFilterType(type){
-        this.activeFilterType = type;
-        this.activeProject = null;
-    }
-    getActiveFilterType(){
-        return this.activeFilterType;
-    }
-    getSpecificTaskByID(id){
-        const allProjects = this.list;
-        for(let i =0; i< allProjects.length;i++){
-            let tasks = allProjects[i].getTasks();
-            for( let j = 0; j <tasks.length;j++){
-                if(tasks[j].getID()===id){
-                    return tasks[j];
-                }   
-            }
-        }
-    }
-    getAllTasks(){
-        const allTasks = [];
-        const allProjects = this.list;
-        for(let i =0; i< allProjects.length;i++){
-            let tasks = allProjects[i].getTasks();
-            for( let j = 0; j <tasks.length;j++){
-                allTasks.push(tasks[j]);
-            }
-        }
-        return allTasks;
-    }
-    fromJson(jsonProjectList){
-        this.setProjectsList(jsonProjectList.list.map(jsonProject => Project.fromJson(jsonProject)));
-        if(jsonProjectList.activeProject){
-            this.setActiveProjectByID(jsonProjectList.activeProject.id); 
-        }else if(jsonProjectList.activeFilterType){
-            this.setActiveFilterType(jsonProjectList.activeFilterType);
-        }else{
-            this.setActiveFilterType(null);
-        }
-    }
+  }
 }
-    export const handleProjectList = function(){
-        const projectList = new ProjectList();
-        function reorderProjects(projectDivArray){
-            const reorderedProjectList = [];
-            for(const projectDiv of projectDivArray){
-                reorderedProjectList.push(projectList.getProjectByID(projectDiv.id));
-            }
-            projectList.setProjectsList(reorderedProjectList);
-        }
-        function reorderTasks(newTaskArray,projectID){
-            const targetProject = projectList.getProjectByID(projectID);
-            targetProject.setTasksArray(newTaskArray);
-        }
-        return{
-            reorderProjects,
-            reorderTasks,
-        }
-        
+export const handleProjectList = function () {
+  const projectList = new ProjectList();
+  function reorderProjects(projectDivArray) {
+    const reorderedProjectList = [];
+    for (const projectDiv of projectDivArray) {
+      reorderedProjectList.push(projectList.getProjectByID(projectDiv.id));
     }
+    projectList.setProjectsList(reorderedProjectList);
+  }
+  function reorderTasks(newTaskArray, projectID) {
+    const targetProject = projectList.getProjectByID(projectID);
+    targetProject.setTasksArray(newTaskArray);
+  }
+  return {
+    reorderProjects,
+    reorderTasks,
+  };
+};

@@ -8,7 +8,7 @@ export class Project {
   setName(name) {
     this.name = name;
   }
-  getName(){
+  getName() {
     return this.name;
   }
   addTask(task) {
@@ -22,34 +22,37 @@ export class Project {
       return task.id === id;
     });
   }
-  setTasksArray(tasks){
+  setTasksArray(tasks) {
     this.tasks = tasks;
   }
   deleteTaskByID(id) {
     const filteredTasks = this.tasks.filter((task) => task.id !== id);
     this.tasks = filteredTasks;
   }
-  getID(){
+  getID() {
     return this.id;
   }
-  setID(id){
+  setID(id) {
     this.id = id;
   }
-  static fromJson(jsonProject){
+  static fromJson(jsonProject) {
     const project = new Project(jsonProject.name);
     project.setID(jsonProject.id);
-    project.setTasksArray(jsonProject.tasks.map(jsonTask => Task.fromJson(jsonTask, project.getID())));
+    project.setTasksArray(
+      jsonProject.tasks.map((jsonTask) =>
+        Task.fromJson(jsonTask, project.getID()),
+      ),
+    );
     return project;
   }
 }
 
 export const handleProjects = function () {
-
-  function createProject(name){
+  function createProject(name) {
     return new Project(name);
   }
 
   return {
-    createProject
+    createProject,
   };
 };

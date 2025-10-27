@@ -1,63 +1,63 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To-Do</title> 
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do</title>
+  </head>
+  <body>
     <header>
-        <button class="showLinks">
-            <span class="material-symbols-outlined menuSpan">menu</span>
-        </button>
-        <h1>To-Do's</h1>
+      <button class="showLinks">
+        <span class="material-symbols-outlined menuSpan">menu</span>
+      </button>
+      <h1>To-Do's</h1>
     </header>
     <main>
-        <aside>
-            <div class="filterContainer">
-                <h2>Filters</h2>
-                <div class="filtersList">
-                    <div class="filter" data-filter-type="today">
-                        <span class="material-symbols-outlined filter-icon">today</span>
-                        Today
-                    </div>
-                    <div class="filter" data-filter-type="important">
-                        <span class="material-symbols-outlined filter-icon">star</span>
-                        Important
-                    </div>
-                    <div class="filter" data-filter-type="next7Days">
-                        <span class="material-symbols-outlined filter-icon">date_range</span>
-                        Next 7 Days
-                    </div>
-                    <div class="filter" data-filter-type="unplanned">
-                        <span class="material-symbols-outlined filter-icon">hourglass_disabled</span>
-                        Unplanned
-                    </div>
-                    <div class="filter" data-filter-type="all">
-                        <span class="material-symbols-outlined filter-icon">inbox</span>
-                        All Tasks
-                    </div>
-                </div>  
+      <aside>
+        <div class="filterContainer">
+          <h2>Filters</h2>
+          <div class="filtersList">
+            <div class="filter" data-filter-type="today">
+              <span class="material-symbols-outlined filter-icon">today</span>
+              Today
             </div>
-            <div class="projectContainer">
-                <h2>Projects</h2>
-                <div class="projectsList">
-
-                </div>
-                <button class="addProjectButton">+Add Project</button>
+            <div class="filter" data-filter-type="important">
+              <span class="material-symbols-outlined filter-icon">star</span>
+              Important
             </div>
-        </aside>
-    <div class="content">
-        <div class="contentTitleContainer">
-            <h2></h2>
+            <div class="filter" data-filter-type="next7Days">
+              <span class="material-symbols-outlined filter-icon"
+                >date_range</span
+              >
+              Next 7 Days
+            </div>
+            <div class="filter" data-filter-type="unplanned">
+              <span class="material-symbols-outlined filter-icon"
+                >hourglass_disabled</span
+              >
+              Unplanned
+            </div>
+            <div class="filter" data-filter-type="all">
+              <span class="material-symbols-outlined filter-icon">inbox</span>
+              All Tasks
+            </div>
+          </div>
         </div>
-        <ul class="tasksList">
-            
-        </ul>
-    </div>
+        <div class="projectContainer">
+          <h2>Projects</h2>
+          <div class="projectsList"></div>
+          <button class="addProjectButton">+Add Project</button>
+        </div>
+      </aside>
+      <div class="content">
+        <div class="contentTitleContainer">
+          <h2></h2>
+        </div>
+        <ul class="tasksList"></ul>
+      </div>
     </main>
     <footer>
-        <p>Copyright © 2025 Jayendra Lal Joshi</p>
+      <p>Copyright © 2025 Jayendra Lal Joshi</p>
     </footer>
-</body>
+  </body>
 </html>

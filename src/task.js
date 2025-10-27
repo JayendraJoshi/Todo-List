@@ -21,19 +21,19 @@ export class Task {
     return this.description;
   }
   setDueDate(dueDate) {
-     if (dueDate) {
-        this.dueDate = new Date(dueDate);
+    if (dueDate) {
+      this.dueDate = new Date(dueDate);
     } else {
-        this.dueDate = "unplanned"; 
+      this.dueDate = "unplanned";
     }
   }
   getDueDate() {
     return this.dueDate;
   }
-  getID(){
+  getID() {
     return this.id;
   }
-  setID(id){
+  setID(id) {
     this.id = id;
   }
   setProjectID(id) {
@@ -48,8 +48,12 @@ export class Task {
   getIsImportant() {
     return this.isImportant;
   }
-  static fromJson(jsonTask, projectID){
-    const task = new Task(jsonTask.name,jsonTask.description,jsonTask.isImportant);
+  static fromJson(jsonTask, projectID) {
+    const task = new Task(
+      jsonTask.name,
+      jsonTask.description,
+      jsonTask.isImportant,
+    );
     task.setID(jsonTask.id);
     task.setDueDate(jsonTask.dueDate);
     task.setProjectID(projectID);
@@ -68,13 +72,13 @@ export const handleTasks = function () {
     task.setIsImportant(formValues.isImportant);
   }
   function createNewTask(formValues) {
-      const newTask = new Task(
-        formValues.name,
-        formValues.description,
-        formValues.isImportant
-      );
-      newTask.setDueDate(formValues.dueDate);
-      return newTask;
+    const newTask = new Task(
+      formValues.name,
+      formValues.description,
+      formValues.isImportant,
+    );
+    newTask.setDueDate(formValues.dueDate);
+    return newTask;
   }
   function getTodaysTasks(projectList) {
     const todaysTasks = [];
@@ -149,6 +153,6 @@ export const handleTasks = function () {
     getNext7DaysTasks,
     getImportantTasks,
     getUnplannedTasks,
-    getTaskFormValues
+    getTaskFormValues,
   };
 };

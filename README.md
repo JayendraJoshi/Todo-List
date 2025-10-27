@@ -5,6 +5,7 @@ A modern todo list application built as part of The Odin Project curriculum.
 ## Resources
 
 ### Icons
+
 All icons from Material Symbols Outlined:
 
 - Drag indicator: https://fonts.google.com/icons?selected=Material+Symbols+Outlined:drag_indicator:FILL@0;wght@400;GRAD@0;opsz@24&icon.size=24&icon.color=%231f1f1f
@@ -19,4 +20,5 @@ All icons from Material Symbols Outlined:
 - Menu: https://fonts.google.com/icons?selected=Material+Symbols+Outlined:menu:FILL@0;wght@400;GRAD@0;opsz@24&icon.size=24&icon.color=%231f1f1f
 
 ### Typography
+
 - Inter font family: https://fonts.google.com/specimen/Inter
