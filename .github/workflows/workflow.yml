@@ -1,12 +1,28 @@
-name: Build and Deploy
+name: Deploy to gh-pages
 on:
   push:
     branches:
       - main
 
 jobs:
-  build:
+  lint-and-format:
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint code
+        run: npx eslint .
+
+      - name: Format code with prettier
+        run: npx prettier . --check
+
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    needs: lint-and-format
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -23,45 +39,11 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Upload dist folder
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-folder
-          path: dist/
-
-  lint-and-format:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Download dist folder
-        uses: actions/download-artifact@v4
-        with: 
-          name: dist-folder
-          path: dist/
-
-      - name: Lint code
-        run: npx eslint .
-
-      - name: Format code with prettier
-        run: npx prettier . --write
-
-      - name: Upload dist folder
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-folder
-          path: dist/
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: lint-and-format
-    steps:
-      - name: Download dist folder
-        uses: actions/download-artifact@v4
-        with: 
-          name: dist-folder
-          path: dist/
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+
+
+      
