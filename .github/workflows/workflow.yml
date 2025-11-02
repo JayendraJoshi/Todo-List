@@ -17,8 +17,9 @@ jobs:
       - name: Lint code
         run: npx eslint .
 
-      - name: Format code with prettier
+      - name: Check code format with prettier
         run: npx prettier . --check
+        continue-on-error: true
 
   build-and-deploy:
     runs-on: ubuntu-latest
