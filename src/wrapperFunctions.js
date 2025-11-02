@@ -100,10 +100,13 @@ export const wrapperFunctions = function () {
     const projectForm = document.querySelector(".projectForm");
     const projectName = projectDomFunctions.getNameValueOfProjectForm();
     if (projectName.length != 0) {
+      generalDomFunctions.removeActiveViewClass();
       const project = projectFunctions.createProject(projectName);
       projectList.addProject(project);
       projectList.setActiveProjectByID(project.id);
       projectDomFunctions.createAndAppendProjectDivToProjectContainer(project);
+      const projectDiv = document.getElementById(project.id);
+      generalDomFunctions.addActiveViewClass(projectDiv);
       generalDomFunctions.updateContentContainerTitle();
       taskDomFunctions.updateTaskVisibility(
         projectList.getActiveProject().getTasks(),
@@ -115,7 +118,6 @@ export const wrapperFunctions = function () {
       }
     }
     projectForm.remove();
-    generalDomFunctions.removeActiveViewClass();
     updateStorage();
   }
   function initializeDefaultProject() {
