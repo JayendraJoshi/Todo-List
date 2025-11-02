@@ -52,7 +52,7 @@ export const handleTaskDomManipulation = function () {
 
     const taskFormAddButton = document.createElement("button");
     taskFormAddButton.textContent = "Add";
-    taskFormAddButton.classList.add("TaskFormAddButton");
+    taskFormAddButton.classList.add("taskFormAddButton");
     taskFormAddButton.type = "submit";
 
     const taskFormCancelButton = document.createElement("button");
