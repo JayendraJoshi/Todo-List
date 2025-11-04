@@ -124,9 +124,12 @@ export const wrapperFunctions = function () {
     const defaultProject = projectFunctions.createProject("default");
     projectList.addProject(defaultProject);
     projectList.setActiveProjectByID(defaultProject.id);
-
+    generalDomFunctions.removeActiveViewClass();
     projectDomFunctions.createAndAppendProjectDivToProjectContainer(
       defaultProject,
+    );
+    generalDomFunctions.addActiveViewClass(
+      document.getElementById(defaultProject.id),
     );
     generalDomFunctions.updateContentContainerTitle();
   }
