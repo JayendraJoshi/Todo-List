@@ -4,7 +4,7 @@ A modern, responsive todo list application with local storage implementation. Th
 
 ## About This Project
 
-This todo list app is a project from [The Odin Project](https://www.theodinproject.com/lessons/node-path-javascript-todo-list) JavaScript curriculum.
+This todo list app is a project from  [The Odin Project](https://www.theodinproject.com/lessons/node-path-javascript-todo-list) JavaScript curriculum.
 
 ## What I Learned
 
@@ -37,7 +37,7 @@ This project took me quite a bit of time, as it was my largest project yet and r
 
 ## Getting Started
 
-1. Clone the repo: `git clone https://github.com/yourusername/Todo-List.git`
+1. Clone the repo: `git clone https://github.com/JayendraJoshi/Todo-List.git`
 2. Install dependencies: `npm install`
 3. Run locally: `npm start`
 4. Build for production: `npm run build`
@@ -46,6 +46,10 @@ This project took me quite a bit of time, as it was my largest project yet and r
 
 GitHub Pages: https://jayendrajoshi.github.io/Todo-List/
 AWS Amplify: https://gh-pages.d1no1tzsp1qxmv.amplifyapp.com/
+
+## Screenshots
+
+![Todo-List App](images/todo-list.png)
 
 ## Resources
 
@@ -67,3 +71,5 @@ All icons from Material Symbols Outlined:
 ### Typography
 
 - Inter font family: https://fonts.google.com/specimen/Inter
+
+
