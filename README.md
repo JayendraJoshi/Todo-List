@@ -39,13 +39,13 @@ This project took me quite a bit of time, as it was my largest project yet and r
 
 1. Clone the repo: `git clone https://github.com/JayendraJoshi/Todo-List.git`
 2. Install dependencies: `npm install`
-3. Run locally: `npm start`
+3. Run locally: `npm run dev`
 4. Build for production: `npm run build`
 
 ## Live Demo
 
-GitHub Pages: https://jayendrajoshi.github.io/Todo-List/
-AWS Amplify: https://gh-pages.d1no1tzsp1qxmv.amplifyapp.com/
+- GitHub Pages: https://jayendrajoshi.github.io/Todo-List/
+- AWS Amplify: https://gh-pages.d1no1tzsp1qxmv.amplifyapp.com/
 
 ## Screenshots
 
