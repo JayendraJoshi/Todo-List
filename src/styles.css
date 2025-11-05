@@ -602,8 +602,6 @@ footer p {
 .checkedCircle,
 .menuSpan {
   font-family: "Material Symbols Outlined";
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 @media (max-width: 620px) {
   main {
