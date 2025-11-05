@@ -601,7 +601,7 @@ footer p {
 .uncheckedCircle,
 .checkedCircle,
 .menuSpan {
-  font-family: 'Material Symbols Outlined';
+  font-family: "Material Symbols Outlined";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -618,10 +618,10 @@ footer p {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  aside{
+  aside {
     padding: 1rem 3rem;
   }
-  .content{
-    padding:3rem;
+  .content {
+    padding: 3rem;
   }
 }
