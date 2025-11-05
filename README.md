@@ -1,16 +1,18 @@
 # Todo-List
 
+[![Deploy to gh-pages](https://github.com/JayendraJoshi/Todo-List/actions/workflows/workflow.yml/badge.svg)](https://github.com/JayendraJoshi/Todo-List/actions/workflows/workflow.yml)
+
 A modern, responsive todo list application with local storage implementation. The app is automatically built and deployed to GitHub Pages using a GitHub Actions workflow.
 
 ## About This Project
 
-This todo list app is a project from  [The Odin Project](https://www.theodinproject.com/lessons/node-path-javascript-todo-list) JavaScript curriculum.
+This todo list app is a project from [The Odin Project](https://www.theodinproject.com/lessons/node-path-javascript-todo-list) JavaScript curriculum.
 
 ## What I Learned
 
 This project took me quite a bit of time, as it was my largest project yet and required me to do many new things, such as segmenting my code into different modules, using import/export, using class syntax, reading and writing data to JSON and locally storing it between sessions, using external libraries such as date-fns, using a comprehensive webpack setup, using extensive styling and much more. I also used technologies not covered by the curriculum to enhance the deployment process, such as GitHub Actions workflow. But my biggest challenge was figuring out how to structure my code in a clean, modular manner while taking the single responsibility principle into account, to follow best practices and make my code more scalable. Although by no means perfect, I believe I achieved my goal of successfully creating a responsive todo list application, with (for the most part) modular and cleanly separated code.
 
-## Technologies and Tools Used
+## Technologies And Tools Used
 
 - HTML5
 - CSS3
@@ -71,5 +73,3 @@ All icons from Material Symbols Outlined:
 ### Typography
 
 - Inter font family: https://fonts.google.com/specimen/Inter
-
-
