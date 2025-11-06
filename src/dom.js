@@ -3,7 +3,8 @@ import { ProjectList } from "./project-list";
 export const handleTaskDomManipulation = function () {
   const contentDiv = document.querySelector(".content");
   const generalDomFunctions = handleGeneralDomManipulation();
-
+  const projectList = new ProjectList();
+  //Addtaskbutton
   function createButton() {
     return document.createElement("button");
   }
@@ -15,6 +16,7 @@ export const handleTaskDomManipulation = function () {
   function appendButtonOnContentDiv(button) {
     contentDiv.appendChild(button);
   }
+  //Taskform
   function createTaskForm() {
     const taskForm = document.createElement("form");
     taskForm.classList.add("taskForm");
@@ -111,6 +113,7 @@ export const handleTaskDomManipulation = function () {
       isImportant,
     };
   }
+  //Handle Taskdivs
   function createTaskDiv(task) {
     const taskDiv = document.createElement("div");
 
@@ -316,6 +319,22 @@ export const handleTaskDomManipulation = function () {
       return new Set(tasksToShow.map((task) => task.id));
     }
   }
+  function showAllTasks() {
+    updateTaskVisibility(projectList.getAllTasks());
+  }
+  function showTodayTasks(taskFunctions) {
+    updateTaskVisibility(taskFunctions.getTodaysTasks(projectList));
+  }
+  function showUnplannedTasks(taskFunctions) {
+    updateTaskVisibility(taskFunctions.getUnplannedTasks(projectList));
+  }
+  function showNext7DaysTasks(taskFunctions) {
+    updateTaskVisibility(taskFunctions.getNext7DaysTasks(projectList));
+  }
+  function showImportantTasks(taskFunctions) {
+    updateTaskVisibility(taskFunctions.getImportantTasks(projectList));
+  }
+  //Helper Functions
   function createAndAppendAddTaskButtonToContentDiv() {
     const button = createButton();
     appendButtonOnContentDiv(addAttributesForAddTaskButton(button));
@@ -350,6 +369,11 @@ export const handleTaskDomManipulation = function () {
     fillTaskValuesIntoTaskForm,
     updateTaskVisibility,
     hideAddTaskButton,
+    showAllTasks,
+    showImportantTasks,
+    showNext7DaysTasks,
+    showTodayTasks,
+    showUnplannedTasks,
   };
 };
 export const handleProjectDomManipulation = function () {
@@ -357,7 +381,7 @@ export const handleProjectDomManipulation = function () {
   const projectContainer = document.querySelector(".projectContainer");
   const projectList = new ProjectList();
   const generalDomFunctions = handleGeneralDomManipulation();
-  // projectform
+  // Projectform
   function createProjectForm() {
     const projectForm = document.createElement("form");
     const projectFormNameLabel = document.createElement("label");
@@ -401,7 +425,7 @@ export const handleProjectDomManipulation = function () {
     const projectName = document.querySelector(".projectFormNameInput");
     return projectName.value;
   }
-  // handle projectdivs
+  // Handle Projectdivs
   function createProjectDiv(project) {
     const projectDiv = document.createElement("div");
     projectDiv.id = project.id;
@@ -463,7 +487,7 @@ export const handleProjectDomManipulation = function () {
     const projectsList = document.querySelector(".projectsList");
     projectsList.appendChild(projectDiv);
   }
-  // get project divs or values
+  // Get Projectdivs or values
   function areThereProjectDivsLeft() {
     const projectsList = document.querySelector(".projectsList");
 
@@ -483,7 +507,7 @@ export const handleProjectDomManipulation = function () {
     const projectsArray = Array.from(projectsDivNodeList);
     return projectsArray;
   }
-  // helper functions
+  // Helper Functions
   function createAndAppendProjectFormOnProjectContainer() {
     addProjectFormToDOM(createProjectForm());
   }

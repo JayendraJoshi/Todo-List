@@ -35,29 +35,6 @@ export const mainControllerFunctions = function () {
     taskDomFunctions.createAndAppendAddTaskButtonToContentDiv();
   }
   // Filter
-  function showAllTasks() {
-    taskDomFunctions.updateTaskVisibility(projectList.getAllTasks());
-  }
-  function showTodayTasks() {
-    taskDomFunctions.updateTaskVisibility(
-      taskFunctions.getTodaysTasks(projectList),
-    );
-  }
-  function showUnplannedTasks() {
-    taskDomFunctions.updateTaskVisibility(
-      taskFunctions.getUnplannedTasks(projectList),
-    );
-  }
-  function showNext7DaysTasks() {
-    taskDomFunctions.updateTaskVisibility(
-      taskFunctions.getNext7DaysTasks(projectList),
-    );
-  }
-  function showImportantTasks() {
-    taskDomFunctions.updateTaskVisibility(
-      taskFunctions.getImportantTasks(projectList),
-    );
-  }
   function updateFilterViewIfActive() {
     const activeFilterElement = document.querySelector(".active-view.filter");
     if (activeFilterElement) {
@@ -76,15 +53,15 @@ export const mainControllerFunctions = function () {
     closeOpenProjectForm();
     taskDomFunctions.hideAddTaskButton();
     if (filterType == "all") {
-      showAllTasks();
+      taskDomFunctions.showAllTasks();
     } else if (filterType == "today") {
-      showTodayTasks();
+      taskDomFunctions.showTodayTasks(taskFunctions);
     } else if (filterType == "unplanned") {
-      showUnplannedTasks();
+      taskDomFunctions.showUnplannedTasks(taskFunctions);
     } else if (filterType == "next7Days") {
-      showNext7DaysTasks();
+      taskDomFunctions.showNext7DaysTasks(taskFunctions);
     } else if (filterType == "important") {
-      showImportantTasks();
+      taskDomFunctions.showImportantTasks(taskFunctions);
     }
     generalDomFunctions.updateContentContainerTitle();
     updateStorage();
@@ -332,7 +309,7 @@ export const mainControllerFunctions = function () {
     updateFilterViewIfActive();
     updateStorage();
   }
-  // Common for projects and tasks
+  // Common for Projects and Tasks
   function clickEventOnMenuSpan() {
     const aside = document.querySelector("aside");
     aside.classList.toggle("hidden");
