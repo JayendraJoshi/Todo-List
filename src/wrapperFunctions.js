@@ -22,7 +22,7 @@ export const wrapperFunctions = function () {
 
   // general
   function startUpFunctions() {
-    if (storageAvailable("localStorage")) {
+    if (storageAvailableToBeRead("localStorage")) {
       if (localStorage.getItem("projectList")) {
         loadDataFromStorage();
       } else {
@@ -89,7 +89,7 @@ export const wrapperFunctions = function () {
     generalDomFunctions.updateContentContainerTitle();
     updateStorage();
   }
-  // projects
+  // Projects
   function clickEventOnAddProjectButton() {
     if (!document.querySelector(".projectForm")) {
       projectDomFunctions.createAndAppendProjectFormOnProjectContainer();
@@ -226,7 +226,7 @@ export const wrapperFunctions = function () {
     );
     updateStorage();
   }
-  // tasks
+  // Tasks
   function adjustTaskList(taskDiv) {
     const activeProject = projectList.getActiveProject();
     if (activeProject) {
@@ -332,13 +332,13 @@ export const wrapperFunctions = function () {
     updateFilterViewIfActive();
     updateStorage();
   }
-  // common for projects and tasks
+  // Common for projects and tasks
   function clickEventOnMenuSpan() {
     const aside = document.querySelector("aside");
     aside.classList.toggle("hidden");
   }
-  // storage
-  function storageAvailable(type) {
+  // Storage
+  function storageAvailableToBeRead(type) {
     let storage;
     try {
       storage = window[type];
@@ -350,30 +350,30 @@ export const wrapperFunctions = function () {
       return (
         e instanceof DOMException &&
         e.name === "QuotaExceededError" &&
-        // acknowledge QuotaExceededError only if there's something already stored
         storage &&
         storage.length !== 0
       );
     }
   }
   function updateStorage() {
-    if (storageAvailable("localStorage")) {
+    try {
       localStorage.setItem("projectList", JSON.stringify(projectList));
+      console.log(JSON.stringify(projectList).length);
+    } catch (e) {
+      console.log("Failed to save to localStorage: " + e);
     }
   }
   function loadDataFromStorage() {
     projectList.fromJson(JSON.parse(localStorage.getItem("projectList")));
 
-    //appends all project and tasks divs
     for (const project of projectList.getAllProjects()) {
       projectDomFunctions.createAndAppendProjectDivToProjectContainer(project);
       for (const task of project.getTasks()) {
         taskDomFunctions.createAndAppendTaskDivToContentDiv(task);
       }
     }
-    //sets title
     generalDomFunctions.updateContentContainerTitle();
-    //shows only active tasks
+
     if (!document.querySelector(".addTaskButton")) {
       taskDomFunctions.createAndAppendAddTaskButtonToContentDiv();
     }
