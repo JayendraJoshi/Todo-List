@@ -1,26 +1,26 @@
-import { wrapperFunctions } from "./wrapperFunctions";
+import { mainControllerFunctions } from "./main-controller";
 import Sortable from "sortablejs";
 
 export const setEventListeners = function () {
-  const wrapFunctions = wrapperFunctions();
+  const mainFunctions = mainControllerFunctions();
 
-  // filter events
+  // Filter events
   function setEventOnFiltersList() {
     const filtersList = document.querySelector(".filtersList");
     filtersList.addEventListener("click", function (event) {
       const targetFilter = event.target.closest(".filter");
       if (targetFilter) {
-        wrapFunctions.clickEventOnFilter(targetFilter);
+        mainFunctions.clickEventOnFilter(targetFilter);
       }
     });
   }
-  // project events
+  // Project events
   function setEventOnAddProjectButton() {
     const addProjectButton = document.querySelector(".addProjectButton");
     addProjectButton.addEventListener("click", function () {
-      wrapFunctions.closeOpenTaskForm();
-      wrapFunctions.closeOpenProjectForm();
-      wrapFunctions.clickEventOnAddProjectButton();
+      mainFunctions.closeOpenTaskForm();
+      mainFunctions.closeOpenProjectForm();
+      mainFunctions.clickEventOnAddProjectButton();
       setEventOnProjectForm();
     });
   }
@@ -30,24 +30,24 @@ export const setEventListeners = function () {
       projectForm.addEventListener("click", function (event) {
         if (event.target.classList.contains("projectFormAddButton")) {
           event.preventDefault();
-          wrapFunctions.clickEventOnProjectEditFormAddButton(projectDiv);
+          mainFunctions.clickEventOnProjectEditFormAddButton(projectDiv);
         } else if (event.target.classList.contains("projectFormCancelButton")) {
           event.preventDefault();
-          wrapFunctions.closeOpenProjectForm();
+          mainFunctions.closeOpenProjectForm();
         }
       });
     } else {
       projectForm.addEventListener("click", function (event) {
         if (event.target.classList.contains("projectFormAddButton")) {
-          wrapFunctions.clickEventOnAddProjectFormButton();
+          mainFunctions.clickEventOnAddProjectFormButton();
           if (!document.querySelector(".addTaskButton")) {
             event.preventDefault();
-            wrapFunctions.createAndAppendAddTaskButtonToContentDiv();
+            mainFunctions.createAndAppendAddTaskButtonToContentDiv();
             setEventOnAddTaskButton();
           }
         } else if (event.target.classList.contains("projectFormCancelButton")) {
           event.preventDefault();
-          wrapFunctions.closeOpenProjectForm();
+          mainFunctions.closeOpenProjectForm();
         }
       });
     }
@@ -61,16 +61,16 @@ export const setEventListeners = function () {
       const targetProjectDiv = event.target.closest(".project");
       if (targetProjectDiv) {
         if (event.target.classList.contains("renameButton")) {
-          wrapFunctions.closeOpenTaskForm();
-          wrapFunctions.closeOpenProjectForm();
-          wrapFunctions.clickEventOnProjectButtonToRename(targetProjectDiv);
+          mainFunctions.closeOpenTaskForm();
+          mainFunctions.closeOpenProjectForm();
+          mainFunctions.clickEventOnProjectButtonToRename(targetProjectDiv);
           setEventOnProjectForm(targetProjectDiv);
         } else if (event.target.classList.contains("deleteButton")) {
-          wrapFunctions.clickEventOnDeleteProjectButton(targetProjectDiv);
+          mainFunctions.clickEventOnDeleteProjectButton(targetProjectDiv);
         } else if (event.target.classList.contains("optionsSpan")) {
-          wrapFunctions.clickEventOnProjectOptionIcon(targetProjectDiv);
+          mainFunctions.clickEventOnProjectOptionIcon(targetProjectDiv);
         } else {
-          wrapFunctions.clickEventOnProjectDiv(targetProjectDiv);
+          mainFunctions.clickEventOnProjectDiv(targetProjectDiv);
         }
       }
     });
@@ -82,24 +82,23 @@ export const setEventListeners = function () {
         draggable: ".project",
         handle: ".dragSpan",
         onUpdate: function () {
-          wrapFunctions.adjustProjectList();
+          mainFunctions.adjustProjectList();
         },
       });
     }
   }
-  // task events
+  // Task events
   function setEventOnAddTaskButton() {
     const addTaskButton = document.querySelector(".addTaskButton");
     if (addTaskButton) {
       addTaskButton.addEventListener("click", function () {
-        wrapFunctions.closeOpenProjectForm();
-        wrapFunctions.closeOpenTaskForm();
-        wrapFunctions.clickEventOnAddTaskButton();
+        mainFunctions.closeOpenProjectForm();
+        mainFunctions.closeOpenTaskForm();
+        mainFunctions.clickEventOnAddTaskButton();
         setEventOnTaskForm();
       });
     }
   }
-
   function setEventOnTaskForm(taskDiv) {
     const taskForm = document.querySelector(".taskForm");
     if (taskDiv) {
@@ -109,11 +108,11 @@ export const setEventListeners = function () {
           return;
         } else if (event.target.classList.contains("taskFormCancelButton")) {
           event.preventDefault();
-          wrapFunctions.closeOpenTaskForm();
+          mainFunctions.closeOpenTaskForm();
         }
       });
       taskForm.addEventListener("submit", function (event) {
-        wrapFunctions.clickEventOnEditAddTaskButton(taskDiv);
+        mainFunctions.clickEventOnEditAddTaskButton(taskDiv);
         event.preventDefault();
       });
       taskForm.addEventListener("change", function (event) {
@@ -125,11 +124,11 @@ export const setEventListeners = function () {
     } else {
       taskForm.addEventListener("click", function (event) {
         if (event.target.classList.contains("taskFormCancelButton")) {
-          wrapFunctions.closeOpenTaskForm();
+          mainFunctions.closeOpenTaskForm();
         }
       });
       taskForm.addEventListener("submit", function (event) {
-        wrapFunctions.clickEventOnTaskFormAddButton(event);
+        mainFunctions.clickEventOnTaskFormAddButton(event);
         event.preventDefault();
       });
     }
@@ -139,7 +138,7 @@ export const setEventListeners = function () {
     tasksList.addEventListener("change", function (event) {
       if (tasksList.childElementCount > 0) {
         if (event.target.classList.contains("isTaskImportantInput")) {
-          wrapFunctions.clickEventOnTaskImportantCheckBox(event);
+          mainFunctions.clickEventOnTaskImportantCheckBox(event);
         }
       }
     });
@@ -147,14 +146,14 @@ export const setEventListeners = function () {
       if (tasksList.childElementCount > 0) {
         const taskDiv = event.target.closest(".task");
         if (event.target.classList.contains("editButton")) {
-          wrapFunctions.closeOpenProjectForm();
-          wrapFunctions.closeOpenTaskForm();
-          wrapFunctions.clickEventOnEditButton(taskDiv);
+          mainFunctions.closeOpenProjectForm();
+          mainFunctions.closeOpenTaskForm();
+          mainFunctions.clickEventOnEditButton(taskDiv);
           setEventOnTaskForm(taskDiv);
         } else if (event.target.classList.contains("deleteButton")) {
-          wrapFunctions.clickEventOnDeleteTaskButton(taskDiv);
+          mainFunctions.clickEventOnDeleteTaskButton(taskDiv);
         } else if (event.target.classList.contains("optionsSpan")) {
-          wrapFunctions.clickEventOnTaskOptionIcon(taskDiv);
+          mainFunctions.clickEventOnTaskOptionIcon(taskDiv);
         }
       }
     });
@@ -167,34 +166,34 @@ export const setEventListeners = function () {
         handle: ".dragSpan",
         onUpdate: function (event) {
           const taskDiv = event.item.querySelector(".task");
-          wrapFunctions.adjustTaskList(taskDiv);
+          mainFunctions.adjustTaskList(taskDiv);
         },
       });
     }
   }
-  // project & task common events
+  // Project & Task common events
   function setEventOnAllObjectButtonContainer() {
     document.addEventListener("click", function (event) {
       const isClickedInsideOptionsContainer =
         event.target.closest(".optionsContainer");
       if (!isClickedInsideOptionsContainer) {
-        wrapFunctions.removeActiveClassFromOptionsButtonsContainer();
+        mainFunctions.removeActiveClassFromOptionsButtonsContainer();
       }
     });
   }
-  // menu icon event
+  // Menu icon event
   function setEventOnMenuSpan() {
     const menuSpan = document.querySelector(".menuSpan");
     menuSpan.addEventListener("click", function () {
-      wrapFunctions.clickEventOnMenuSpan();
+      mainFunctions.clickEventOnMenuSpan();
     });
   }
-  // entry
+  // Entry
   function entryPointEventListener() {
     setEventOnAllObjectButtonContainer();
     setEventOnMenuSpan();
     setEventOnAddProjectButton();
-    wrapFunctions.startUpFunctions();
+    mainFunctions.startUpFunctions();
     setEventOnAddTaskButton();
     setEventOnFiltersList();
     setEventOnTaskElements();

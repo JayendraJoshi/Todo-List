@@ -1,5 +1,5 @@
 import "./styles.css";
-import { setEventListeners } from "./eventListeners";
+import { setEventListeners } from "./event-listeners";
 
 const eventListeners = setEventListeners();
 eventListeners.entryPointEventListener();

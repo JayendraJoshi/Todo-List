@@ -1,4 +1,4 @@
-import { ProjectList } from "./projectList";
+import { ProjectList } from "./project-list";
 
 export const handleTaskDomManipulation = function () {
   const contentDiv = document.querySelector(".content");

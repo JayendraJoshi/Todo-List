@@ -1,5 +1,5 @@
 import "./styles.css";
-import { handleProjectList, ProjectList } from "./projectList";
+import { handleProjectList, ProjectList } from "./project-list";
 import { handleProjects } from "./project";
 import { handleTasks } from "./task";
 import {
@@ -8,7 +8,7 @@ import {
   handleGeneralDomManipulation,
 } from "./dom";
 
-export const wrapperFunctions = function () {
+export const mainControllerFunctions = function () {
   const projectList = new ProjectList();
   const projectListFunctions = handleProjectList();
 
@@ -20,7 +20,7 @@ export const wrapperFunctions = function () {
 
   const generalDomFunctions = handleGeneralDomManipulation();
 
-  // general
+  // General
   function startUpFunctions() {
     if (storageAvailableToBeRead("localStorage")) {
       if (localStorage.getItem("projectList")) {
@@ -34,7 +34,7 @@ export const wrapperFunctions = function () {
   function createAndAppendAddTaskButtonToContentDiv() {
     taskDomFunctions.createAndAppendAddTaskButtonToContentDiv();
   }
-  // filter
+  // Filter
   function showAllTasks() {
     taskDomFunctions.updateTaskVisibility(projectList.getAllTasks());
   }
