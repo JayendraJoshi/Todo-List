@@ -7,6 +7,7 @@ import {
   handleTaskDomManipulation,
   handleGeneralDomManipulation,
 } from "./dom";
+import Sortable from "sortablejs";
 
 export const mainControllerFunctions = function () {
   const projectList = new ProjectList();
@@ -34,7 +35,20 @@ export const mainControllerFunctions = function () {
   function createAndAppendAddTaskButtonToContentDiv() {
     taskDomFunctions.createAndAppendAddTaskButtonToContentDiv();
   }
+  function clickEventOnDocument(event) {
+    const isClickedInsideOptionsContainer =
+      event.target.closest(".optionsContainer");
+    if (!isClickedInsideOptionsContainer) {
+      removeActiveClassFromOptionsButtonsContainer();
+    }
+  }
   // Filter
+  function clickEventOnFiltersList(event) {
+    const targetFilter = event.target.closest(".filter");
+    if (targetFilter) {
+      clickEventOnFilter(targetFilter);
+    }
+  }
   function updateFilterViewIfActive() {
     const activeFilterElement = document.querySelector(".active-view.filter");
     if (activeFilterElement) {
@@ -67,10 +81,75 @@ export const mainControllerFunctions = function () {
     updateStorage();
   }
   // Projects
-  function clickEventOnAddProjectButton() {
+  function clickEventOnProjectFormToEditProjectDiv(event, projectDiv) {
+    if (event.target.classList.contains("projectFormAddButton")) {
+      event.preventDefault();
+      clickEventOnProjectEditFormAddButton(projectDiv);
+    } else if (event.target.classList.contains("projectFormCancelButton")) {
+      event.preventDefault();
+      closeOpenProjectForm();
+    }
+  }
+  function clickEventOnProjectFormToAddNewProjectDiv(
+    event,
+    setEventOnAddTaskButton,
+  ) {
+    if (event.target.classList.contains("projectFormAddButton")) {
+      clickEventOnAddProjectFormButton();
+      if (!document.querySelector(".addTaskButton")) {
+        event.preventDefault();
+        createAndAppendAddTaskButtonToContentDiv();
+        setEventOnAddTaskButton();
+      }
+    } else if (event.target.classList.contains("projectFormCancelButton")) {
+      event.preventDefault();
+      closeOpenProjectForm();
+    }
+  }
+  function makeProjectsListItemsDraggalble() {
+    const projectsList = document.querySelector(".projectsList");
+    if (projectsList) {
+      new Sortable(projectsList, {
+        draggable: ".project",
+        handle: ".dragSpan",
+        onUpdate: function () {
+          adjustProjectList();
+        },
+      });
+    }
+  }
+  function clickEventOnProjectList(
+    event,
+    setEventOnProjectFormToEditProjectDiv,
+  ) {
+    if (event.target.closest(".projectForm")) {
+      return;
+    }
+    const targetProjectDiv = event.target.closest(".project");
+    if (targetProjectDiv) {
+      if (event.target.classList.contains("renameButton")) {
+        closeOpenTaskForm();
+        closeOpenProjectForm();
+        clickEventOnProjectButtonToRename(targetProjectDiv);
+        setEventOnProjectFormToEditProjectDiv(targetProjectDiv);
+      } else if (event.target.classList.contains("deleteButton")) {
+        clickEventOnDeleteProjectButton(targetProjectDiv);
+      } else if (event.target.classList.contains("optionsSpan")) {
+        clickEventOnProjectOptionIcon(targetProjectDiv);
+      } else {
+        clickEventOnProjectDiv(targetProjectDiv);
+      }
+    }
+  }
+  function clickEventOnAddProjectButton(
+    setEventOnProjectFormToAddNewProjectDiv,
+  ) {
+    closeOpenTaskForm();
+    closeOpenProjectForm();
     if (!document.querySelector(".projectForm")) {
       projectDomFunctions.createAndAppendProjectFormOnProjectContainer();
     }
+    setEventOnProjectFormToAddNewProjectDiv();
     updateStorage();
   }
   function clickEventOnAddProjectFormButton() {
@@ -220,6 +299,45 @@ export const mainControllerFunctions = function () {
 
     updateStorage();
   }
+  function clickEventOnTasksList(
+    event,
+    tasksList,
+    setEventOnTaskFormToEditTaskDiv,
+  ) {
+    if (tasksList && tasksList.childElementCount > 0) {
+      const taskDiv = event.target.closest(".task");
+      if (event.target.classList.contains("editButton")) {
+        closeOpenProjectForm();
+        closeOpenTaskForm();
+        clickEventOnEditButton(taskDiv);
+        setEventOnTaskFormToEditTaskDiv();
+      } else if (event.target.classList.contains("deleteButton")) {
+        clickEventOnDeleteTaskButton(taskDiv);
+      } else if (event.target.classList.contains("optionsSpan")) {
+        clickEventOnTaskOptionIcon(taskDiv);
+      }
+    }
+  }
+  function changeEventOnTasksList(event, tasksList) {
+    if (tasksList && tasksList.childElementCount > 0) {
+      if (event.target.classList.contains("isTaskImportantInput")) {
+        clickEventOnTaskImportantCheckBox(event);
+      }
+    }
+  }
+  function makeTasksListItemsDraggable() {
+    const tasksList = document.querySelector(".tasksList");
+    if (tasksList) {
+      new Sortable(tasksList, {
+        draggable: ".liItem",
+        handle: ".dragSpan",
+        onUpdate: function (event) {
+          const taskDiv = event.item.querySelector(".task");
+          adjustTaskList(taskDiv);
+        },
+      });
+    }
+  }
   function clickEventOnTaskOptionIcon(taskDiv) {
     if (document.querySelector(".optionsButtonsContainer.active")) {
       removeActiveClassFromOptionsButtonsContainer();
@@ -250,8 +368,38 @@ export const mainControllerFunctions = function () {
       }
     }
   }
-  function clickEventOnAddTaskButton() {
+  function clickEventOnTaskFormToEditTaskDiv(event) {
+    if (event.target.classList.contains("isTaskImportantInput")) {
+      event.stopPropagation();
+      return;
+    } else if (event.target.classList.contains("taskFormCancelButton")) {
+      event.preventDefault();
+      closeOpenTaskForm();
+    }
+  }
+  function submitEventOnTaskFormToEditTaskDiv(event) {
+    const taskDiv = document.querySelector(".task-beeing-edited");
+    console.log(taskDiv);
+    clickEventOnEditAddTaskButton(taskDiv);
+    event.preventDefault();
+  }
+  function changeEventOnTaskFormToEditTaskDiv(event) {
+    if (event.target.classList.contains("isTaskImportantInput")) {
+      event.stopPropagation();
+      return;
+    }
+  }
+  function clickEventOnTaskFormCancelButton(event) {
+    if (event.target.classList.contains("taskFormCancelButton")) {
+      closeOpenTaskForm();
+    }
+  }
+
+  function clickEventOnAddTaskButton(setEventOnTaskFormOnNewTaskDiv) {
+    closeOpenProjectForm();
+    closeOpenTaskForm();
     taskDomFunctions.createAndAppendTaskFormOnContentDiv();
+    setEventOnTaskFormOnNewTaskDiv();
     updateStorage();
   }
   function clickEventOnTaskFormAddButton(event) {
@@ -264,6 +412,7 @@ export const mainControllerFunctions = function () {
     taskDomFunctions.createAndAppendTaskDivToContentDiv(task);
     taskForm.remove();
     updateStorage();
+    event.preventDefault();
   }
   function clickEventOnTaskImportantCheckBox(event) {
     const taskID = event.target.closest(".task").id;
@@ -294,7 +443,7 @@ export const mainControllerFunctions = function () {
     taskFunctions.updateTask(task, formValues);
     taskDomFunctions.updateTaskDivValues(taskDiv, task);
     generalDomFunctions.removeHiddenClass(taskDiv);
-    taskEditForm.remove();
+    closeOpenTaskForm();
     updateFilterViewIfActive();
     updateStorage();
   }
@@ -376,27 +525,22 @@ export const mainControllerFunctions = function () {
   }
   return {
     clickEventOnAddProjectButton,
-    clickEventOnAddProjectFormButton,
-    clickEventOnTaskFormAddButton,
-    clickEventOnProjectDiv,
     clickEventOnAddTaskButton,
-    clickEventOnEditButton,
-    clickEventOnTaskImportantCheckBox,
-    clickEventOnEditAddTaskButton,
-    clickEventOnDeleteTaskButton,
-    clickEventOnProjectButtonToRename,
-    clickEventOnProjectEditFormAddButton,
-    clickEventOnDeleteProjectButton,
     startUpFunctions,
-    clickEventOnFilter,
-    adjustProjectList,
-    adjustTaskList,
-    clickEventOnTaskOptionIcon,
-    clickEventOnProjectOptionIcon,
+    clickEventOnDocument,
+    makeTasksListItemsDraggable,
+    clickEventOnTasksList,
+    changeEventOnTasksList,
+    clickEventOnTaskFormToEditTaskDiv,
+    submitEventOnTaskFormToEditTaskDiv,
+    changeEventOnTaskFormToEditTaskDiv,
+    clickEventOnTaskFormCancelButton,
+    makeProjectsListItemsDraggalble,
+    clickEventOnProjectList,
+    clickEventOnProjectFormToEditProjectDiv,
+    clickEventOnProjectFormToAddNewProjectDiv,
+    clickEventOnFiltersList,
     clickEventOnMenuSpan,
-    removeActiveClassFromOptionsButtonsContainer,
-    closeOpenProjectForm,
-    closeOpenTaskForm,
-    createAndAppendAddTaskButtonToContentDiv,
+    clickEventOnTaskFormAddButton,
   };
 };
