@@ -153,7 +153,6 @@ export const mainControllerFunctions = function () {
     updateStorage();
   }
   function clickEventOnAddProjectFormButton() {
-    const projectForm = document.querySelector(".projectForm");
     const projectName = projectDomFunctions.getNameValueOfProjectForm();
     if (projectName.length != 0) {
       generalDomFunctions.removeActiveViewClass();
@@ -173,7 +172,7 @@ export const mainControllerFunctions = function () {
         );
       }
     }
-    projectForm.remove();
+    closeOpenProjectForm();
     updateStorage();
   }
   function initializeDefaultProject() {
@@ -245,8 +244,7 @@ export const mainControllerFunctions = function () {
       projectDomFunctions.updateProjectDivName(projectDiv, targetProject);
     }
     generalDomFunctions.removeHiddenClass(projectDiv);
-    const projectEditForm = document.querySelector(".projectForm");
-    projectEditForm.remove();
+    closeOpenProjectForm();
     generalDomFunctions.updateContentContainerTitle();
     updateStorage();
   }
